@@ -1,0 +1,53 @@
+name: Publish Production Release
+run-name: Stage Release (${{ inputs.version }})
+# This workflow will run on every push containing a tag, that is matching version naming
+# If the app builds and passes tests, it will release to the production channel (Docker's 'latest' tag, npm release...)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version string for staged release'
+        default: 'v1.0.0-beta'
+        required: true
+    # ${{github.ref_name}} should contain the tag name (aka version string)
+
+jobs:
+
+  build:
+    name: Build
+    uses: ./.github/workflows/lifecycle/build.yml
+    with:
+      fullBuild: false
+
+  test:
+    name: Test
+    uses: ./.github/workflows/lifecycle/test.yml
+    needs: build
+    with:
+      fullTest: true
+    secrets: inherit
+
+  version-bump:
+    name: Version Bump
+    uses: ./.github/workflows/lifecycle/bump-version.yml
+    needs: test
+    with:
+      version: ${{ inputs.version }}
+      tag: true
+    permissions:
+      contents: write
+
+  merge-branch:
+    name: Publish Beta Docker Image
+    needs: build-workflow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Merge branch into main
+        uses: devmasx/merge-branch@1.4.0
+        with:
+          type: now
+          target_branch: main
+          github_token: ${{ github.token }}

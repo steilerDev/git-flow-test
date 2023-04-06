@@ -1,0 +1,37 @@
+name: Create Production Release
+run-name: Production Release (${{ github.event.inputs.version }})
+# A manually triggered workflow to create a new release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version string for release'
+        default: 'v1.0.0'
+        required: true
+
+# Just a roll-up with the max permissions / handled on job level
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    name: Tags the release version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Load Version
+        id: load-version
+        run: |
+          echo "VERSION=$(cat ./VERSION)" | tee -a $GITHUB_OUTPUT
+      - name: Create tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{steps.load-version.outputs.VERSION}}',
+              sha: context.sha
+            })

@@ -1,0 +1,82 @@
+name: Test
+# This reusable workflow will test the application. 
+# It expects the build asset to be present.
+
+on:
+  workflow_call:
+    inputs:
+      fullTest:
+        description: 'Specifies if the full test suite with API Tests should be executed - secrets need to be present'
+        # This execution expects the following secrets:
+        # secrets.TEST_APPLE_ID_USER
+        # secrets.TEST_APPLE_ID_PWD
+        # secrets.TEST_TRUST_TOKEN
+        # The following asset will be produced:
+        #  - coverage-report (Test coverage report)
+        default: false
+        required: false
+        type: boolean
+
+permissions: {}
+
+jobs:
+  test-app:
+    name: Test App
+    strategy:
+      matrix:
+        os: ${{ fromJSON(inputs.fullTest && '["ubuntu-latest", "macos-latest"]' || '["ubuntu-latest"]'') }} # Skipping macOS on non fullTest, due to slow performance
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'app/.node-version'
+          cache: 'npm'
+          cache-dependency-path: app/
+      - name: Install
+        run: npm ci
+        working-directory: app/
+      - name: Test All
+        if: ${{ inputs.fullTest }}
+        run: npm run test-all
+        working-directory: app/
+        env: 
+          TEST_APPLE_ID_USER: ${{ secrets.TEST_APPLE_ID_USER }}
+          TEST_APPLE_ID_PWD: ${{ secrets.TEST_APPLE_ID_PWD }}
+          TEST_TRUST_TOKEN: ${{ secrets.TEST_TRUST_TOKEN }}
+      - name: Test Unit Only
+        if: ${{ ! inputs.fullTest }}
+        run: npm run test
+        working-directory: app/
+      - name: Collect test coverage
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: |
+            app/coverage/
+
+  test-docker:
+    name: Test Docker Image
+    runs-on: ubuntu-latest
+    if: inputs.fullTest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download 
+        uses: actions/download-artifact@v3
+        with:
+          name: docker-artifacts
+          path: docker-image
+      - name: Install
+        run: docker load --input ./docker-image/docker-image.tar.gz
+      - name: Prepare tests
+        run: chmod +x ./docker/test/*
+      - name: Test Image
+        run: run-parts -v --exit-on-error ./docker/test
+        env:
+          TEST_APPLE_ID_USER: ${{ secrets.TEST_APPLE_ID_USER }}
+          TEST_APPLE_ID_PWD: ${{ secrets.TEST_APPLE_ID_PWD }}
+          TEST_TRUST_TOKEN: ${{ secrets.TEST_TRUST_TOKEN }}

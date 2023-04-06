@@ -1,0 +1,32 @@
+name: Publish Nightly Release
+# This workflow will automatically run, in order to publish the latest nightly release
+
+on: 
+  push:
+    branches: # Run on every push to dev
+      - 'dev'
+
+permissions: {}
+
+jobs:
+  build:
+    name: Build
+    uses: ./.github/workflows/lifecycle/build.yml
+    with:
+      fullBuild: false
+    permissions: {}
+
+  test:
+    name: Test
+    needs: build
+    uses: ./.github/workflows/lifecycle/test.yml
+    with:
+      fullTest: false
+    permissions: {}
+
+  deploy:
+    name: Deploy nightly
+    needs: test
+    uses: ./.github/workflows/lifecycle/deploy.yml
+    with:
+      environment: 'nightly'

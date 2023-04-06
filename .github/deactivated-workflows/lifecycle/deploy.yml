@@ -1,0 +1,165 @@
+name: Deploy
+# This reusable workflow will deploy the application to the relevant channels, based on input parameters.
+# All necessary assets are expected
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'The GH environment, this deploy is running on. Should be `nightly`, `beta` or `production`'
+        required: true
+        type: string
+
+jobs:
+  publish-docker:
+    name: Publish Docker Image
+    runs-on: ubuntu-latest
+    environment: 
+      name: ${{ inputs.environment }}
+      url: https://hub.docker.com/r/${{env.DOCKER_USERNAME}}/${{github.event.repository.name}}
+    permissions: {}
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: docker-artifacts
+      - name: Load Docker Username
+        id: load-docker-user
+        run: echo "DOCKER_USERNAME=$(cat ./.docker-username)" | tee -a $GITHUB_OUTPUT
+      - name: Load Version
+        id: load-version
+        run: |
+          if [[ "${{inputs.environment}}" == "nightly" ]]; then
+            echo "VERSION=$(cat ./VERSION)-nightly" | tee -a $GITHUB_OUTPUT
+          elif [[ "${{inputs.environment}}" == "beta" ]]; then
+            echo "VERSION=$(cat ./VERSION)-beta" | tee -a $GITHUB_OUTPUT
+          elif [[ "${{inputs.environment}}" == "production" ]]; then
+            echo "VERSION=$(cat ./VERSION)" | tee -a $GITHUB_OUTPUT
+          fi
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ steps.load-docker-user.outputs.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PWD }}
+      - name: Load Docker Image
+        run: docker load --input ./docker-image.tar.gz
+      - name: Tag build
+        run: |
+          docker image tag ${{github.event.repository.name}} ${{steps.load-ducker-user.outputs.DOCKER_USERNAME}}/${{github.event.repository.name}}:${{steps.load-version.outputs.VERSION}}
+
+          if [[ "${{inputs.environment}}" == "nightly" ]]; then
+            docker image tag ${{github.event.repository.name}} ${{steps.load-ducker-user.outputs.DOCKER_USERNAME}}/${{github.event.repository.name}}:nightly
+          elif [[ "${{inputs.environment}}" == "beta" ]]; then
+            docker image tag ${{github.event.repository.name}} ${{steps.load-ducker-user.outputs.DOCKER_USERNAME}}/${{github.event.repository.name}}:beta
+          elif [[ "${{inputs.environment}}" == "production" ]]; then
+            docker image tag ${{github.event.repository.name}} ${{steps.load-ducker-user.outputs.DOCKER_USERNAME}}/${{github.event.repository.name}}:latest
+          fi
+      - name: Push Docker Image
+        run: docker image push --all-tags ${{steps.load-ducker-user.outputs.DOCKER_USERNAME}}/${{github.event.repository.name}}
+      - name: Update DockerHub readme
+        if: ${{ inputs.environment == 'production' }}
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ steps.load-ducker-user.outputs.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PWD }}
+          repository: ${{ steps.load-ducker-user.outputs.DOCKER_USERNAME }}/${{github.event.repository.name}}
+          short-description: ${{ github.event.repository.description }}
+          readme-filepath: ./README.md
+
+  publish-npm:
+    name: Publish npm
+    runs-on: ubuntu-latest
+    if: ${{ inputs.environment == 'production'}}
+    environment: 
+      name: ${{ inputs.environment }}
+      url: https://www.npmjs.com/package/${{github.event.repository.name}}
+    permissions: {}
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: app-artifacts
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: './.node-version'
+          cache: 'npm'
+          cache-dependency-path: ./
+      - name: Prepare environment
+        run: npm ci
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+  
+  publish-gh-pages:
+    name: Publish GH Pages
+    needs: build-workflow
+    runs-on: ubuntu-latest
+    if: ${{ inputs.environment == 'production'}}
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{steps.deployment.outputs.page_url}}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+  
+  publish-wiki:
+    name: Publish GitHub Wiki
+    needs: build-workflow
+    runs-on: ubuntu-latest
+    if: ${{ inputs.environment == 'production'}}
+    environment: 
+      name: ${{ inputs.environment }}
+      url: https://github.com/steilerDev/icloud-photos-sync/wiki
+    permissions: {}
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: gh-wiki-artifacts
+      - name: Upload Documentation to Wiki
+        uses: SwiftDocOrg/github-wiki-publish-action@v1
+        with:
+          path: ./doc
+        env:
+          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+
+  create-gh-release:
+    name: Create GH Release
+    runs-on: ubuntu-latest
+    if: ${{ inputs.environment == 'production'}}
+    environment: 
+      name: ${{ inputs.environment }}
+      url: https://github.com/steilerDev/icloud-photos-sync/releases/tag/${{steps.load-version.outputs.VERSION}}
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: ./artifacts
+      - name: Load Version
+        id: load-version
+        run: |
+          if [[ "${{inputs.environment}}" == "nightly" ]]; then
+            echo "VERSION=$(cat ./artifacts/app-artifacts/VERSION)-nightly" | tee -a $GITHUB_OUTPUT
+          elif [[ "${{inputs.environment}}" == "beta" ]]; then
+            echo "VERSION=$(cat ./artifacts/app-artifacts/VERSION)-beta" | tee -a $GITHUB_OUTPUT
+          elif [[ "${{inputs.environment}}" == "production" ]]; then
+            echo "VERSION=$(cat ./artifacts/app-artifacts/VERSION)" | tee -a $GITHUB_OUTPUT
+          fi
+      - name: Prepare artifacts
+        run: tar -C ./artifacts -czf ./icloud-photos-sync.${{steps.load-version.outputs.VERSION}}.tar.gz ./
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          bodyFile: ./artifacts/changelog/CHANGELOG.latest.md
+          tag: ${{steps.load-version.outputs.VERSION}}
+          artifacts: ./icloud-photos-sync.${{steps.load-version.outputs.VERSION}}.tar.gz
