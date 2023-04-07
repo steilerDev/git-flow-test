@@ -11,4 +11,5 @@ jobs:
 
   gen-docker-artifact:
     name: workflow
+    needs: gen-app-artifact
     uses: ./.github/workflows/gen-docker-artifact.yml
