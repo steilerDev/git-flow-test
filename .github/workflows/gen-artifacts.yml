@@ -9,8 +9,9 @@ on:
         required: true
         type: string
 
-jobs:
+permissions: {}
 
+jobs:
   app:
     runs-on: ubuntu-latest
     if: contains(fromJSON(inputs.artifacts), 'app') || contains(fromJSON(inputs.artifacts), 'docker')
