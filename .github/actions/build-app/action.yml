@@ -4,7 +4,7 @@ inputs:
   app-path:
     description: "The path to the app directory"
     required: false
-    default: ./app
+    default: app
 outputs:
   artifact-path:
     description: "The generated npm-pack filepath"
