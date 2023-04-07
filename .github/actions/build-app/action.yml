@@ -2,7 +2,7 @@ name: 'Build icloud-photos-sync artifacts'
 description: 'Builds the JS application'
 outputs:
   artifact-path:
-    description: "The generated npm-pack filename"
+    description: "The generated npm-pack filepath"
     value: ${{ steps.npm-pack.outputs.artifact-path }}
 runs:
   using: "composite"
@@ -16,3 +16,4 @@ runs:
     - id: npm-pack
       run: echo "artifact-path='./app/$(cd ./app; npm pack)'" >> $GITHUB_OUTPUT
       shell: bash
+    - run: echo $GITHUB_OUTPUT

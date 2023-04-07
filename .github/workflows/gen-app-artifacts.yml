@@ -17,10 +17,11 @@ jobs:
           node-version-file: 'app/.node-version'
           cache: 'npm'
           cache-dependency-path: app/
-      - uses: ./.github/actions/build-app
+      - name: Build app action
+        uses: ./.github/actions/build-app
         id: build-app
       - name: Upload app artifacts
         uses: actions/upload-artifact@v3
         with:
           name: app-artifacts
-          path: ${{ steps.build-app.outputs.artifact-file }}
+          path: ${{ steps.build-app.outputs.artifact-path }}
