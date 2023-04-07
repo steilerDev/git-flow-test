@@ -5,9 +5,9 @@ on: [push]
     #permissions: {}
 
 jobs:
-  # gen-app-artifact:
-  #   name: workflow
-  #   uses: ./.github/workflows/gen-app-artifact.yml
+  gen-app-artifact:
+    name: workflow
+    uses: ./.github/workflows/gen-app-artifact.yml
 
   # gen-docker-artifact:
   #   name: workflow
