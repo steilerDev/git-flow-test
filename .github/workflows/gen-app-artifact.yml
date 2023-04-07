@@ -20,7 +20,10 @@ jobs:
       - name: action/build-app
         uses: ./.github/actions/build-app
         id: build-app
-      - run: tree -a .
+      - run: |
+          pwd
+          echo ${{ steps.build-app.outputs.artifact-path }}
+          ls -al  ${{ steps.build-app.outputs.artifact-path }}
       - name: upload/app-artifact
         uses: actions/upload-artifact@v3
         with:
