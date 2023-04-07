@@ -1,0 +1,30 @@
+name: Generate app-artifacts
+description: Builds the application and uploads the artifacts as <app-artifacts>
+
+on:
+  workflow_call:
+
+permissions: {}
+
+jobs:
+  build-app:
+    name: Build App
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'app/.node-version'
+          cache: 'npm'
+          cache-dependency-path: app/
+      - uses: .github/actions/build-app
+        id: build-app
+        working-directory: app/
+      - name: Upload app artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-artifacts
+          path: ${{ steps.build-app.outputs.path }}
+        working-directory: app/

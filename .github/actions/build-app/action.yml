@@ -1,21 +1,18 @@
-name: 'Hello World'
-description: 'Greet someone'
-inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
-    required: true
-    default: 'World'
+name: 'Build icloud-photos-sync artifacts'
+description: 'Builds the JS application'
 outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-number }}
+  artifact-file:
+    description: "The generated npm-pack filename"
+    value: ${{ steps.npm-pack.outputs.path }}
 runs:
   using: "composite"
   steps:
-    - run: echo Hello ${{ inputs.who-to-greet }}.
+    - run: cp ../README.md ../CHANGELOG.md ../LICENSE ./
       shell: bash
-    - id: random-number-generator
-      run: echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
+    - run: npm ci
       shell: bash
-    - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
+    - run: npm run build
+      shell: bash
+    - id: npm-pack
+      run: echo "path=$(npm pack)" >> $GITHUB_OUTPUT
       shell: bash

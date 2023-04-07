@@ -2,3 +2,6 @@ bin/
 node_modules/
 docs/
 coverage/
+README.md
+CHANGELOG.md
+LICENSE
