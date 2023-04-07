@@ -6,7 +6,8 @@ on: [workflow_call]
 permissions: {}
 
 jobs:
-  gen-app-artifacts:
+  gen-app-artifact:
+    name: Gen
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
