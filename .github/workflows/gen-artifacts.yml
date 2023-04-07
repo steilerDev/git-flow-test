@@ -12,7 +12,7 @@ on:
 jobs:
   gen-docker-artifact:
     runs-on: ubuntu-latest
-    if: ${{contains(fromJSON(inputs.artifacts), 'docker'}}
+    if: ${{ contains(fromJSON(inputs.artifacts), "docker") }}
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3

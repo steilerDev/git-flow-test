@@ -23,4 +23,4 @@ jobs:
     name: workflow
     uses: ./.github/workflows/gen-artifacts.yml
     with:
-      artifacts: "['docker', 'app']"
+      artifacts: '["docker", "app"]'
