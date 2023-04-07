@@ -6,9 +6,23 @@ on: [workflow_call]
 permissions: {}
 
 jobs:
-  use-app-artifact:
-    needs: gen-app-artifact
+  gen-app-artifact:
     runs-on: ubuntu-latest
     steps:
       - name: setup/checkout
-        run: echo "Success"
+        uses: actions/checkout@v3
+      - name: setup/node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'app/.node-version'
+          cache: 'npm'
+          cache-dependency-path: app/
+      - name: action/build-app
+        uses: ./.github/actions/build-app
+        id: build-app
+      - run: tree -a .
+      - name: upload/app-artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-artifact
+          path: ${{ steps.build-app.outputs.artifact-path }}
