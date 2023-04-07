@@ -22,12 +22,12 @@ jobs:
       - name: setup/checkout
         uses: actions/checkout@v3
       - name: setup/build-${{github.event.inputs.artifact}}
-        uses: ./.github/actions/build-${{inputs.artifact}}-setup
-      - name: action/build-${{inputs.artifact}}
-        uses: ./.github/actions/build-${{inputs.artifact}}
+        uses: ./.github/actions/build-${{github.event.inputs.artifact}}-setup
+      - name: action/build-${{github.event.inputs.artifact}}
+        uses: ./.github/actions/build-${{github.event.inputs.artifact}}
         id: build
-      - name: upload/${{inputs.artifact}}-artifact
+      - name: upload/${{github.event.inputs.artifact}}-artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{inputs.artifact}}-artifact
+          name: ${{github.event.inputs.artifact}}-artifact
           path: ${{ steps.build.outputs.artifact-path }}
