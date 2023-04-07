@@ -5,14 +5,62 @@ on:
   workflow_call:
     inputs:
       artifacts:
-        description: 'An array of artifacts that need to be generated . Will be read using fromJSON()'
+        description: 'An array of artifacts that need to be generated . Will be read using fromJSON(). Allowed values: ["docker", "wiki"]'
         required: true
         type: string
 
 jobs:
-  gen-docker-artifact:
+
+  app:
     runs-on: ubuntu-latest
-    if: contains(fromJSON(inputs.artifacts), 'docker')
+    if: contains(fromJSON(inputs.artifacts), 'app') || contains(fromJSON(inputs.artifacts), 'docker')
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
+      - name: setup/build-app
+        uses: ./.github/actions/build/app-setup
+      - name: action/build-app
+        uses: ./.github/actions/build/app
+        id: build-app
+      - name: upload/app-artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-artifact
+          path: ${{ steps.build-app.outputs.artifact-path }}
+
+  docker:
+    if: contains(fromJSON(inputs.artifacts), 'docker')
+    needs: app
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/build-docker
+        uses: ./.github/actions/build/docker-setup
+      - name: action/build-docker
+        uses: ./.github/actions/build/docker
+        id: build-docker
+      - name: upload/docker-artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-artifact
+          path: ${{ steps.build-docker.outputs.artifact-path }}
+  
+  wiki:
+    runs-on: ubuntu-latest
+    if: contains(fromJSON(inputs.artifacts), 'wiki')
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/build-wiki
+        uses: ./.github/actions/build/wiki-setup
+      - name: action/build-wiki
+        uses: ./.github/actions/build/wiki
+        id: build-wiki
+      - name: upload/wiki-artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: wiki-artifact
+          path: ${{ steps.build-wiki.outputs.artifact-path }}
+  
+  

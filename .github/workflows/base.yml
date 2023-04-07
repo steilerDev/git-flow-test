@@ -19,8 +19,8 @@ jobs:
   #   uses: ./.github/workflows/gen-wiki-artifact.yml
 
  
-  gen-wiki-artifact:
-    name: workflow
+  gen-artifacts:
+    name: gen-artifacts
     uses: ./.github/workflows/gen-artifacts.yml
     with:
-      artifacts: '["docker", "app"]'
+      artifacts: ["docker", "app", "wiki"]
