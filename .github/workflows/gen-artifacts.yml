@@ -77,9 +77,8 @@ jobs:
         id: build-docs
       - run: echo ${{ steps.build-docs.outputs.artifact-path }}
       - name: upload/docs-artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-pages-artifact@v1
         with:
-          name: docs-artifact
           path: ${{ steps.build-docs.outputs.artifact-path }}
 
   changelog:
