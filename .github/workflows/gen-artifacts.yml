@@ -75,6 +75,7 @@ jobs:
       - name: action/build-docs
         uses: ./.github/actions/build/docs
         id: build-docs
+      - run: echo ${{ steps.build-docs.outputs.artifact-path }}
       - name: upload/docs-artifact
         uses: actions/upload-artifact@v3
         with:
