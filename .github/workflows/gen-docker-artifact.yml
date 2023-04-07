@@ -1,0 +1,35 @@
+name: Generate docker-artifact
+# Builds the container and uploads it as <docker-artifact>
+# needs: app-artifact
+
+on: [workflow_call]
+
+permissions: {}
+
+jobs:
+  gen-docker-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/get-app-artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app-artifact
+          path: ./docker/rootfs/opt/icloud-photos-sync
+      - name: setup/build-docker
+        uses: ./.github/actions/build-docker-setup
+      - name: action/build-docker
+        uses: ./.github/actions/build-docker
+        id: build-docker
+      - name: Upload docker artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-artifacts
+          path: |
+            ./.docker-username
+            ./README.md
+            ./CHANGELOG.md
+            ./LICENSE
+            ./VERSION
+            ./docker-image.tar.gz

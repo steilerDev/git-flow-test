@@ -12,9 +12,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - id: setup
-      run: cp ./README.md ./CHANGELOG.md ./LICENSE ${{ inputs.app-path }}/
-      shell: bash
     - id: npm-ci
       run: (cd ${{ inputs.app-path }}; npm ci)
       shell: bash
@@ -25,6 +22,4 @@ runs:
       run: |
         fileName=$(cd ${{ inputs.app-path }}; npm pack)
         echo "artifact-path=${{ inputs.app-path }}/$fileName" >> $GITHUB_OUTPUT
-      shell: bash
-    - run: ls -al ${{ inputs.app-path }}
       shell: bash

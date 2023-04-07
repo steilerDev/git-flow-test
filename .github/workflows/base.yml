@@ -3,8 +3,12 @@ name: Base debugging workflow
 on: [push]
 
 jobs:
-  gen-app-artifacts:
+  gen-app-artifact:
     name: workflow
     uses: ./.github/workflows/gen-app-artifact.yml
     #secrets: inherit
     #permissions: {}
+
+  gen-docker-artifact:
+    name: workflow
+    uses: ./.github/workflows/gen-docker-artifact.yml
