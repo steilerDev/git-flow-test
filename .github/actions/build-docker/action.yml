@@ -13,7 +13,7 @@ runs:
   using: "composite"
   steps:
     - id: build-rootfs
-      run: tar --cd ${{ inputs.docker-path }}/rootfs -czf ../rootfs.tar.gz ./
+      run: tar -C ${{ inputs.docker-path }}/rootfs -czf ../rootfs.tar.gz ./
       shell: bash
     - run: tree -a .
       shell: bash
