@@ -16,3 +16,5 @@ runs:
     - id: npm-pack
       run: echo "path=$(cd ./app; npm pack)" >> $GITHUB_OUTPUT
       shell: bash
+    - run: echo $GITHUB_OUTPUT
+      shell: bash
