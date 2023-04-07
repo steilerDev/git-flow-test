@@ -1,5 +1,10 @@
 name: 'build-app'
 description: 'Builds the JS application'
+inputs:
+  app-path:
+    description: "The path to the app directory"
+    required: false
+    default: ./app
 outputs:
   artifact-path:
     description: "The generated npm-pack filepath"
@@ -7,14 +12,14 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - run: cp ./README.md ./CHANGELOG.md ./LICENSE ./app/
+    - run: cp ./README.md ./CHANGELOG.md ./LICENSE ${{ inputs.app-path }}
       shell: bash
-    - run: (cd app/; npm ci)
+    - run: (cd ${{ inputs.app-path }}; npm ci)
       shell: bash
-    - run: (cd app/; npm run build)
+    - run: (cd ${{ inputs.app-path }}; npm run build)
       shell: bash
     - id: npm-pack
-      run: echo "artifact-path='app/$(cd ./app; npm pack)'" >> $GITHUB_OUTPUT
+      run: echo "artifact-path='${{ inputs.app-path }}$(cd ${{ inputs.app-path }}; npm pack)'" >> $GITHUB_OUTPUT
       shell: bash
-    - run: ls -al ./app
+    - run: ls -al ${{ inputs.app-path }}
       shell: bash
