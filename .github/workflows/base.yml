@@ -5,9 +5,8 @@ on: [push]
     #permissions: {}
 
 jobs:
- 
   gen-artifacts:
     name: gen-artifacts
     uses: ./.github/workflows/gen-artifacts.yml
     with:
-      artifacts: '["changelog"]'
+      artifacts: '["docs"]'

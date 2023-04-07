@@ -5,7 +5,7 @@ on:
   workflow_call:
     inputs:
       artifacts:
-        description: 'An array of artifacts that need to be generated. Will be read using fromJSON(). Allowed values: ["docker", "wiki", "app", "changelog"]'
+        description: 'An array of artifacts that need to be generated. Will be read using fromJSON(). Allowed values: ["docker", "wiki", "app", "changelog", "docs"]'
         required: true
         type: string
 
@@ -63,6 +63,23 @@ jobs:
         with:
           name: wiki-artifact
           path: ${{ steps.build-wiki.outputs.artifact-path }}
+
+  docs:
+    runs-on: ubuntu-latest
+    if: contains(fromJSON(inputs.artifacts), 'docs')
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/build-docs
+        uses: ./.github/actions/build/docs-setup
+      - name: action/build-docs
+        uses: ./.github/actions/build/docs
+        id: build-docs
+      - name: upload/docs-artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: docs-artifact
+          path: ${{ steps.build-docs.outputs.artifact-path }}
 
   changelog:
     runs-on: ubuntu-latest
