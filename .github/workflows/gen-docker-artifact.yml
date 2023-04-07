@@ -16,7 +16,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: app-artifact
-          path: ./docker/rootfs/opt/icloud-photos-sync
+          path: ./docker/rootfs/opt/
       - name: setup/build-docker
         uses: ./.github/actions/build-docker-setup
       - name: action/build-docker

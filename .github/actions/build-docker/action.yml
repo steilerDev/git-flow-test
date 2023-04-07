@@ -28,3 +28,4 @@ runs:
       run: |
         cp ./docker/.docker-username ./
         gzip ./docker-image.tar
+      shell: bash

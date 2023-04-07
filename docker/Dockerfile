@@ -8,9 +8,7 @@ RUN apk update && \
     rm -rf /var/cache/apk/*
 
 # Installing icloud-photos-sync 
-RUN cd /opt/icloud-photos-sync/ && \
-    npm install --omit dev && \
-    npm link
+RUN npm install -g /opt/icloud-photos-sync*.tgz
 
 # Installing helper scripts
 RUN chmod 755 /root/enter_mfa.sh && \
