@@ -10,4 +10,4 @@ jobs:
     name: gen-artifacts
     uses: ./.github/workflows/gen-artifacts.yml
     with:
-      artifacts: '["docker", "app", "wiki"]'
+      artifacts: '["docker", "changelog"]'

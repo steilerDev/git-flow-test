@@ -1,12 +1,12 @@
-name: 'extract-current-changelog'
+name: 'build-changelog'
 description: 'Extracts the changelog for the current version'
 inputs:
-  changelog-input-path:
+  changelog-path:
     description: "The path to the full changelog file"
     required: false
     default: CHANGELOG.md
 outputs:
-  changelog-output-path:
+  artifact-path:
     description: "The path to the extracted changelog for the current version"
     value: ${{ steps.extract-changelog.outputs.path }}
 runs:

@@ -5,7 +5,7 @@ on:
   workflow_call:
     inputs:
       artifacts:
-        description: 'An array of artifacts that need to be generated . Will be read using fromJSON(). Allowed values: ["docker", "wiki"]'
+        description: 'An array of artifacts that need to be generated . Will be read using fromJSON(). Allowed values: ["docker", "wiki", "app", "changelog"]'
         required: true
         type: string
 
@@ -63,5 +63,18 @@ jobs:
         with:
           name: wiki-artifact
           path: ${{ steps.build-wiki.outputs.artifact-path }}
-  
-  
+
+  changelog:
+    runs-on: ubuntu-latest
+    if: contains(fromJSON(inputs.artifacts), 'changelog')
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: action/build-changelog
+        uses: ./.github/actions/build/changelog
+        id: build-changelog
+      - name: upload/changelog-artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: changelog-artifact
+          path: ${{ steps.build-changelog.outputs.artifact-path }}
