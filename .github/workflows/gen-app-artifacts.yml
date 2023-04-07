@@ -1,5 +1,5 @@
 name: Generate app-artifacts
-description: Builds the application and uploads the artifacts as <app-artifacts>
+# Builds the application and uploads the artifacts as <app-artifacts>
 
 on: [workflow_call]
 
@@ -20,7 +20,6 @@ jobs:
           cache-dependency-path: app/
       - uses: ./.github/actions/build-app
         id: build-app
-        working-directory: app/
       - name: Upload app artifacts
         uses: actions/upload-artifact@v3
         with:

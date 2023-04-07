@@ -7,7 +7,9 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - run: cp ../README.md ../CHANGELOG.md ../LICENSE ./
+    - run: cp ./README.md ./CHANGELOG.md ./LICENSE ./app/
+      shell: bash
+    - run: cd app/
       shell: bash
     - run: npm ci
       shell: bash
