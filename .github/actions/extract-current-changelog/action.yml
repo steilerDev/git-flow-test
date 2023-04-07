@@ -1,0 +1,24 @@
+name: 'extract-current-changelog'
+description: 'Extracts the changelog for the current version'
+inputs:
+  changelog-input-path:
+    description: "The path to the full changelog file"
+    required: false
+    default: CHANGELOG.md
+outputs:
+  changelog-output-path:
+    description: "The path to the extracted changelog for the current version"
+    value: ${{ steps.extract-changelog.outputs.path }}
+runs:
+  using: "composite"
+  steps:
+    - id: extract-changelog
+      shell: bash
+      run: |
+        LATEST_CHANGELOG_FILE='CHANGELOG.latest.md'
+        START_LINE=$(grep -n -m 1 -E '^##' ${{ inputs.changelog-input-path }} | grep -Eo '^[0-9]+')
+        ((START_LINE++))
+        END_LINE=$(grep -n -m 2 -E '^##' ${{ inputs.changelog-input-path }} | tail -n 1 | grep -Eo '^[0-9]+')
+        LENGTH=$(( END_LINE - START_LINE ))
+        tail -n +$START_LINE ${{ inputs.changelog-input-path }} | head -n $LENGTH > ${LATEST_CHANGELOG_FILE}
+        echo "path=${{ inputs.app-path }}/$outDir" >> $GITHUB_OUTPUT

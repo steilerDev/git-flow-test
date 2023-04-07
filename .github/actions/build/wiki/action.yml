@@ -13,13 +13,13 @@ runs:
   using: "composite"
   steps:
     - id: npm-ci
+      shell: bash
       run: (cd ${{ inputs.app-path }}; npm ci)
-      shell: bash
     - id: build-typedoc
-      run: (cd ${{ inputs.app-path }}; npx typedoc)
       shell: bash
+      run: (cd ${{ inputs.app-path }}; npx typedoc)
     - id: package-artifact
+      shell: bash
       run: |
         outDir=$(cat ${{ inputs.app-path }}/typedoc.json | jq -r .out)
         echo "artifact-path=${{ inputs.app-path }}/$outDir" >> $GITHUB_OUTPUT
-      shell: bash

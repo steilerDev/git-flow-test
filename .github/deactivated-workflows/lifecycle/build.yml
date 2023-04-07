@@ -22,32 +22,6 @@ permissions: {}
 jobs:
   
 
-  build-typedoc:
-    name: Build TypeDoc
-    runs-on: ubuntu-latest
-    if: inputs.fullBuild
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: 'app/.node-version'
-          cache: 'npm'
-          cache-dependency-path: app/
-      - name: Install
-        run: npm ci
-        working-directory: app/
-      - name: Build doc artifacts
-        run: npm run doc
-        working-directory: app/
-      - name: Upload doc artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: gh-wiki-artifacts
-          path: |
-            ./app/doc/
-
   build-changelog:
     name: Build Changelog
     runs-on: ubuntu-latest

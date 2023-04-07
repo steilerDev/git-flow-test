@@ -15,6 +15,6 @@ runs:
         cache: 'npm'
         cache-dependency-path: ${{ inputs.app-path }}
     - id: setup-fs
-      run: cp ./README.md ./CHANGELOG.md ./LICENSE ${{ inputs.app-path }}/
       shell: bash
+      run: cp ./README.md ./CHANGELOG.md ./LICENSE ${{ inputs.app-path }}/
     

@@ -13,8 +13,8 @@ runs:
   using: "composite"
   steps:
     - id: build-rootfs
-      run: tar -C ${{ inputs.docker-path }}/rootfs -czf ${{ inputs.docker-path }}/rootfs.tar.gz ./
       shell: bash
+      run: tar -C ${{ inputs.docker-path }}/rootfs -czf ${{ inputs.docker-path }}/rootfs.tar.gz ./
     - id: build-docker
       uses: docker/build-push-action@v4
       with:
@@ -22,12 +22,10 @@ runs:
         platforms: linux/amd64,linux/arm64
         tags: ${{ github.event.repository.name }}
         outputs: type=tar,dest=docker-image.tar
-    - run: tree -a .
-      shell: bash
     - id: package-artifact
+      shell: bash
       run: |
         mkdir docker-artifact
         gzip docker-image.tar
         mv ${{ inputs.docker-path }}/.docker-username docker-image.tar.gz README.md CHANGELOG.md LICENSE docker-artifact/
         echo "artifact-path=docker-artifact/" >> $GITHUB_OUTPUT
-      shell: bash

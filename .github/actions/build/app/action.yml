@@ -13,13 +13,13 @@ runs:
   using: "composite"
   steps:
     - id: npm-ci
+      shell: bash
       run: (cd ${{ inputs.app-path }}; npm ci)
-      shell: bash
     - id: npm-build
-      run: (cd ${{ inputs.app-path }}; npm run build)
       shell: bash
+      run: (cd ${{ inputs.app-path }}; npm run build)
     - id: npm-pack
+      shell: bash
       run: |
         fileName=$(cd ${{ inputs.app-path }}; npm pack)
         echo "artifact-path=${{ inputs.app-path }}/$fileName" >> $GITHUB_OUTPUT
-      shell: bash

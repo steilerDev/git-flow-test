@@ -5,14 +5,27 @@ on: [push]
     #permissions: {}
 
 jobs:
-  gen-app-artifact:
-    name: workflow
-    uses: ./.github/workflows/gen-app-artifact.yml
+  # gen-app-artifact:
+  #   name: workflow
+  #   uses: ./.github/workflows/gen-app-artifact.yml
 
   # gen-docker-artifact:
   #   name: workflow
   #   needs: gen-app-artifact
   #   uses: ./.github/workflows/gen-docker-artifact.yml
-  gen-wiki-artifact:
-    name: workflow
-    uses: ./.github/workflows/gen-wiki-artifact.yml
+
+  # gen-wiki-artifact:
+  #   name: workflow
+  #   uses: ./.github/workflows/gen-wiki-artifact.yml
+
+  gen-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: getChangelog
+        uses: ./.github/actions/extract-current-changelog
+        id: changelog
+      - name: pasteChangelog
+        run: cat ${{ steps.changelog.outputs.path }}
+      
