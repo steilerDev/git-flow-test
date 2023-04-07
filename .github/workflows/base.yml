@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   gen-app-artifacts:
-    uses: .github/jobs/gen-app-artifacts.yml
+    uses: /.github/jobs/gen-app-artifacts.yml
     #secrets: inherit
     #permissions: {}
 
