@@ -8,7 +8,7 @@ inputs:
 outputs:
   artifact-path:
     description: "The path to the extracted changelog for the current version"
-    value: ${{ steps.extract-changelog.outputs.path }}
+    value: ${{ steps.extract-changelog.outputs.artifact-path }}
 runs:
   using: "composite"
   steps:
@@ -16,9 +16,9 @@ runs:
       shell: bash
       run: |
         LATEST_CHANGELOG_FILE='CHANGELOG.latest.md'
-        START_LINE=$(grep -n -m 1 -E '^##' ${{ inputs.changelog-input-path }} | grep -Eo '^[0-9]+')
+        START_LINE=$(grep -n -m 1 -E '^##' ${{ inputs.changelog-path }} | grep -Eo '^[0-9]+')
         ((START_LINE++))
-        END_LINE=$(grep -n -m 2 -E '^##' ${{ inputs.changelog-input-path }} | tail -n 1 | grep -Eo '^[0-9]+')
+        END_LINE=$(grep -n -m 2 -E '^##' ${{ inputs.changelog-path }} | tail -n 1 | grep -Eo '^[0-9]+')
         LENGTH=$(( END_LINE - START_LINE ))
-        tail -n +$START_LINE ${{ inputs.changelog-input-path }} | head -n $LENGTH > ${LATEST_CHANGELOG_FILE}
-        echo "path=${{ inputs.app-path }}/$outDir" >> $GITHUB_OUTPUT
+        tail -n +$START_LINE ${{ inputs.changelog-path }} | head -n $LENGTH > ${LATEST_CHANGELOG_FILE}
+        echo "artifact-path=${LATEST_CHANGELOG_FILE}" >> $GITHUB_OUTPUT

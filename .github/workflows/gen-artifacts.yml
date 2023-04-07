@@ -5,7 +5,7 @@ on:
   workflow_call:
     inputs:
       artifacts:
-        description: 'An array of artifacts that need to be generated . Will be read using fromJSON(). Allowed values: ["docker", "wiki", "app", "changelog"]'
+        description: 'An array of artifacts that need to be generated. Will be read using fromJSON(). Allowed values: ["docker", "wiki", "app", "changelog"]'
         required: true
         type: string
 
