@@ -16,5 +16,3 @@ jobs:
   gen-wiki-artifact:
     name: workflow
     uses: ./.github/workflows/gen-wiki-artifact.yml
-    with:
-      artifact: 'wiki'

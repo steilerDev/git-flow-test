@@ -6,14 +6,9 @@ name: Generate wiki-artifact
 # GENERATES:
 #   Artifacts: wiki-artifact
 
-on:
-  workflow_call:
-    inputs:
-      artifact:
-        required: true
-        type: string
+on: [workflow_call]
 
-#permissions: {}
+permissions: {}
 
 jobs:
   gen-artifact:
@@ -21,13 +16,13 @@ jobs:
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
-      - name: setup/build-${{github.event.inputs.artifact}}
-        uses: ./.github/actions/build-${{github.event.inputs.artifact}}-setup
-      - name: action/build-${{github.event.inputs.artifact}}
-        uses: ./.github/actions/build-${{github.event.inputs.artifact}}
-        id: build
-      - name: upload/${{github.event.inputs.artifact}}-artifact
+      - name: setup/build-wiki
+        uses: ./.github/actions/build-wiki-setup
+      - name: action/build-wiki
+        uses: ./.github/actions/build-wiki
+        id: build-wiki
+      - name: upload/wiki-artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{github.event.inputs.artifact}}-artifact
-          path: ${{ steps.build.outputs.artifact-path }}
+          name: wiki-artifact
+          path: ${{ steps.build-wiki.outputs.artifact-path }}
