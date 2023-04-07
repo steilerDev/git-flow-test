@@ -22,7 +22,7 @@ runs:
       run: (cd ${{ inputs.app-path }}; npm run build)
       shell: bash
     - id: npm-pack
-      run: fileName=$(cd ${{ inputs.app-path }}; npm pack)
+      run: fileName=$(cd ${{ inputs.app-path }}; npm pack) && echo $fileName
       shell: bash
     - id: path
       run: echo "artifact-path=${{ inputs.app-path }}/$fileName" >> $GITHUB_OUTPUT
