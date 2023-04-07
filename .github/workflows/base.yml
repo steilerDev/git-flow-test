@@ -4,8 +4,7 @@ on: [push]
 
 jobs:
   gen-app-artifacts:
-    name: Generate App Artifacts
-    uses: ./.github/workflows/jobs/gen-app-artifacts.yml
+    uses: ./.github/workflows/gen-app-artifacts.yml
     #secrets: inherit
     #permissions: {}
 
