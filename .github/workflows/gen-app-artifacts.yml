@@ -25,4 +25,3 @@ jobs:
         with:
           name: app-artifacts
           path: ${{ steps.build-app.outputs.path }}
-        working-directory: app/
