@@ -17,9 +17,9 @@ jobs:
       - name: setup/checkout
         uses: actions/checkout@v3
       - name: setup/build-docker
-        uses: ./.github/actions/build-docker-setup
+        uses: ./.github/actions/build/docker-setup
       - name: action/build-docker
-        uses: ./.github/actions/build-docker
+        uses: ./.github/actions/build/docker
         id: build-docker
       - name: upload/docker-artifact
         uses: actions/upload-artifact@v3

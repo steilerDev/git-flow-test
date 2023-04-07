@@ -17,9 +17,9 @@ jobs:
       - name: setup/checkout
         uses: actions/checkout@v3
       - name: setup/build-wiki
-        uses: ./.github/actions/build-wiki-setup
+        uses: ./.github/actions/build/wiki-setup
       - name: action/build-wiki
-        uses: ./.github/actions/build-wiki
+        uses: ./.github/actions/build/wiki
         id: build-wiki
       - name: upload/wiki-artifact
         uses: actions/upload-artifact@v3
