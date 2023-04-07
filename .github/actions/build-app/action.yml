@@ -8,7 +8,7 @@ inputs:
 outputs:
   artifact-path:
     description: "The generated npm-pack filepath"
-    value: ${{ steps.path.outputs.artifact-path }}
+    value: ${{ steps.npm-pack.outputs.artifact-path }}
 runs:
   using: "composite"
   steps:
@@ -22,10 +22,9 @@ runs:
       run: (cd ${{ inputs.app-path }}; npm run build)
       shell: bash
     - id: npm-pack
-      run: fileName=$(cd ${{ inputs.app-path }}; npm pack) && echo $fileName
-      shell: bash
-    - id: path
-      run: echo "artifact-path=${{ inputs.app-path }}/$fileName" >> $GITHUB_OUTPUT
+      run: |
+        fileName=$(cd ${{ inputs.app-path }}; npm pack)
+        echo "artifact-path=${{ inputs.app-path }}/$fileName" >> $GITHUB_OUTPUT
       shell: bash
     - run: ls -al ${{ inputs.app-path }}
       shell: bash
