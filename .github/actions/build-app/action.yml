@@ -12,14 +12,14 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - run: cp ./README.md ./CHANGELOG.md ./LICENSE ${{ inputs.app-path }}
+    - run: cp ./README.md ./CHANGELOG.md ./LICENSE ${{ inputs.app-path }}/
       shell: bash
     - run: (cd ${{ inputs.app-path }}; npm ci)
       shell: bash
     - run: (cd ${{ inputs.app-path }}; npm run build)
       shell: bash
     - id: npm-pack
-      run: echo "artifact-path='${{ inputs.app-path }}$(cd ${{ inputs.app-path }}; npm pack)'" >> $GITHUB_OUTPUT
+      run: echo "artifact-path='${{ inputs.app-path }}/$(cd ${{ inputs.app-path }}; npm pack)'" >> $GITHUB_OUTPUT
       shell: bash
     - run: ls -al ${{ inputs.app-path }}
       shell: bash
