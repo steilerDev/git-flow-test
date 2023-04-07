@@ -8,7 +8,7 @@ inputs:
 outputs:
   artifact-path:
     description: "The generated docs artifact filepath"
-    value: ${{ steps.package-artifact.outputs.artifact-path }}
+    value: ${{ steps.export-artifact.outputs.artifact-path }}
 runs:
   using: "composite"
   steps:
@@ -26,6 +26,5 @@ runs:
         name: coverage-report
         path: ${{ inputs.docs-path }}/${{ steps.get-config.outputs.site-dir }}/dev/coverage
     - id: export-artifact
-      if: always()
       shell: bash
-      run: tree ${{ inputs.docs-path }} && echo "artifact-path=${{ inputs.docs-path }}/${{ steps.get-config.outputs.site-dir }}" >> $GITHUB_OUTPUT
+      run: echo "artifact-path=${{ inputs.docs-path }}/${{ steps.get-config.outputs.site-dir }}" >> $GITHUB_OUTPUT
