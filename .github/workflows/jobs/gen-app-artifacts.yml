@@ -1,8 +1,7 @@
 name: Generate app-artifacts
 description: Builds the application and uploads the artifacts as <app-artifacts>
 
-on:
-  workflow_call:
+on: [workflow_call]
 
 permissions: {}
 
