@@ -20,11 +20,11 @@ runs:
       shell: bash
       run: (cd ${{ inputs.docs-path }}; mkdocs build)
     - id: bundle-coverage
-      continue-on-error: true
       uses: actions/download-artifact@v3
       with:
         name: coverage-report
         path: ${{ inputs.docs-path }}/${{ steps.get-config.outputs.site-dir }}/dev/coverage
     - id: export-artifact
+      if: always()
       shell: bash
       run: echo "artifact-path=${{ inputs.docs-path }}/${{ steps.get-config.outputs.site-dir }}" >> $GITHUB_OUTPUT
