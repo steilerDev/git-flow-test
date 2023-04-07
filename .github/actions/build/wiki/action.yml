@@ -12,9 +12,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - id: npm-ci
-      shell: bash
-      run: (cd ${{ inputs.app-path }}; npm ci)
     - id: build-typedoc
       shell: bash
       run: (cd ${{ inputs.app-path }}; npx typedoc)

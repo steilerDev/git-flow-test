@@ -14,6 +14,9 @@ runs:
         node-version-file: ${{ inputs.app-path }}/.node-version
         cache: 'npm'
         cache-dependency-path: ${{ inputs.app-path }}
+    - id: setup-npm
+      shell: bash
+      run: (cd ${{ inputs.app-path }}; npm ci)
     - id: setup-fs
       shell: bash
       run: cp ./README.md ./CHANGELOG.md ./LICENSE ${{ inputs.app-path }}/

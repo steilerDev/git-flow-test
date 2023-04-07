@@ -8,17 +8,14 @@ inputs:
 outputs:
   artifact-path:
     description: "The generated npm-pack filepath"
-    value: ${{ steps.npm-pack.outputs.artifact-path }}
+    value: ${{ steps.package-artifact.outputs.artifact-path }}
 runs:
   using: "composite"
   steps:
-    - id: npm-ci
-      shell: bash
-      run: (cd ${{ inputs.app-path }}; npm ci)
-    - id: npm-build
+    - id: build-app
       shell: bash
       run: (cd ${{ inputs.app-path }}; npm run build)
-    - id: npm-pack
+    - id: package-artifact
       shell: bash
       run: |
         fileName=$(cd ${{ inputs.app-path }}; npm pack)
