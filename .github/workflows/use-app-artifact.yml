@@ -1,4 +1,4 @@
-name: Generate app-artifact
+name: Use app-artifact
 # Builds the application and uploads it as <app-artifact>
 
 on: [workflow_call]
@@ -7,8 +7,8 @@ permissions: {}
 
 jobs:
   use-app-artifact:
-    needs: gen-app-artifact
     runs-on: ubuntu-latest
+    needs: gen-app-artifact
     steps:
       - name: setup/checkout
-        run: echo "Success"
+        run: echo 'success'

@@ -8,3 +8,7 @@ jobs:
     uses: ./.github/workflows/gen-app-artifact.yml
     #secrets: inherit
     #permissions: {}
+
+  use-app-artifacts:
+    name: workflow
+    uses: ./.github/workflows/use-app-artifact.yml

@@ -9,12 +9,12 @@ runs:
   steps:
     - run: cp ./README.md ./CHANGELOG.md ./LICENSE ./app/
       shell: bash
-    - run: (cd ./app; npm ci)
+    - run: (cd app/; npm ci)
       shell: bash
-    - run: (cd ./app; npm run build)
+    - run: (cd app/; npm run build)
       shell: bash
     - id: npm-pack
-      run: echo "artifact-path='./app/$(cd ./app; npm pack)'" >> $GITHUB_OUTPUT
+      run: echo "artifact-path='app/$(cd ./app; npm pack)'" >> $GITHUB_OUTPUT
       shell: bash
     - run: ls -al ./app
       shell: bash
