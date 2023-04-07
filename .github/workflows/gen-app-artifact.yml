@@ -1,5 +1,8 @@
 name: Generate app-artifact
 # Builds the application and uploads it as <app-artifact>
+# NEEDS:
+#   Artifacts: <none>
+#   Secrets: <none>
 
 on: [workflow_call]
 

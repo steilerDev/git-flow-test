@@ -1,6 +1,8 @@
 name: Generate docker-artifact
 # Builds the container and uploads it as <docker-artifact>
-# needs: app-artifact
+# NEEDS:
+#   Artifacts: app-artifact
+#   Secrets: <none>
 
 on: [workflow_call]
 
@@ -12,11 +14,6 @@ jobs:
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
-      - name: setup/get-app-artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: app-artifact
-          path: ./docker/rootfs/opt/
       - name: setup/build-docker
         uses: ./.github/actions/build-docker-setup
       - name: action/build-docker
