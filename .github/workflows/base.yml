@@ -18,14 +18,9 @@ jobs:
   #   name: workflow
   #   uses: ./.github/workflows/gen-wiki-artifact.yml
 
-  gen-changelog:
-    runs-on: ubuntu-latest
-    steps:
-      - name: setup/checkout
-        uses: actions/checkout@v3
-      - name: getChangelog
-        uses: ./.github/actions/extract-current-changelog
-        id: changelog
-      - name: pasteChangelog
-        run: cat ${{ steps.changelog.outputs.path }}
-      
+ 
+  gen-wiki-artifact:
+    name: workflow
+    uses: ./.github/workflows/gen-artifacts.yml
+    with:
+      artifacts: "['docker', 'app']"

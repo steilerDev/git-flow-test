@@ -1,0 +1,18 @@
+name: Generate artifacts
+# This workflow will generate the requested artifacts
+
+on:
+  workflow_call:
+    inputs:
+      artifacts:
+        description: 'An array of artifacts that need to be generated . Will be read using fromJSON()'
+        required: true
+        type: string
+
+jobs:
+  gen-docker-artifact:
+    runs-on: ubuntu-latest
+    if: ${{contains(fromJSON(inputs.artifacts), 'docker'}}
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
