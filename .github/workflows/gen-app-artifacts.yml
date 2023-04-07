@@ -7,7 +7,6 @@ permissions: {}
 
 jobs:
   gen-app-artifacts:
-    name: Generate app-artifacts
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,4 +23,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app-artifacts
-          path: ${{ steps.build-app.outputs.path }}
+          path: ${{ steps.build-app.outputs.artifact-file }}
