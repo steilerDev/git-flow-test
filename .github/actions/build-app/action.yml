@@ -16,5 +16,5 @@ runs:
     - id: npm-pack
       run: echo "artifact-path='./app/$(cd ./app; npm pack)'" >> $GITHUB_OUTPUT
       shell: bash
-    - run: echo $GITHUB_OUTPUT
+    - run: ls -al ./app
       shell: bash

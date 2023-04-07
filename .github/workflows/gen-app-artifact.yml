@@ -20,6 +20,7 @@ jobs:
       - name: action/build-app
         uses: ./.github/actions/build-app
         id: build-app
+      - run: tree -a .
       - name: upload/app-artifact
         uses: actions/upload-artifact@v3
         with:
