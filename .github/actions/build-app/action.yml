@@ -1,4 +1,4 @@
-name: 'Build icloud-photos-sync artifacts'
+name: 'build-app'
 description: 'Builds the JS application'
 outputs:
   artifact-path:
