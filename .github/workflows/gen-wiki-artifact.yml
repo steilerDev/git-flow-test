@@ -1,0 +1,33 @@
+name: Generate wiki-artifact
+# Builds the typedoc documentation (used for the Github Wiki) and uploads it as <wiki-artifact>
+# NEEDS:
+#   Artifacts: <none>
+#   Secrets: <none>
+# GENERATES:
+#   Artifacts: wiki-artifact
+
+on:
+  workflow_call:
+    inputs:
+      artifact:
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  gen-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/build-${{inputs.artifact}}
+        uses: ./.github/actions/build-${{inputs.artifact}}-setup
+      - name: action/build-${{inputs.artifact}}
+        uses: ./.github/actions/build-${{inputs.artifact}}
+        id: build
+      - name: upload/${{inputs.artifact}}-artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{inputs.artifact}}-artifact
+          path: ${{ steps.build.outputs.artifact-path }}

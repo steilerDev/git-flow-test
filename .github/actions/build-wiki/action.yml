@@ -1,0 +1,25 @@
+name: 'build-wiki'
+description: 'Builds the Github Wiki Pages'
+inputs:
+  app-path:
+    description: "The path to the app directory"
+    required: false
+    default: app
+outputs:
+  artifact-path:
+    description: "The generated wiki artifact filepath"
+    value: ${{ steps.npm-pack.outputs.artifact-path }}
+runs:
+  using: "composite"
+  steps:
+    - id: npm-ci
+      run: (cd ${{ inputs.app-path }}; npm ci)
+      shell: bash
+    - id: build-typedoc
+      run: (cd ${{ inputs.app-path }}; npx typedoc)
+      shell: bash
+    - id: package-artifact
+      run: |
+        outDir=$(cat ${{ inputs.app-path }}/typedoc.json | jq -r .out)
+        echo "artifact-path=${{ inputs.app-path }}/$outDir" >> $GITHUB_OUTPUT
+      shell: bash

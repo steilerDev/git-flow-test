@@ -3,6 +3,8 @@ name: Generate docker-artifact
 # NEEDS:
 #   Artifacts: app-artifact
 #   Secrets: <none>
+# GENERATES:
+#   Artifacts: docker-artifact
 
 on: [workflow_call]
 
@@ -19,8 +21,8 @@ jobs:
       - name: action/build-docker
         uses: ./.github/actions/build-docker
         id: build-docker
-      - name: Upload docker artifacts
+      - name: upload/docker-artifact
         uses: actions/upload-artifact@v3
         with:
-          name: docker-artifacts
+          name: docker-artifact
           path: ${{ steps.build-docker.outputs.artifact-path }}

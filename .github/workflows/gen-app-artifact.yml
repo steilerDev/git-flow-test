@@ -3,6 +3,8 @@ name: Generate app-artifact
 # NEEDS:
 #   Artifacts: <none>
 #   Secrets: <none>
+# GENERATES:
+#   Artifacts: app-artifact
 
 on: [workflow_call]
 

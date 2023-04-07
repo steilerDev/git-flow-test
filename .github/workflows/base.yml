@@ -1,15 +1,20 @@
 name: Base debugging workflow
 
 on: [push]
-
-jobs:
-  gen-app-artifact:
-    name: workflow
-    uses: ./.github/workflows/gen-app-artifact.yml
     #secrets: inherit
     #permissions: {}
 
-  gen-docker-artifact:
+jobs:
+  # gen-app-artifact:
+  #   name: workflow
+  #   uses: ./.github/workflows/gen-app-artifact.yml
+
+  # gen-docker-artifact:
+  #   name: workflow
+  #   needs: gen-app-artifact
+  #   uses: ./.github/workflows/gen-docker-artifact.yml
+  gen-wiki-artifact:
     name: workflow
-    needs: gen-app-artifact
-    uses: ./.github/workflows/gen-docker-artifact.yml
+    uses: ./.github/workflows/gen-wiki-artifact.yml
+    with:
+      artifact: 'wiki'
