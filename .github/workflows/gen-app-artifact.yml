@@ -1,5 +1,5 @@
-name: Generate app-artifacts
-# Builds the application and uploads the artifacts as <app-artifacts>
+name: Generate app-artifact
+# Builds the application and uploads it as <app-artifact>
 
 on: [workflow_call]
 
@@ -17,11 +17,11 @@ jobs:
           node-version-file: 'app/.node-version'
           cache: 'npm'
           cache-dependency-path: app/
-      - name: Build app action
+      - name: action/build-app
         uses: ./.github/actions/build-app
         id: build-app
-      - name: Upload app artifacts
+      - name: Upload app-artifact
         uses: actions/upload-artifact@v3
         with:
-          name: app-artifacts
+          name: app-artifact
           path: ${{ steps.build-app.outputs.artifact-path }}

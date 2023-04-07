@@ -4,6 +4,7 @@ on: [push]
 
 jobs:
   gen-app-artifacts:
+    name: workflow
     uses: ./.github/workflows/gen-app-artifacts.yml
     #secrets: inherit
     #permissions: {}
