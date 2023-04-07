@@ -3,6 +3,11 @@ name: Base debugging workflow
 on: [push]
 
 jobs:
+  gen-app-artifacts:
+    uses: .github/jobs/gen-app-artifacts.yml
+    #secrets: inherit
+    #permissions: {}
+
   hello_world_job:
     runs-on: ubuntu-latest
     name: A job to say hello
