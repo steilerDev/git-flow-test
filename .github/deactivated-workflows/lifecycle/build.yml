@@ -70,7 +70,7 @@ jobs:
       - name: Build docker rootfs
         run: |
           # Packaging assets
-          tar -C ./rootfs -czf ./rootfs.tar.gz ./
+          tar --cd ./rootfs -czf ./rootfs.tar.gz ./
           # For packaging purposes
           cp ./.docker-username ../
         working-directory: docker/
