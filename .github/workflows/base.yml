@@ -9,4 +9,4 @@ jobs:
     name: gen-artifacts
     uses: ./.github/workflows/gen-artifacts.yml
     with:
-      artifacts: '["docs"]'
+      artifacts: '["app"]'

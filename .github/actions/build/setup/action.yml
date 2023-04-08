@@ -1,0 +1,7 @@
+name: 'setup'
+description: 'Sets up the environment'
+runs:
+  using: "composite"
+  steps:
+    - id: checkout
+      uses: actions/checkout@v3

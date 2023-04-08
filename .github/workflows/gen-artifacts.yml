@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(fromJSON(inputs.artifacts), 'app') || contains(fromJSON(inputs.artifacts), 'docker')
     steps:
-      - name: setup/checkout
-        uses: actions/checkout@v3
+      - name: setup
+        uses: ./.github/actions/build/setup
       - name: setup/build-app
         uses: ./.github/actions/build/app-setup
       - name: action/build-app
