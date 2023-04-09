@@ -27,5 +27,5 @@ runs:
       run: |
         mkdir docker-artifact
         gzip docker-image.tar
-        mv ${{ inputs.docker-path }}/.docker-username docker-image.tar.gz README.md CHANGELOG.md LICENSE docker-artifact/
+        mv docker-image.tar.gz README.md CHANGELOG.md LICENSE docker-artifact/
         echo "artifact-path=docker-artifact/" >> $GITHUB_OUTPUT
