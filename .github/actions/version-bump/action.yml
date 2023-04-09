@@ -1,8 +1,8 @@
-name: 'version-bump'
-description: 'Version bumps the repository respecting this projects' release process'
+name: version-bump
+description: Version bumps the repository respecting the release process of this project
 inputs:
   app-path:
-    description: "The path to the app directory"
+    description: The path to the app directory
     required: false
     default: app
   version-bump-type:
@@ -16,7 +16,7 @@ inputs:
       <production> to move the current version onto the production release channel, or increment the patch version
     required: true
 runs:
-  using: "composite"
+  using: composite
   steps:
     - id: setup-node
       uses: actions/setup-node@v3
