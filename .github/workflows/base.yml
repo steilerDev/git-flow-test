@@ -19,4 +19,4 @@ jobs:
       - name: action/version-bump
         uses: ./.github/actions/version-bump
         with:
-          version-bump-type: "patch"
+          version-bump-type: "minor"

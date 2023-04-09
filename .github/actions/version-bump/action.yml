@@ -57,13 +57,24 @@ runs:
             ;;
         esac
 
-        (cd ${{ inputs.app-path }}; bump $COMMAND ../CHANGELOG.md src/lib/package.ts package.json)
-        (cd ${{ inputs.app-path }}; npm install)
+        (cd ${{ inputs.app-path }}; bump $COMMAND ../CHANGELOG.md src/lib/package.ts package.json package-lock.json)
     - id: validate
       shell: bash
       run: |
+        echo "########################################"
+        echo "########################################"
+        echo "########################################"
         cat CHANGELOG.md
+        echo "########################################"
+        echo "########################################"
+        echo "########################################"
         cat app/src/lib/package.ts 
+        echo "########################################"
+        echo "########################################"
+        echo "########################################"
         cat app/package.json
+        echo "########################################"
+        echo "########################################"
+        echo "########################################"
         cat app/package-lock.json
       
