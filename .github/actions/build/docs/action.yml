@@ -23,7 +23,7 @@ runs:
       uses: actions/download-artifact@v3
       continue-on-error: true
       with:
-        name: coverage-report
+        name: coverage-artifact
         path: ${{ inputs.docs-path }}/${{ steps.get-config.outputs.site-dir }}/dev/coverage
     - id: export-artifact
       shell: bash

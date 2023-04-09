@@ -1,0 +1,41 @@
+name: Test artifacts
+# This workflow will generate the requested artifacts
+
+on:
+  workflow_call:
+    inputs:
+      artifacts:
+        description: 'An array of tests that need to be run. Will be read using fromJSON(). Allowed values: ["e2e", "unit"]'
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    if: contains(fromJSON(inputs.artifacts), 'unit')
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/test-unit
+        uses: ./.github/actions/test/unit-setup
+      - name: action/test-unit
+        uses: ./.github/actions/test/unit
+        id: test-unit
+      - name: upload/coverage-artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-artifact
+          path: ${{ steps.test-unit.outputs.artifact-path }}
+
+  e2e:
+    runs-on: ubuntu-latest
+    if: contains(fromJSON(inputs.artifacts), 'e2e')
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/test-e2e
+        uses: ./.github/actions/test/e2e-setup
+      - name: action/test-e2e
+        uses: ./.github/actions/test/e2e

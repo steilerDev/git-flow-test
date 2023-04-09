@@ -1,0 +1,19 @@
+name: 'test-unit'
+description: 'Unit tests the JS application'
+inputs:
+  app-path:
+    description: "The path to the app directory"
+    required: false
+    default: app
+outputs:
+  artifact-path:
+    description: "The generated test coverage report"
+    value: ${{ steps.package-artifact.outputs.artifact-path }}
+runs:
+  using: "composite"
+  steps:
+    - id: test-unit
+      shell: bash
+      run: (cd ${{ inputs.app-path }}; npm run test)
+    - id: package-artifact
+      run: echo "artifact-path=${{ inputs.app-path }}/coverage/" >> $GITHUB_OUTPUT"
