@@ -57,7 +57,7 @@ runs:
             ;;
         esac
 
-        (cd ${{ inputs.app-path }}; bump $COMMAND ../CHANGELOG.md src/lib/package.ts package.json package-lock.json)
+        (cd ${{ inputs.app-path }}; bump $COMMAND ../CHANGELOG.md src/lib/package.ts package.json)
     - id: validate
       shell: bash
       run: |
