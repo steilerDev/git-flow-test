@@ -1,10 +1,14 @@
-name: 'build-docker'
-description: 'Builds the Docker container'
+name: build-docker
+description: Builds the Docker container
 inputs:
   docker-path:
-    description: "The path to the docker directory"
+    description: The path to the docker directory
     required: false
     default: docker
+  docker-platform:
+    description: Comma separated list of platforms to build
+    required: false
+    default: linux/amd64 #,linux/arm64
 outputs:
   artifact-path:
     description: "The generated docker artifact filepath"
@@ -19,7 +23,7 @@ runs:
       uses: docker/build-push-action@v4
       with:
         context: ${{ inputs.docker-path }}
-        platforms: linux/amd64,linux/arm64
+        platforms: ${{ inputs.docker-platform }}
         tags: ${{ github.event.repository.name }}
         outputs: type=tar,dest=docker-image.tar
     - id: package-artifact

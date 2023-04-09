@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+
+import { VERSION } from "./lib/package.js";
+
 console.log(`Hello world`);
-console.log(`cool feature`);
-console.log(`cool feature1`);
+console.log(`Version: ${VERSION}`)

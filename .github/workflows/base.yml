@@ -15,6 +15,7 @@ jobs:
     name: test-artifacts
     needs: gen-artifacts
     uses: ./.github/workflows/test-artifacts.yml
+    secrets: inherit
     with:
       artifacts: '["unit", "e2e"]'
 
