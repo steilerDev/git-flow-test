@@ -1,11 +1,11 @@
-name: Generate artifacts
+name: Build artifacts
 # This workflow will generate the requested artifacts
 
 on:
   workflow_call:
     inputs:
       artifacts:
-        description: 'An array of artifacts that need to be generated. Will be read using fromJSON(). Allowed values: ["docker", "wiki", "app", "changelog", "docs"]'
+        description: 'An array of artifacts that need to be built. Will be read using fromJSON(). Allowed values: ["docker", "wiki", "app", "changelog", "docs"]'
         required: true
         type: string
 

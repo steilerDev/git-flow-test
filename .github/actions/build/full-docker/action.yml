@@ -1,10 +1,14 @@
-name: build-docker
-description: Builds the docker container
+name: build-full-docker
+description: Builds the cross platform docker containers
 inputs:
   docker-path:
     description: The path to the docker directory
     required: false
     default: docker
+  docker-platform:
+    description: Comma separated list of platforms to build
+    required: false
+    default: linux/amd64,linux/arm64
 outputs:
   artifact-path:
     description: The generated docker artifact filepath
@@ -16,13 +20,16 @@ runs:
       shell: bash
       run: tar -C ${{ inputs.docker-path }}/rootfs -czf ${{ inputs.docker-path }}/rootfs.tar.gz ./
     - id: build-docker
-      shell: bash
-      run: |
-        docker build ./docker --tag ${{ github.event.repository.name }}
-        docker save ${{ github.event.repository.name }} | gzip > ./docker-image.tar.gz
+      uses: docker/build-push-action@v4
+      with:
+        context: ${{ inputs.docker-path }}
+        platforms: ${{ inputs.docker-platform }}
+        tags: ${{ github.event.repository.name }}
+        outputs: type=tar,dest=docker-image.tar
     - id: package-artifact
       shell: bash
       run: |
         mkdir docker-artifact
+        gzip docker-image.tar
         mv docker-image.tar.gz README.md CHANGELOG.md LICENSE docker-artifact/
         echo "artifact-path=docker-artifact/" >> $GITHUB_OUTPUT

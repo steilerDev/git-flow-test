@@ -5,19 +5,19 @@ on: [push]
     #permissions: {}
 
 jobs:
-  gen-artifacts:
-    name: gen-artifacts
-    uses: ./.github/workflows/gen-artifacts.yml
+  build-artifacts:
+    name: build-artifacts
+    uses: ./.github/workflows/artifacts_build.yml
     with:
-      artifacts: '["app", "docker"]'
+      artifacts: '["docker"]'
   
   test-artifacts:
     name: test-artifacts
-    needs: gen-artifacts
-    uses: ./.github/workflows/test-artifacts.yml
+    needs: build-artifacts
+    uses: ./.github/workflows/artifacts_test.yml
     secrets: inherit
     with:
-      artifacts: '["unit", "e2e"]'
+      artifacts: '["e2e"]'
 
   # version:
   #   runs-on: ubuntu-latest

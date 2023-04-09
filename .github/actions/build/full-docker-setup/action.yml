@@ -1,5 +1,5 @@
-name: build-docker-setup
-description: Sets up the environment for the docker build action
+name: build-full-docker-setup
+description: Sets up the environment for cross platform docker build action
 inputs:
   docker-path:
     description: The path to the docker directory
@@ -8,6 +8,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - id: setup-quemu
+      uses: docker/setup-qemu-action@v2
+    - id: setup-buildx
+      uses: docker/setup-buildx-action@v2
     - id: setup-app-artifact
       uses: actions/download-artifact@v3
       with:
