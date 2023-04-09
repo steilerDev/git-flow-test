@@ -22,7 +22,6 @@ runs:
         platforms: linux/amd64,linux/arm64
         tags: ${{ github.event.repository.name }}
         outputs: type=tar,dest=docker-image.tar
-        provenance: false
     - id: package-artifact
       shell: bash
       run: |

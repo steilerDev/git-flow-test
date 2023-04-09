@@ -8,6 +8,10 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - id: setup-quemu
+      uses: docker/setup-qemu-action@v2
+    - id: setup-buildx
+      uses: docker/setup-buildx-action@v2
     - id: download-docker-artifact 
       uses: actions/download-artifact@v3
       with:

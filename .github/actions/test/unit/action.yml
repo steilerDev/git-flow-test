@@ -17,4 +17,4 @@ runs:
       run: (cd ${{ inputs.app-path }}; npm run test)
     - id: package-artifact
       shell: bash
-      run: echo "artifact-path=${{ inputs.app-path }}/coverage/" >> $GITHUB_OUTPUT"
+      run: echo "artifact-path=${{ inputs.app-path }}/coverage/" >> $GITHUB_OUTPUT
