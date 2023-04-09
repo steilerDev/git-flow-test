@@ -10,7 +10,7 @@ inputs:
       The type of version bump: 
       <major> to move to the next major-nightly version
       <minor> to move to the next minor-nightly version
-      <patch> to move to the next patch-nighly version
+      <patch> to move to the next patch-nightly version
       <nightly> to move the current version onto the nightly release channel, or increment the current nightly version
       <beta> to move the current version onto the beta release channel, or increment the current beta version
       <production> to move the current version onto the production release channel, or increment the patch version
@@ -26,7 +26,7 @@ runs:
     - id: perform-beta-bump
       shell: bash
       run: |
-        case ${{ inputs.version-bump-type }} in
+        case "${{ inputs.version-bump-type }}" in
           'major')
             COMMAND=premajor --preid nightly
             ;;
