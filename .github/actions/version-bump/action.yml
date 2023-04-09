@@ -15,6 +15,10 @@ inputs:
       <beta> to move the current version onto the beta release channel, or increment the current beta version
       <production> to move the current version onto the production release channel, or increment the patch version
     required: true
+outputs:
+  new-version:
+    description: "The bumped version string"
+    value: ${{ steps.get-bumped-version.outputs.bumped-version }}
 runs:
   using: composite
   steps:
@@ -59,6 +63,9 @@ runs:
 
         (cd ${{ inputs.app-path }}; bump $COMMAND ../CHANGELOG.md src/lib/package.ts package.json)
         (cd ${{ inputs.app-path }}; npm install)
+    - id: get-bumped-version
+      shell: bash
+      run: echo "bumped-version=$(cat ${{inputs.app-path}}/package.json | jq -r .version)" >> $GITHUB_OUTPUT
     - id: validate
       shell: bash
       run: |
