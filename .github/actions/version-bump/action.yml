@@ -1,5 +1,5 @@
 name: 'version-bump'
-description: 'Version bumps the repository to the next <major>, <minor>, or <patch> version.'
+description: 'Version bumps the repository respecting this projects' release process'
 inputs:
   app-path:
     description: "The path to the app directory"
@@ -28,27 +28,27 @@ runs:
       run: |
         case "${{ inputs.version-bump-type }}" in
           'major')
-            COMMAND=premajor --preid nightly
+            COMMAND="premajor --preid nightly"
             ;;
 
           'minor')
-            COMMAND=preminor --preid nightly
+            COMMAND="preminor --preid nightly"
             ;;
 
           'patch')
-            COMMAND=prepatch --preid nightly
+            COMMAND="prepatch --preid nightly"
             ;;
           
           'nightly')
-            COMMAND=prerelease --preid nightly
+            COMMAND="prerelease --preid nightly"
             ;;
 
           'beta')
-            COMMAND=prerelease --preid beta
+            COMMAND="prerelease --preid beta"
             ;;
 
           'production')
-            COMMAND=patch
+            COMMAND="patch"
             ;;
 
           *)
