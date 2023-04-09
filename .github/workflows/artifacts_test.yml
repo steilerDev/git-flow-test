@@ -40,6 +40,6 @@ jobs:
       - name: action/test-e2e
         uses: ./.github/actions/test/e2e
         with:
-          test-apple-id-user: User'
-          test-apple-id-pwd: 'Pwd'
-          test-trust-token: 'token'
+          test-apple-id-user: User
+          test-apple-id-pwd: Pwd
+          test-trust-token: token
