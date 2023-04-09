@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.1.0
+## V1.2.0-beta.2
 
 - some release notes
 
