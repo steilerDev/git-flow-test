@@ -13,6 +13,7 @@ jobs:
   
   test-artifacts:
     name: test-artifacts
+    needs: gen-artifacts
     uses: ./.github/workflows/test-artifacts.yml
     with:
       artifacts: '["unit", "e2e"]'
