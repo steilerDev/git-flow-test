@@ -1,9 +1,9 @@
 # Changelog
 
-## V1.2.0-beta.2
+## 1.2.0
 
 - some release notes
 
-## V1.0.0
+## 1.0.0
 
 - some feature stuff

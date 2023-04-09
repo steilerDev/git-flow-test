@@ -1,29 +1,69 @@
 name: 'version-bump'
 description: 'Version bumps the repository to the next <major>, <minor>, or <patch> version.'
 inputs:
-  version-bump-type:
-    description: "The type of version bump. Either <major>, <minor>, or <patch>"
-    required: true
-  release-type:
-    description: "The type of release. Either <nightly>, <beta> or empty"
+  app-path:
+    description: "The path to the app directory"
     required: false
-    default: ""
+    default: app
+  version-bump-type:
+    description: |
+      The type of version bump: 
+      <major> to move to the next major-nightly version
+      <minor> to move to the next minor-nightly version
+      <patch> to move to the next patch-nighly version
+      <nightly> to move the current version onto the nightly release channel, or increment the current nightly version
+      <beta> to move the current version onto the beta release channel, or increment the current beta version
+      <production> to move the current version onto the production release channel, or increment the patch version
+    required: true
 runs:
   using: "composite"
   steps:
-    - id: setup-python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-        cache: 'pip' 
-        cache-dependency-path: ${{ inputs.docs-path }}
-    - id: setup-pip
+    - id: setup-node
+      uses: actions/setup-node@v3
+    - id: setup-version-bump
       shell: bash
-      run: pip install bump2version
-    - id: get-config
+      run: npm install -g @jsdevtools/version-bump-prompt
+    - id: perform-beta-bump
       shell: bash
-      run: | 
-        echo "docs-dir=$(grep -oP "docs_dir: '\K.+'" ${{ inputs.docs-path }}/mkdocs.yml | head -c-2)" >> $GITHUB_OUTPUT
-    - id: setup-fs
+      run: |
+        case ${{ inputs.version-bump-type }} in
+          'major')
+            COMMAND=premajor --preid nightly
+            ;;
+
+          'minor')
+            COMMAND=preminor --preid nightly
+            ;;
+
+          'patch')
+            COMMAND=prepatch --preid nightly
+            ;;
+          
+          'nightly')
+            COMMAND=prerelease --preid nightly
+            ;;
+
+          'beta')
+            COMMAND=prerelease --preid beta
+            ;;
+
+          'production')
+            COMMAND=patch
+            ;;
+
+          *)
+            echo "Unsupported command: ${{ inputs.version-bump-type }}"
+            exit 1
+            ;;
+        esac
+
+        (cd ${{ inputs.app-path }}; bump $COMMAND ../CHANGELOG.md src/lib/package.ts package.json)
+        (cd ${{ inputs.app-path }}; npm install)
+    - id: validate
       shell: bash
-      run: cp ./README.md ./CHANGELOG.md ./LICENSE ${{ inputs.docs-path }}/${{ steps.get-config.outputs.docs-dir }}/
+      run: |
+        cat CHANGELOG.md
+        cat app/src/lib/package.ts 
+        cat app/package.json
+        cat app/package-lock.json
+      

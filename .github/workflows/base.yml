@@ -5,8 +5,16 @@ on: [push]
     #permissions: {}
 
 jobs:
-  gen-artifacts:
-    name: gen-artifacts
-    uses: ./.github/workflows/gen-artifacts.yml
-    with:
-      artifacts: '["app"]'
+  # gen-artifacts:
+  #   name: gen-artifacts
+  #   uses: ./.github/workflows/gen-artifacts.yml
+  #   with:
+  #     artifacts: '["app"]'
+
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/build-app
+        uses: ./.github/actions/version-bump
