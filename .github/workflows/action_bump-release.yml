@@ -48,6 +48,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           base: dev
+          branch: main
           title: Release bump to ${{ steps.version-bump.outputs.new-version }}
           body: This PR bumps the release to ${{ steps.version-bump.outputs.new-version }}
-          labels: "beta"
+          labels: ${{ inputs.bump-type }}
