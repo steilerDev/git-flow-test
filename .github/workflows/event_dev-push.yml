@@ -6,7 +6,7 @@ on:
     branches: # Run on every push to dev
       - 'dev'
     tags-ignore:
-      - *
+      - '**'
 
 jobs:
   build-artifacts:

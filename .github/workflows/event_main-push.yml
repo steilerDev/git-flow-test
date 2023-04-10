@@ -3,10 +3,10 @@ name: 'Event: Push to {main}'
 
 on: 
   push:
-    branches: # Run on every push to dev
+    branches: # Run on every push to main
       - 'main'
     tags-ignore:
-      - *
+      - '**'
 
 jobs:
 
