@@ -1,11 +1,11 @@
-name: Deploy artifacts
+name: 'Artifacts: Deploy'
 # This workflow will deploy the requested artifacts
 
 on:
   workflow_call:
     inputs:
       targets:
-        description: 'An array of deployment targets. Will be read using fromJSON(). Allowed values: ["npm", "unit"]'
+        description: 'An array of deployment targets. Will be read using fromJSON(). Allowed values: ["npm", "docker"]'
         required: true
         type: string
     #secrets:
@@ -16,3 +16,9 @@ jobs:
     if: contains(fromJSON(inputs.artifacts), 'npm'))
     steps:
       - run: echo "deploying to npm"
+  
+  docker:
+    runs-on: ubuntu-latest
+    if: contains(fromJSON(inputs.artifacts), 'docker'))
+    steps:
+      - run: echo "deploying to docker"

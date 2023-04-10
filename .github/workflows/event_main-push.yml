@@ -1,1 +1,35 @@
-# Deploy on a beta tag
+name: 'Event: Push to {main}'
+# Upon receiving a push to main, this workflow will deploy the main branch to the beta or production channel
+
+on: 
+  push:
+    branches: # Run on every push to dev
+      - 'main'
+    tags-ignore:
+      - *
+
+jobs:
+
+  test-artifacts:
+    name: test-artifacts
+    uses: ./.github/workflows/artifacts_test.yml
+    with:
+      artifacts: '["unit"]' # Get coverage report
+
+  build-artifacts:
+    name: build-artifacts
+    uses: ./.github/workflows/artifacts_build.yml
+    with:
+      artifacts: '["docker", "wiki", "app", "changelog", "docs"]'
+
+  test-artifacts:
+    name: test-artifacts
+    uses: ./.github/workflows/artifacts_test.yml
+    with:
+      artifacts: '["e2e"]'
+    
+  deploy-artifacts:
+    name: deploy-artifacts
+    uses: ./.github/workflows/artifacts_deploy.yml
+    with:
+      artifacts: '["npm", "docker"]'

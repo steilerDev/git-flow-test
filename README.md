@@ -19,3 +19,35 @@ Before accepting the PR the following checks are enforced through branch protect
 - Docker E2E tests
 
 Every push leads to a deployment to the appropriate `beta` or `production` channel, based on the current version of the application. Both will lead to a release and tag.
+
+## Setup
+
+- Environments:
+  - `nightly`
+    - Deployment branch: `dev`
+    - `DOCKER_TOKEN` (with deployment access to a user with the same username as this repo's owner)
+  - `beta`
+    - Deployment branch: `main`
+    - `DOCKER_TOKEN` (with deployment access to a user with the same username as this repo's owner)
+    - `NPM_TOKEN` (with deployment access)
+  - `production`
+    - Deployment branch: `main`
+    - Required reviewer: `steilerDev`
+    - Do not let admins overwrite protection rules
+    - `DOCKER_TOKEN` (with deployment access to a user with the same username as this repo's owner)
+    - `NPM_TOKEN` (with deployment access)
+- Branch protection rules:
+  - `main` branch:
+    - Require a pull request before merging
+    - Require status checks to pass before merging
+      - `build-artifacts / changelog`
+      - `build-artifacts / app`
+      - `build-artifacts / docker`
+      - `build-artifacts / docs`
+      - `build-artifacts / wiki`
+      - `test-artifacts / unit`
+      - `test-artifacts / e2e`
+- Repository Secrets:
+  - `TEST_APPLE_ID_USER`
+  - `TEST_APPLE_ID_PWD`
+  - `TEST_TRUST_TOKEN`

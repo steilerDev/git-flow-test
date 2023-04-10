@@ -1,4 +1,4 @@
-name: Test artifacts
+name: 'Artifacts: Test'
 # This workflow will test the requested artifacts
 
 on:

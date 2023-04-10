@@ -1,0 +1,26 @@
+name: 'Event: PR to {main}'
+# Upon receiving a PR to main, this workflow will run all build and test checks
+
+on:
+  pull_request:
+    branches:    
+      - main
+
+jobs:
+  build-artifacts:
+    name: build-artifacts
+    uses: ./.github/workflows/artifacts_build.yml
+    with:
+      artifacts: '["docker", "wiki", "app", "changelog", "docs"]'
+
+  test-artifacts:
+    name: test-artifacts
+    uses: ./.github/workflows/artifacts_test.yml
+    with:
+      artifacts: '["unit", "e2e"]'
+    secrets:
+      test-apple-id-user: ${{ secrets.test-apple-id-user }}
+      test-apple-id-pwd: ${{ secrets.test-apple-id-pwd }}
+      test-trust-token: ${{ secrets.test-trust-token }}
+
+  

@@ -1,4 +1,4 @@
-name: Build artifacts
+name: 'Artifacts: Build'
 # This workflow will generate the requested artifacts
 
 on:

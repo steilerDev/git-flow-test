@@ -1,1 +1,30 @@
-# On every push to dev -> run small build + test + deploy
+name: 'Event: Push to {dev}'
+# Upon receiving a push to dev, this workflow will deploy the dev branch to the nightly channel
+
+on: 
+  push:
+    branches: # Run on every push to dev
+      - 'dev'
+    tags-ignore:
+      - *
+
+jobs:
+  build-artifacts:
+    name: build-artifacts
+    uses: ./.github/workflows/artifacts_build.yml
+    with:
+      artifacts: '["app", "docker"]'
+
+  test-artifacts:
+    name: test-artifacts
+    needs: build-artifacts
+    uses: ./.github/workflows/artifacts_test.yml
+    with:
+      artifacts: '["unit"]'
+    
+  deploy-artifacts:
+    name: deploy-artifacts
+    needs: test-artifacts
+    uses: ./.github/workflows/artifacts_deploy.yml
+    with:
+      artifacts: '["app", "docker"]'
