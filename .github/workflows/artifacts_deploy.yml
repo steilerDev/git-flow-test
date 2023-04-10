@@ -13,12 +13,12 @@ on:
 jobs:
   npm:
     runs-on: ubuntu-latest
-    if: contains(fromJSON(inputs.targets), 'npm'))
+    if: contains(fromJSON(inputs.targets), 'npm')
     steps:
       - run: echo "deploying to npm"
   
   docker:
     runs-on: ubuntu-latest
-    if: contains(fromJSON(inputs.targets), 'docker'))
+    if: contains(fromJSON(inputs.targets), 'docker')
     steps:
       - run: echo "deploying to docker"
