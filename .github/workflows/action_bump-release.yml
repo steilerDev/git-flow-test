@@ -52,6 +52,7 @@ jobs:
         if: inputs.bump-type == 'beta' || inputs.bump-type == 'production'
         uses: peter-evans/create-pull-request@v5
         with:
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
           commit-message: Release bump to ${{ steps.version-bump.outputs.new-version }}
           base: main
           branch: dev
