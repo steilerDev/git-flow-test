@@ -5,6 +5,10 @@ inputs:
     description: "The path to the mkdocs directory"
     required: false
     default: docs
+  app-path:
+    description: "The path to the app directory"
+    required: false
+    default: app
 runs:
   using: "composite"
   steps:
@@ -17,10 +21,15 @@ runs:
     - id: setup-pip
       shell: bash
       run: pip install -r ${{ inputs.docs-path }}/requirements.txt
-    - id: get-config
+    - id: setup-node
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: ${{ inputs.app-path }}/.node-version
+        cache: 'npm'
+        cache-dependency-path: ${{ inputs.app-path }}
+    - id: setup-npm
       shell: bash
-      run: | 
-        echo "docs-dir=$(grep -oP "docs_dir: '\K.+'" ${{ inputs.docs-path }}/mkdocs.yml | head -c-2)" >> $GITHUB_OUTPUT
+      run: (cd ${{ inputs.app-path }}; npm ci)
     - id: setup-fs
       shell: bash
       run: cp ./README.md ./CHANGELOG.md ./LICENSE ${{ inputs.docs-path }}/${{ steps.get-config.outputs.docs-dir }}/

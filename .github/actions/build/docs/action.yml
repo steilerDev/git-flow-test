@@ -5,6 +5,10 @@ inputs:
     description: "The path to the docs directory"
     required: false
     default: docs
+  app-path:
+    description: "The path to the app directory"
+    required: false
+    default: app
 outputs:
   artifact-path:
     description: "The generated docs artifact filepath"
@@ -16,6 +20,10 @@ runs:
       shell: bash
       run: | 
         echo "site-dir=$(grep -oP "site_dir: '\K.+'" ${{ inputs.docs-path }}/mkdocs.yml | head -c-2)" >> $GITHUB_OUTPUT
+        echo "docs-dir=$(grep -oP "docs_dir: '\K.+'" ${{ inputs.docs-path }}/mkdocs.yml | head -c-2)" >> $GITHUB_OUTPUT
+    - id: build-cli-reference
+      shell: bash
+      run: ${{ github.action_path }}/build_cli.sh ${{ steps.get-config.outputs.docs-dir }} ${{ inputs.app-path }}
     - id: build-mkdocs
       shell: bash
       run: (cd ${{ inputs.docs-path }}; mkdocs build)

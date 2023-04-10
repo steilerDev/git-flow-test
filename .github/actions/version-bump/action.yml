@@ -8,9 +8,9 @@ inputs:
   version-bump-type:
     description: |
       The type of version bump: 
-      <major> to move to the next major-nightly version
-      <minor> to move to the next minor-nightly version
-      <patch> to move to the next patch-nightly version
+      <nightly-major> to move to the next major-nightly version
+      <nightly-minor> to move to the next minor-nightly version
+      <nightly-patch> to move to the next patch-nightly version
       <nightly> to move the current version onto the nightly release channel, or increment the current nightly version
       <beta> to move the current version onto the beta release channel, or increment the current beta version
       <production> to move the current version onto the production release channel, or increment the patch version
@@ -31,15 +31,15 @@ runs:
       shell: bash
       run: |
         case "${{ inputs.version-bump-type }}" in
-          'major')
+          'nightly-major')
             COMMAND="premajor --preid nightly"
             ;;
 
-          'minor')
+          'nightly-minor')
             COMMAND="preminor --preid nightly"
             ;;
 
-          'patch')
+          'nightly-patch')
             COMMAND="prepatch --preid nightly"
             ;;
           

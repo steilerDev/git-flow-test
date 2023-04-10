@@ -1,5 +1,5 @@
 name: Test artifacts
-# This workflow will generate the requested artifacts
+# This workflow will test the requested artifacts
 
 on:
   workflow_call:
@@ -8,6 +8,15 @@ on:
         description: 'An array of tests that need to be run. Will be read using fromJSON(). Allowed values: ["e2e", "unit"]'
         required: true
         type: string
+    secrets:
+      test-apple-id-user: 
+        description: The username of the Apple ID test user, used during E2E tests
+        required: false
+      test-apple-id-pwd:
+        description: The password of the Apple ID test user, used during E2E tests
+        required: false
+      test-trust-token: 
+        description: The validated trust token of the Apple ID test user
 
 permissions: {}
 
@@ -40,6 +49,6 @@ jobs:
       - name: action/test-e2e
         uses: ./.github/actions/test/e2e
         with:
-          test-apple-id-user: User
-          test-apple-id-pwd: Pwd
-          test-trust-token: token
+          test-apple-id-user: ${{ secrets.test-apple-id-user }}
+          test-apple-id-pwd: ${{ secrets.test-apple-id-pwd }}
+          test-trust-token: ${{ secrets.test-trust-token }}

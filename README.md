@@ -8,14 +8,14 @@ This projects' development process loosely follows git-flow by (Vincent Driessen
 
 External PRs should therefore target the dev branch. This will trigger unit tests, which need to pass, in order for merging to be considered.
 
-Version bumps only happen on the `dev` branch, initiated through the `Version Bump` workflow. This will create a new major, minor or patch release on the `nightly` release train. Every push to the dev branch will trigger a deployment to the `nightly` docker tag.
+Version bumps only happen on the `dev` branch, initiated through the `Version Bump` workflow. This will create a new major, minor or patch release on the `nightly` release train. Every push to the `dev` branch will trigger a deployment to the docker `nightly` tag. 
 
-Once enough changes are ready for deployment, a PR to the main branch needs to be opened for a complete suite of checks to pass. Those include:
+Once enough changes are ready for deployment, a PR to the main branch needs to be opened for a complete suite of checks to pass. To automate this, together with the appropriate version bump, execute the `beta_release` action. The same holds true for production releases through the `production_release` action.
+
+Before accepting the PR the following checks are enforced through branch protection rules:
 - Full build process
 - Unit tests
 - API tests
 - Docker E2E tests
 
-These checks need to pass in order to allow pushes to the `main` branch. This will lead to a version bump to the `beta` channel and following deployments. Every subsequent push to the `main` branch will increment the current beta version.
-
-Final release will be initiated by running `Release` workflow, which will push a release tag, create a release and push relevant deployments.
+Every push leads to a deployment to the appropriate `beta` or `production` channel, based on the current version of the application. Both will lead to a release and tag.

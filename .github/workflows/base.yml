@@ -9,15 +9,15 @@ jobs:
     name: build-artifacts
     uses: ./.github/workflows/artifacts_build.yml
     with:
-      artifacts: '["docker"]'
+      artifacts: '["docs"]'
   
-  test-artifacts:
-    name: test-artifacts
-    needs: build-artifacts
-    uses: ./.github/workflows/artifacts_test.yml
-    secrets: inherit
-    with:
-      artifacts: '["e2e"]'
+  # test-artifacts:
+  #   name: test-artifacts
+  #   needs: build-artifacts
+  #   uses: ./.github/workflows/artifacts_test.yml
+  #   secrets: inherit
+  #   with:
+  #     artifacts: '["e2e"]'
 
   # version:
   #   runs-on: ubuntu-latest

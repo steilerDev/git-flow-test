@@ -10,6 +10,8 @@ site_dir: 'site'
 nav:
   - 'Home': README.md
   - 'Get Started': get-started.md
+  - 'User Guides':
+    - 'CLI Reference': user-guides/cli.md
   - 'Changelog': CHANGELOG.md
 
 theme:
