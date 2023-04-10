@@ -10,8 +10,8 @@ on:
 
 jobs:
 
-  test-artifacts:
-    name: test-artifacts
+  create-coverage-report:
+    name: create-coverage-report
     uses: ./.github/workflows/artifacts_test.yml
     with:
       methods: '["unit"]' # Get coverage report
