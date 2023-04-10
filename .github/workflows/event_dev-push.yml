@@ -13,7 +13,7 @@ jobs:
     name: check-version
     runs-on: ubuntu-latest
     outputs: ## Only continue run if we are on nightly
-      should-run: ${{ steps.check-version.outputs.nightly }}
+      nightly: ${{ steps.check-version.outputs.nightly }}
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
@@ -24,7 +24,7 @@ jobs:
   build-artifacts:
     name: build-artifacts
     needs: check-version
-    if: needs.check-version.outputs.should-run == 'true'
+    if: needs.check-version.outputs.nightly == 'true'
     uses: ./.github/workflows/artifacts_build.yml
     with:
       artifacts: '["app", "docker"]'
