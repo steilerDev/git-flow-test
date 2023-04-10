@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.0-beta.6
+## 1.2.0-beta.7
 
 - some release notes
 
