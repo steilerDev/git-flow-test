@@ -30,15 +30,31 @@ jobs:
       - name: setup/checkout
         uses: actions/checkout@v3
       - name: check/correct-branch
-        if: github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/dev'
+        if: github.ref != 'refs/heads/dev'
         run: |
           echo "This workflow should not be triggered with workflow_dispatch on a branch other than dev"
           exit 1
+      - name: check/version
+        id: check-version
+        uses: ./.github/actions/version/check
       - name: check/correct-order
         run: |
-          echo "Check for illegal transitions: nightly while on beta / production while on nightly"
+          if [[ ${{ steps.check-version.outputs.beta }} == 'true' && ${{ inputs.bump-type }} == 'nightly' ]]; then
+            echo "Illegal transition from beta to nightly"
+            exit 1
+          fi
+
+          if [[ ${{ steps.check-version.outputs.production }} == 'true' && ${{ inputs.bump-type }} == 'nightly' ]]; then
+            echo "Illegal transition from production to nightly"
+            exit 1
+          fi
+
+          if [[ ${{ steps.check-version.outputs.production }} == 'true' && ${{ inputs.bump-type }} == 'beta' ]]; then
+            echo "Illegal transition from production to beta"
+            exit 1
+          fi
       - name: action/version-bump
-        uses: ./.github/actions/version-bump
+        uses: ./.github/actions/version/bump
         id: version-bump
         with:
           version-bump-type: ${{ inputs.bump-type }}

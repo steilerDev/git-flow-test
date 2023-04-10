@@ -1,0 +1,37 @@
+name: version-check
+description: Checks the current version present in package.json and returns useful metadata information
+inputs:
+  app-path:
+    description: The path to the app directory
+    required: false
+    default: app
+outputs:
+  version:
+    description: "The bumped version string"
+    value: ${{ steps.get-version.outputs.version }}
+  nightly:
+    description: "'true' if this is a nightly release"
+    value: ${{ steps.get-metadata.outputs.nightly }}
+  beta:
+    description: "'true' if this is a beta release"
+    value: ${{ steps.get-metadata.outputs.beta }}
+  production:
+    description: "'true' if this is a production release"
+    value: ${{ steps.get-metadata.outputs.production }}
+
+runs:
+  using: composite
+  steps:
+    - id: get-version
+      shell: bash
+      run: echo "version=$(cat ${{inputs.app-path}}/package.json | jq -r .version)" >> $GITHUB_OUTPUT
+    - id: get-metadata
+      shell: bash
+      run: |
+        NIGHTLY=$(([[ ${{ steps.get-version.outputs.version }} =~ ^[0-9]+\.[0-9]+\.[0-9]+-nightly\.[0-9]+$ ]] && echo "true") || echo "false")
+        echo "nightly=$NIGHTLY" >> $GITHUB_OUTPUT
+        BETA=$(([[ ${{ steps.get-version.outputs.version }} =~ ^[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]] && echo "true") || echo "false")
+        echo "beta=$BETA" >> $GITHUB_OUTPUT
+        PRODUCTION=$(([[ ${{ steps.get-version.outputs.version }} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] && echo "true") || echo "false")
+        echo "production=$PRODUCTION" >> $GITHUB_OUTPUT
+    
