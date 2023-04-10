@@ -23,7 +23,7 @@ runs:
         echo "docs-dir=$(grep -oP "docs_dir: '\K.+'" ${{ inputs.docs-path }}/mkdocs.yml | head -c-2)" >> $GITHUB_OUTPUT
     - id: build-cli-reference
       shell: bash
-      run: ${{ github.action_path }}/build_cli.sh ${{ steps.get-config.outputs.docs-dir }} ${{ inputs.app-path }}
+      run: ${{ github.action_path }}/build_cli.sh ${{ inputs.docs-path }}/${{ steps.get-config.outputs.docs-dir }} ${{ inputs.app-path }}
     - id: build-mkdocs
       shell: bash
       run: (cd ${{ inputs.docs-path }}; mkdocs build)
