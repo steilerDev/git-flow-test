@@ -44,7 +44,7 @@ jobs:
         with:
           commit_message: Version bump to ${{ steps.version-bump.outputs.new-version }}
       - name: Create Pull Request
-        if: inputs.bump-type == "beta" || inputs.bump-type == "production"
+        if: inputs.bump-type == 'beta' || inputs.bump-type == 'production'
         uses: peter-evans/create-pull-request@v5
         with:
           base: dev
