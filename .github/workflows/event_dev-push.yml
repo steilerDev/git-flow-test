@@ -20,11 +20,11 @@ jobs:
     needs: build-artifacts
     uses: ./.github/workflows/artifacts_test.yml
     with:
-      artifacts: '["unit"]'
+      methods: '["unit"]'
     
   deploy-artifacts:
     name: deploy-artifacts
     needs: test-artifacts
     uses: ./.github/workflows/artifacts_deploy.yml
     with:
-      artifacts: '["app", "docker"]'
+      targets: '["npm", "docker"]'

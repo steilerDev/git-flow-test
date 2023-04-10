@@ -14,7 +14,7 @@ jobs:
     name: test-artifacts
     uses: ./.github/workflows/artifacts_test.yml
     with:
-      artifacts: '["unit"]' # Get coverage report
+      methods: '["unit"]' # Get coverage report
 
   build-artifacts:
     name: build-artifacts
@@ -26,10 +26,10 @@ jobs:
     name: test-artifacts
     uses: ./.github/workflows/artifacts_test.yml
     with:
-      artifacts: '["e2e"]'
+      methods: '["e2e"]'
     
   deploy-artifacts:
     name: deploy-artifacts
     uses: ./.github/workflows/artifacts_deploy.yml
     with:
-      artifacts: '["npm", "docker"]'
+      targets: '["npm", "docker"]'

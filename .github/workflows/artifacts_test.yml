@@ -4,8 +4,8 @@ name: 'Artifacts: Test'
 on:
   workflow_call:
     inputs:
-      artifacts:
-        description: 'An array of tests that need to be run. Will be read using fromJSON(). Allowed values: ["e2e", "unit"]'
+      methods:
+        description: 'An array of test methods that need to be run. Will be read using fromJSON(). Allowed values: ["e2e", "unit"]'
         required: true
         type: string
     secrets:
@@ -23,7 +23,7 @@ permissions: {}
 jobs:
   unit:
     runs-on: ubuntu-latest
-    if: contains(fromJSON(inputs.artifacts), 'unit')
+    if: contains(fromJSON(inputs.methods), 'unit')
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
@@ -40,7 +40,7 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
-    if: contains(fromJSON(inputs.artifacts), 'e2e')
+    if: contains(fromJSON(inputs.methods), 'e2e')
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3

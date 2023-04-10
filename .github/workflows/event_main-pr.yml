@@ -17,7 +17,7 @@ jobs:
     name: test-artifacts
     uses: ./.github/workflows/artifacts_test.yml
     with:
-      artifacts: '["unit", "e2e"]'
+      method: '["unit", "e2e"]'
     secrets:
       test-apple-id-user: ${{ secrets.test-apple-id-user }}
       test-apple-id-pwd: ${{ secrets.test-apple-id-pwd }}
