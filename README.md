@@ -8,9 +8,7 @@ This projects' development process loosely follows git-flow by (Vincent Driessen
 
 External PRs should therefore target the dev branch. This will trigger unit tests, which need to pass, in order for merging to be considered.
 
-Version bumps only happen on the `dev` branch, initiated through the `Version Bump` workflow. This will create a new major, minor or patch release on the `nightly` release train. Every push to the `dev` branch will trigger a deployment to the docker `nightly` tag. 
-
-Once enough changes are ready for deployment, a PR to the main branch needs to be opened for a complete suite of checks to pass. To automate this, together with the appropriate version bump, execute the `beta_release` action. The same holds true for production releases through the `production_release` action.
+Version bumps only happen on the `dev` branch, initiated through the `Action: Bump Release` workflow, by selecting `nightly-major`, `nightly-major`, or `nightly-patch`. This will create a new major, minor or patch release on the `nightly` release train. Once enough changes are ready for deployment, a PR to the main branch needs to be opened for a complete suite of checks to pass. To automate this, together with the appropriate version bump, execute the `Action: Bump Release` workflow, selecting the `beta`release bump type. Prouction releases are creted in the same way, by selection the `production` type.
 
 Before accepting the PR the following checks are enforced through branch protection rules:
 - Full build process
@@ -18,7 +16,7 @@ Before accepting the PR the following checks are enforced through branch protect
 - API tests
 - Docker E2E tests
 
-Every push leads to a deployment to the appropriate `beta` or `production` channel, based on the current version of the application. Both will lead to a release and tag.
+Every non-tag push to the `dev` branch leads to a `nightly` deployment. Every non-tag push to the `main` branch leads to a `beta` or `production` release, based on the triggering app version.
 
 ## Setup
 
