@@ -58,13 +58,13 @@ jobs:
         id: version-bump
         with:
           version-bump-type: ${{ inputs.bump-type }}
-      # - name: commit
-      #   id: auto-commit-tag
-      #   uses: stefanzweifel/git-auto-commit-action@v4
-      #   with:
-      #     commit_message: Version bump to ${{ steps.version-bump.outputs.new-version }}
-      - name: Create Pull Request
-        id: cpr
+      - name: commit
+        if: inputs.bump-type != 'beta' && inputs.bump-type != 'production'
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Release bump to ${{ steps.version-bump.outputs.new-version }}
+      - name: commit-pr
+        id: commit-pr
         if: inputs.bump-type == 'beta' || inputs.bump-type == 'production'
         uses: peter-evans/create-pull-request@v5
         with:
