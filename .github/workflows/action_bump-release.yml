@@ -64,20 +64,20 @@ jobs:
         if: inputs.bump-type != 'beta' && inputs.bump-type != 'production'
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Release bump to ${{ steps.version-bump.outputs.new-version }}
+          commit_message: release bump to ${{ steps.version-bump.outputs.new-version }}
       - name: commit-pr
         id: commit-pr
         if: inputs.bump-type == 'beta' || inputs.bump-type == 'production'
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GH_ACCESS_TOKEN }}
-          commit-message: Release bump to ${{ steps.version-bump.outputs.new-version }}
           base: main
           branch: dev
           title: Release bump to ${{ steps.version-bump.outputs.new-version }}
           body: This PR bumps the release to ${{ steps.version-bump.outputs.new-version }}
+          commit-message: release bump to ${{ steps.version-bump.outputs.new-version }}
           labels: ${{ inputs.bump-type }}
       - name: Check outputs
         run: |
-          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+          echo "Pull Request Number - ${{ steps.commit-pr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.commit-pr.outputs.pull-request-url }}"
