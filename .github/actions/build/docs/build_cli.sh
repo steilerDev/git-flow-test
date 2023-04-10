@@ -1,10 +1,10 @@
 #!/bin/bash
 
 OUT_FILE="$1/user-guides/cli.md"
-BIN="$2/node_modules/.bin/ts-node-esm app/src/main.ts'
+BIN="$2/node_modules/.bin/ts-node-esm app/src/main.ts"
 > $OUT_FILE
 
-echo "# CLI Reference" >> $OUT_FILE
+echo '# CLI Reference' >> $OUT_FILE
 echo '' >> $OUT_FILE
 echo '```' >> $OUT_FILE
 $BIN --help >> $OUT_FILE

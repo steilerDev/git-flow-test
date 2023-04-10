@@ -1,8 +1,6 @@
-# Bumps the version to beta (or bumps the current beta version), and opens PR against main
 
 name: 'Action: Bump release'
-# This workflow will run on every push containing a tag, that is matching version naming
-# If the app builds and passes tests, it will release to the production channel (Docker's 'latest' tag, npm release...)
+# This workflow bumps the release and opens a PR (in case beta or production release bumps were selected)
 
 on:
   workflow_call:
