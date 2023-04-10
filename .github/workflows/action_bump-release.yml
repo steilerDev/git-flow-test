@@ -1,6 +1,6 @@
 
-name: 'Action: Bump release'
-run-name: 'Action: Release Bump to ${{ inputs.bump-type }} by @${{ github.actor }}'
+name: '[action] bump release'
+run-name: '[action] release bump to ${{ inputs.bump-type }} by @${{ github.actor }}'
 # This workflow bumps the release and opens a PR (in case beta or production release bumps were selected)
 
 on:
@@ -70,6 +70,7 @@ jobs:
         if: inputs.bump-type == 'beta' || inputs.bump-type == 'production'
         uses: peter-evans/create-pull-request@v5
         with:
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
           commit-message: Release bump to ${{ steps.version-bump.outputs.new-version }}
           base: main
           branch: dev

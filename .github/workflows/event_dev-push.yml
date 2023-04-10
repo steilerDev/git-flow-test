@@ -1,5 +1,5 @@
-name: 'Event: Push to {dev}'
-run-name: 'Event (Push to {dev}): ${{ github.event.head_commit.message }}'
+name: '[event] push to {dev}'
+run-name: '[event] push to {dev}: ${{ github.event.head_commit.message }}'
 # Upon receiving a push to dev, this workflow will deploy the dev branch to the nightly channel
 
 on: 
@@ -22,24 +22,24 @@ jobs:
         id: check-version
         uses: ./.github/actions/version/check
 
-  build-artifacts:
-    name: build-artifacts
+  test-artifacts:
+    name: test-artifacts
     needs: check-version
     if: needs.check-version.outputs.nightly == 'true'
+    uses: ./.github/workflows/artifacts_test.yml
+    with:
+      methods: '["unit"]'
+
+  build-artifacts:
+    name: build-artifacts
+    needs: test-artifacts
     uses: ./.github/workflows/artifacts_build.yml
     with:
       artifacts: '["app", "docker"]'
 
-  test-artifacts:
-    name: test-artifacts
-    needs: build-artifacts
-    uses: ./.github/workflows/artifacts_test.yml
-    with:
-      methods: '["unit"]'
-    
   deploy-artifacts:
     name: deploy-artifacts
-    needs: test-artifacts
+    needs: build-artifacts
     uses: ./.github/workflows/artifacts_deploy.yml
     with:
       targets: '["npm", "docker"]'
