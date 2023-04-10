@@ -1,5 +1,6 @@
 
 name: 'Action: Bump release'
+run-name: 'Version bump to next ${{ inputs.bump-type }}'
 # This workflow bumps the release and opens a PR (in case beta or production release bumps were selected)
 
 on:
@@ -26,29 +27,55 @@ jobs:
   version-bump:
     runs-on: ubuntu-latest
     steps:
-      - name: Fail if branch is not dev
-        if: github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/dev'
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: check/correct-branch
+        if: github.ref != 'refs/heads/dev'
         run: |
           echo "This workflow should not be triggered with workflow_dispatch on a branch other than dev"
           exit 1
-      - name: setup/checkout
-        uses: actions/checkout@v3
+      - name: check/version
+        id: check-version
+        uses: ./.github/actions/version/check
+      - name: check/correct-order
+        run: |
+          if [[ ${{ steps.check-version.outputs.beta }} == 'true' && ${{ inputs.bump-type }} == 'nightly' ]]; then
+            echo "Illegal transition from beta to nightly"
+            exit 1
+          fi
+
+          if [[ ${{ steps.check-version.outputs.production }} == 'true' && ${{ inputs.bump-type }} == 'nightly' ]]; then
+            echo "Illegal transition from production to nightly"
+            exit 1
+          fi
+
+          if [[ ${{ steps.check-version.outputs.production }} == 'true' && ${{ inputs.bump-type }} == 'beta' ]]; then
+            echo "Illegal transition from production to beta"
+            exit 1
+          fi
       - name: action/version-bump
-        uses: ./.github/actions/version-bump
+        uses: ./.github/actions/version/bump
         id: version-bump
         with:
           version-bump-type: ${{ inputs.bump-type }}
-      - name: commit
-        id: auto-commit-tag
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Version bump to ${{ steps.version-bump.outputs.new-version }}
+      # - name: commit
+      #   id: auto-commit-tag
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   with:
+      #     commit_message: Version bump to ${{ steps.version-bump.outputs.new-version }}
       - name: Create Pull Request
+        id: cpr
         if: inputs.bump-type == 'beta' || inputs.bump-type == 'production'
         uses: peter-evans/create-pull-request@v5
         with:
-          base: dev
-          branch: main
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
+          commit-message: Release bump to ${{ steps.version-bump.outputs.new-version }}
+          base: main
+          branch: dev
           title: Release bump to ${{ steps.version-bump.outputs.new-version }}
           body: This PR bumps the release to ${{ steps.version-bump.outputs.new-version }}
           labels: ${{ inputs.bump-type }}
+      - name: Check outputs
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"

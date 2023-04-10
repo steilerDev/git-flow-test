@@ -9,8 +9,22 @@ on:
       - '**'
 
 jobs:
+  check-version:
+    name: check-version
+    runs-on: ubuntu-latest
+    outputs: ## Only continue run if we are on nightly
+      should-run: ${{ steps.check-version.outputs.nightly }}
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: check-version
+        id: check-version
+        uses: ./.github/actions/version/check
+
   build-artifacts:
     name: build-artifacts
+    needs: check-version
+    if: needs.check-version.outputs.should-run == 'true'
     uses: ./.github/workflows/artifacts_build.yml
     with:
       artifacts: '["app", "docker"]'
