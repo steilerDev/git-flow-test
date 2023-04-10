@@ -1,6 +1,6 @@
 
 name: 'Action: Bump release'
-run-name: 'Version bump to next ${{ inputs.bump-type }}'
+run-name: 'Version bump to next ${{ inputs.bump-type }} release by @${{ github.actor }}'
 # This workflow bumps the release and opens a PR (in case beta or production release bumps were selected)
 
 on:

@@ -1,4 +1,5 @@
 name: 'Event: Push to {dev}'
+run-name: 'Event: Push to {dev} [${{ github.event.head_commit.message }}]'
 # Upon receiving a push to dev, this workflow will deploy the dev branch to the nightly channel
 
 on: 
