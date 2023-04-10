@@ -15,6 +15,7 @@ jobs:
 
   test-artifacts:
     name: test-artifacts
+    needs: build-artifacts
     uses: ./.github/workflows/artifacts_test.yml
     with:
       methods: '["unit", "e2e"]'
