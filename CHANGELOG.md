@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.0-beta.8
+## 1.2.1-nightly.1
 
 - some release notes
 
