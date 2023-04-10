@@ -47,8 +47,8 @@ jobs:
         if: inputs.bump-type == 'beta' || inputs.bump-type == 'production'
         uses: peter-evans/create-pull-request@v5
         with:
-          base: dev
-          branch: main
+          base: main
+          branch: dev
           title: Release bump to ${{ steps.version-bump.outputs.new-version }}
           body: This PR bumps the release to ${{ steps.version-bump.outputs.new-version }}
           labels: ${{ inputs.bump-type }}
