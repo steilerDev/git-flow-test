@@ -3,7 +3,7 @@ name: 'Action: Bump release'
 # This workflow bumps the release and opens a PR (in case beta or production release bumps were selected)
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       bump-type:
         description: 'Select which type of version bump you want to perform'
