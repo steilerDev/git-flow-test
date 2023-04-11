@@ -38,7 +38,7 @@ jobs:
         uses: ./.github/actions/version/check
 
   deploy-beta-artifacts:
-    name: deploy-beta- artifacts
+    name: deploy-beta-artifacts
     needs: [build-artifacts, check-version]
     if: needs.check-version.outputs.beta == 'true'
     uses: ./.github/workflows/artifacts_deploy.yml

@@ -43,3 +43,4 @@ jobs:
     uses: ./.github/workflows/artifacts_deploy.yml
     with:
       targets: '["npm", "docker"]'
+      environment: 'nightly'

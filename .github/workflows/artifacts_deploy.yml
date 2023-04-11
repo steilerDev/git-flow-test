@@ -8,6 +8,10 @@ on:
         description: 'An array of deployment targets. Will be read using fromJSON(). Allowed values: ["npm", "docker"]'
         required: true
         type: string
+      environment:
+        description: The deployment environment. Either 'nightly', 'production' or 'beta'
+        required: true
+        type: string
     #secrets:
 
 jobs:
