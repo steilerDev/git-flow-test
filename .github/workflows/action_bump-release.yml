@@ -75,7 +75,7 @@ jobs:
             gh pr close $EXISTING_PR
           fi
         env:
-            GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
       - name: pull-request
         if: inputs.bump-type == "beta" || inputs.bump-type == "production"
         run: |
@@ -90,4 +90,4 @@ jobs:
             gh pr comment ${{ steps.check-existing-pr.outputs.existing-pr }} -b "Superseded by #${NEW_PR}"
           fi
         env:
-            GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
