@@ -19,6 +19,9 @@ runs:
       run: echo "pr=$(gh pr list -B main -H dev --label 'release-bump' --json number -q '.[0].number')" >> GITHUB_OUTPUT
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
+    - id: print-pr
+      shell: bash
+      run: echo ${{ steps.get-existing-pr.outputs.pr }}
     - id: close-existing-pr
       if: ${{ steps.get-existing-pr.outputs.pr != '' }}
       shell: bash
