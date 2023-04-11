@@ -20,9 +20,9 @@ runs:
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
     - id: close-existing-pr
-      if: steps.get-existing-pr.outputs.pr != ''
+      if: ${{ steps.get-existing-pr.outputs.pr != '' }}
       shell: bash
-      run: gh pr close $EXISTING_PR
+      run: gh pr close ${{ steps.get-existing-pr.outputs.pr }}
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
     - id: create-pr
