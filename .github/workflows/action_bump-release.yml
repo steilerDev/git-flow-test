@@ -70,5 +70,5 @@ jobs:
         uses: ./.github/actions/version/bump-pr
         with:
           from-version: ${{ steps.check-version.outputs.main-version }}
-          to-version: ${{ steps.check-version.outputs.new-version }}
+          to-version: ${{ steps.version-bump.outputs.new-version }}
           gh-token: ${{ secrets.GH_ACCESS_TOKEN }}
