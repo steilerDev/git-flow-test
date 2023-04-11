@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.2
+## 1.2.3-nightly.1
 
 - some release notes
 
