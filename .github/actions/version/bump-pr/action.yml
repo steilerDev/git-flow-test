@@ -38,8 +38,10 @@ runs:
       if: steps.get-existing-pr.outputs.pr != ''
       shell: bash
       run: |
-        PR=$(gh pr list -B main -H dev --label release-bump )
-        echo $PR
+        while [ -z $PR ]; do
+          PR=$(gh pr list -B main -H dev --label release-bump )
+          echo $PR
+        done
         echo "pr=$PR" >> $GITHUB_OUTPUT
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
