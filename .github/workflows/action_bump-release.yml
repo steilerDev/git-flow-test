@@ -60,7 +60,7 @@ jobs:
       - name: check/existing-pr
         id: check-existing-pr
         run: |
-          EXISTING_PR=$(gh pr list -B main -H dev --label release-bump --json number -q .number)
+          EXISTING_PR=$(gh pr list -B main -H dev --label 'release-bump' --json number -q '.[0].number')
           if [ ! -z "$EXISTING_PR" ]; then
             echo "Closing existing PR $EXISTING_PR"
             gh pr close $EXISTING_PR
@@ -86,7 +86,7 @@ jobs:
             --json number
           
           if[ ! -z "${{ steps.check-existing-pr.outputs.existing-pr }}"]; then
-            NEW_PR=$(gh pr list -B main -H dev --label release-bump --json number)
+            NEW_PR=$(gh pr list -B main -H dev --label release-bump --json number -q '.[0].number')
             gh pr comment ${{ steps.check-existing-pr.outputs.existing-pr }} -b "Superseded by #${NEW_PR}"
           fi
         env:
