@@ -1,6 +1,6 @@
 {
   "name": "icloud-photos-sync",
-  "version": "1.2.2-beta.20",
+  "version": "1.2.2-beta.21",
   "description": "1.2.0",
   "preferGlobal": true,
   "type": "module",
