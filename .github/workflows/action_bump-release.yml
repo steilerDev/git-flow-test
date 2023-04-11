@@ -1,6 +1,6 @@
 
 name: '[action] bump release'
-run-name: '[action] release bump to ${{ inputs.bump-type }} by @${{ github.actor }}'
+run-name: '[action] ${{ inputs.bump-type }} release bump, triggered by @${{ github.actor }}'
 # This workflow bumps the release and opens a PR (in case beta or production release bumps were selected)
 
 on:
@@ -64,34 +64,11 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: release bump to ${{ steps.version-bump.outputs.new-version }}
-      # - name: pull-request
-      #   uses: repo-sync/pull-request@v2
-      #   with:
-      #     destination_branch: "main"                      # If blank, default: master
-      #     pr_title: "Pulling ${{ github.ref }} into master" # Title of pull request
-      #     pr_body: |                                        # Full markdown support, requires pr_title to be set
-      #       :crown: *An automated PR*
-
-      #       _Created by [repo-sync/pull-request](https://github.com/repo-sync/pull-request)_
-      #     pr_label: "auto-pr"                               # Comma-separated list (no spaces)
-      #     pr_allow_empty: true                              # Creates pull request even if there are no changes
-      #     github_token: ${{ secrets.GH_ACCESS_TOKEN }}      # If blank, default: secrets.GITHUB_TOKEN
-      - name: create pull request
-        run: gh pr create -B main -H dev --title 'Release bump to ${{ steps.version-bump.outputs.new-version }}' --body 'Created by Github action'
+      - name: pull-request
+        run: |
+          gh pr create -B main -H dev \
+            --title '${{ steps.check-version.outputs.version }} → ${{ steps.version-bump.outputs.new-version }}' \
+            --body '${{ inputs.bump-type }} release bump from ${{ steps.check-version.outputs.version }} to ${{ steps.version-bump.outputs.new-version }}, triggered by @${{ github.actor }}' \
+            --label ${{ inputs.bump-type }}
         env:
             GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
-      # - name: commit-pr
-      #   id: commit-pr
-      #   if: inputs.bump-type == 'beta' || inputs.bump-type == 'production'
-      #   uses: peter-evans/create-pull-request@v5
-      #   with:
-      #     token: ${{ secrets.GH_ACCESS_TOKEN }}
-      #     branch: main
-      #     title: Release bump to ${{ steps.version-bump.outputs.new-version }}
-      #     body: This PR bumps the release to ${{ steps.version-bump.outputs.new-version }}
-      #     commit-message: release bump to ${{ steps.version-bump.outputs.new-version }}
-      #     labels: ${{ inputs.bump-type }}
-      - name: Check outputs
-        run: |
-          echo "Pull Request Number - ${{ steps.commit-pr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.commit-pr.outputs.pull-request-url }}"
