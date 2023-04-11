@@ -27,7 +27,7 @@ runs:
   steps:
     - id: fetch-all
       shell: bash
-      run: git fetch --all
+      run: git fetch origin main
     - id: get-version
       shell: bash
       run: |
