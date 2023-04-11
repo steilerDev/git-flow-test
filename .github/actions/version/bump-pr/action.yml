@@ -32,6 +32,8 @@ runs:
           --title '${{ inputs.from-version }} → ${{ inputs.to-version }}' \
           --body 'Release bump from ${{ inputs.from-version }} to ${{ inputs.to-version }}' \
           --label release-bump
+      env:
+        GH_TOKEN: ${{ inputs.gh-token }}
     - id: get-new-pr
       if: steps.get-existing-pr.outputs.pr != ''
       shell: bash
