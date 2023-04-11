@@ -25,6 +25,9 @@ outputs:
 runs:
   using: composite
   steps:
+    - id: fetch-all
+      shell: bash
+      run: git fetch --all
     - id: get-version
       shell: bash
       run: |

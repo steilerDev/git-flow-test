@@ -27,21 +27,16 @@ jobs:
   version-bump:
     runs-on: ubuntu-latest
     steps:
-      - name: setup/checkout
-        uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GH_ACCESS_TOKEN }}
-          ref: 'main'
-      - name: setup/checkout
-        uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GH_ACCESS_TOKEN }}
       - name: check/correct-branch
         run: |
           if [[ ${{ github.ref }} != 'refs/heads/dev' ]]; then
             echo "This workflow should not be triggered with workflow_dispatch on a branch other than dev"
             exit 1
           fi
+      - name: setup/checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
       - name: check/version
         id: check-version
         uses: ./.github/actions/version/check
