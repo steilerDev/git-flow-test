@@ -60,6 +60,8 @@ jobs:
       - name: check/existing-pr
         run: |
           gh pr list -B main -H dev --label release-bump
+        env:
+            GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
       - name: action/version-bump
         uses: ./.github/actions/version/bump
         id: version-bump
