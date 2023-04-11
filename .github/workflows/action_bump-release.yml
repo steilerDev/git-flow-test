@@ -60,7 +60,7 @@ jobs:
       - name: check/existing-pr
         id: check-existing-pr
         run: |
-          EXISTING_PR=$(gh pr list -B main -H dev --label release-bump --json number)
+          EXISTING_PR=$(gh pr list -B main -H dev --label release-bump --json number -q .number)
           if [ ! -z "$EXISTING_PR" ]; then
             echo "Closing existing PR $EXISTING_PR"
             gh pr close $EXISTING_PR
