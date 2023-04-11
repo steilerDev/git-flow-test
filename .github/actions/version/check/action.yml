@@ -10,7 +10,7 @@ outputs:
     description: "The current version string"
     value: ${{ steps.get-version.outputs.version }}
   main-version:
-    description: "The current version string on the main branch"
+    description: "The current version string on the main branch - might be empty if main branch is not available"
     value: ${{ steps.get-main-version.outputs.version }}
   nightly:
     description: "'true' if this is a nightly release"
