@@ -20,24 +20,27 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.gh-token }}
     - id: close-existing-pr
-      if: steps.get-existing-pr.outputs.pr != ""
+      if: steps.get-existing-pr.outputs.pr != ''
       shell: bash
       run: gh pr close $EXISTING_PR
       env:
         GITHUB_TOKEN: ${{ inputs.gh-token }}
     - id: create-pr
+      shell: bash
       run: |
         gh pr create -B main -H dev \
           --title '${{ inputs.from-version }} → ${{ inputs.to-version }}' \
           --body 'Release bump from ${{ inputs.from-version }} to ${{ inputs.to-version }}' \
           --label release-bump
     - id: get-new-pr
-      if: steps.get-existing-pr.outputs.pr != ""
+      if: steps.get-existing-pr.outputs.pr != ''
+      shell: bash
       run: echo "pr=$(gh pr list -B main -H dev --label release-bump --json number -q '.[0].number')" >> GITHUB_OUTPUTS
       env:
         GITHUB_TOKEN: ${{ inputs.gh-token }}
     - id: comment-closed-pr 
-      if: steps.get-existing-pr.outputs.pr != ""
+      if: steps.get-existing-pr.outputs.pr != ''
+      shell: bash
       run: gh pr comment ${{ steps.get-existing-pr.outputs.pr }} -b 'Superseded by #${{ steps.get-new-pr.outputs.pr }}'
       env:
         GITHUB_TOKEN: ${{ inputs.gh-token }}
