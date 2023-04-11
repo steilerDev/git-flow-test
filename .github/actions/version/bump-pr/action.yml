@@ -47,6 +47,6 @@ runs:
     - id: comment-closed-pr 
       if: steps.get-existing-pr.outputs.pr != ''
       shell: bash
-      run: gh pr comment ${{ steps.get-existing-pr.outputs.pr }} -b "Superseded by ${{ steps.get-new-pr.outputs.pr }}"
+      run: gh pr comment ${{ steps.get-existing-pr.outputs.pr }} -b "Superseded by #${{ steps.get-new-pr.outputs.pr }}."
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
