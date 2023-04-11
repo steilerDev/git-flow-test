@@ -31,11 +31,13 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GH_ACCESS_TOKEN }}
+          fetch-depth: 2 # make sure to also fetch main branch
       - name: check/correct-branch
-        if: github.ref != 'refs/heads/dev'
         run: |
-          echo "This workflow should not be triggered with workflow_dispatch on a branch other than dev"
-          exit 1
+          if [[ ${{ github.ref }} != 'refs/heads/dev' ]]; then
+            echo "This workflow should not be triggered with workflow_dispatch on a branch other than dev"
+            exit 1
+          fi
       - name: check/version
         id: check-version
         uses: ./.github/actions/version/check

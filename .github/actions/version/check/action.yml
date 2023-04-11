@@ -32,6 +32,7 @@ runs:
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         echo "Detected version $VERSION"
     - id: get-main-version
+      continue-on-error: true
       shell: bash
       run: |
         VERSION=$(git show main:${{inputs.app-path}}/package.json | jq -r .version)
