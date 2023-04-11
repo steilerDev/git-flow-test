@@ -65,29 +65,10 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: release bump to ${{ steps.version-bump.outputs.new-version }}
-      - name: check/existing-pr
+      - name: bump-pr
         if: inputs.bump-type == 'beta' || inputs.bump-type == 'production'
-        id: check-existing-pr
-        run: |
-          EXISTING_PR=$(gh pr list -B main -H dev --label 'release-bump' --json number -q '.[0].number')
-          if [ ! -z "$EXISTING_PR" ]; then
-            echo "Found existing open PR #$EXISTING_PR, closing..."
-            gh pr close $EXISTING_PR
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
-      - name: pull-request
-        if: inputs.bump-type == 'beta' || inputs.bump-type == 'production'
-        run: |
-          gh pr create -B main -H dev \
-            --title '${{ steps.check-version.outputs.main-version }} → ${{ steps.version-bump.outputs.new-version }}' \
-            --body '${{ inputs.bump-type }} release bump from ${{ steps.check-version.outputs.main-version }} to ${{ steps.version-bump.outputs.new-version }}, triggered by @${{ github.actor }}' \
-            --label ${{ inputs.bump-type }} \
-            --label release-bump
-          
-          if[ ! -z "${{ steps.check-existing-pr.outputs.existing-pr }}"]; then
-            NEW_PR=$(gh pr list -B main -H dev --label release-bump --json number -q '.[0].number')
-            gh pr comment ${{ steps.check-existing-pr.outputs.existing-pr }} -b "Superseded by #${NEW_PR}"
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+        uses: ./.github/actions/version/bump-pr
+        with:
+          from-version: ${{ steps.check-version.outputs.main-version }}
+          to-version: ${{ steps.check-version.outputs.new-version }}
+          gh-token: ${{ secrets.GH_ACCESS_TOKEN }}
