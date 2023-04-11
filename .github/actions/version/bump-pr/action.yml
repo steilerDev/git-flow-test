@@ -16,7 +16,10 @@ runs:
   steps:
     - id: get-existing-pr
       shell: bash
-      run: echo "pr=$(gh pr list -B main -H dev --label 'release-bump' --json number -q '.[0].number')" >> GITHUB_OUTPUTS
+      run: |
+        PR=$(gh pr list -B main -H dev --label 'release-bump' --json number -q '.[0].number')
+        echo $PR
+        echo "pr=$PR" >> GITHUB_OUTPUTS
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
     - id: close-existing-pr
@@ -43,6 +46,6 @@ runs:
     - id: comment-closed-pr 
       if: steps.get-existing-pr.outputs.pr != ''
       shell: bash
-      run: gh pr comment ${{ steps.get-existing-pr.outputs.pr }} -b 'Superseded by #${{ steps.get-new-pr.outputs.pr }}'
+      run: gh pr comment ${{ steps.get-existing-pr.outputs.pr }} -b 'Superseded by #${{ steps.get-new-pr.outputs.pr }}.'
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
