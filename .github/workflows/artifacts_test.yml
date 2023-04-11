@@ -17,6 +17,7 @@ on:
         required: false
       test-trust-token: 
         description: The validated trust token of the Apple ID test user
+        required: false
 
 permissions: {}
 

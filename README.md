@@ -8,15 +8,17 @@ This projects' development process loosely follows git-flow by (Vincent Driessen
 
 External PRs should therefore target the dev branch. This will trigger unit tests, which need to pass, in order for merging to be considered.
 
-Version bumps only happen on the `dev` branch, initiated through the `Action: Bump Release` workflow, by selecting `nightly-major`, `nightly-major`, or `nightly-patch`. This will create a new major, minor or patch release on the `nightly` release train. Once enough changes are ready for deployment, a PR to the main branch needs to be opened for a complete suite of checks to pass. To automate this, together with the appropriate version bump, execute the `Action: Bump Release` workflow, selecting the `beta`release bump type. Prouction releases are creted in the same way, by selection the `production` type.
+Version bumps only happen on the `dev` branch, initiated through the [`[action] bump release`](https://github.com/steilerDev/git-flow-test/actions/workflows/action_bump-release.yml) workflow, by selecting `nightly-major`, `nightly-major`, or `nightly-patch`. 
 
-Before accepting the PR the following checks are enforced through branch protection rules:
+This will create a new major, minor or patch release on the `nightly` release train. Once enough changes are ready for deployment, a PR to the main branch needs to be opened for a complete suite of checks to pass. To automate this, together with the appropriate version bump, execute the [`[action] bump release`](https://github.com/steilerDev/git-flow-test/actions/workflows/action_bump-release.yml) workflow, selecting the `beta`release bump type. Production releases are created in the same way, by selection the `production` type.
+
+Before merging the PR into `main` the following checks are enforced through branch protection rules:
 - Full build process
 - Unit tests
 - API tests
 - Docker E2E tests
 
-Every non-tag push to the `dev` branch leads to a `nightly` deployment. Every non-tag push to the `main` branch leads to a `beta` or `production` release, based on the triggering app version.
+Every push to the `dev` branch containing a `nightly` release version leads to a `nightly` deployment. Every non-tag push to the `main` branch leads to a `beta` or `production` release, based on the triggering app version.
 
 ## Setup
 
@@ -49,3 +51,4 @@ Every non-tag push to the `dev` branch leads to a `nightly` deployment. Every no
   - `TEST_APPLE_ID_USER`
   - `TEST_APPLE_ID_PWD`
   - `TEST_TRUST_TOKEN`
+  - `GH_ACCESS_TOKEN` (for version bump workflow)

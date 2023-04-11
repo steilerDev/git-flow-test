@@ -10,7 +10,6 @@ on:
       - '**'
 
 jobs:
-
   create-coverage-report:
     name: create-coverage-report
     uses: ./.github/workflows/artifacts_test.yml
@@ -27,7 +26,7 @@ jobs:
   check-version:
     name: check-version
     runs-on: ubuntu-latest
-    outputs: ## Only continue run if we are on nightly
+    outputs: 
       beta: ${{ steps.check-version.outputs.beta }}
       production: ${{ steps.check-version.outputs.production }}
     steps:
@@ -38,7 +37,7 @@ jobs:
         uses: ./.github/actions/version/check
 
   deploy-beta-artifacts:
-    name: deploy-beta- artifacts
+    name: deploy-beta-artifacts
     needs: [build-artifacts, check-version]
     if: needs.check-version.outputs.beta == 'true'
     uses: ./.github/workflows/artifacts_deploy.yml

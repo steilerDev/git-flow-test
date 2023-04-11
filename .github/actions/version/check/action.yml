@@ -7,8 +7,11 @@ inputs:
     default: app
 outputs:
   version:
-    description: "The bumped version string"
+    description: "The current version string"
     value: ${{ steps.get-version.outputs.version }}
+  main-version:
+    description: "The current version string on the main branch - might be empty if main branch is not available"
+    value: ${{ steps.get-main-version.outputs.version }}
   nightly:
     description: "'true' if this is a nightly release"
     value: ${{ steps.get-metadata.outputs.nightly }}
@@ -22,12 +25,22 @@ outputs:
 runs:
   using: composite
   steps:
+    - id: fetch-all
+      shell: bash
+      run: git fetch origin main
     - id: get-version
       shell: bash
       run: |
         VERSION=$(cat ${{inputs.app-path}}/package.json | jq -r .version)
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         echo "Detected version $VERSION"
+    - id: get-main-version
+      continue-on-error: true
+      shell: bash
+      run: |
+        VERSION=$(git show origin/main:${{inputs.app-path}}/package.json | jq -r .version)
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Detected main version $VERSION"
     - id: get-metadata
       shell: bash
       run: |
