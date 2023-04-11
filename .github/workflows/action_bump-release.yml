@@ -61,7 +61,6 @@ jobs:
         with:
           version-bump-type: ${{ inputs.bump-type }}
       - name: commit
-        if: inputs.bump-type != 'beta' && inputs.bump-type != 'production'
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: release bump to ${{ steps.version-bump.outputs.new-version }}
@@ -71,8 +70,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GH_ACCESS_TOKEN }}
-          base: main
-          branch: dev
+          branch: main
           title: Release bump to ${{ steps.version-bump.outputs.new-version }}
           body: This PR bumps the release to ${{ steps.version-bump.outputs.new-version }}
           commit-message: release bump to ${{ steps.version-bump.outputs.new-version }}
