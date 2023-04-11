@@ -55,6 +55,9 @@ jobs:
             echo "Illegal transition from production to beta"
             exit 1
           fi
+      - name: check/existing-pr
+        run: |
+          gh pr list --json --label release-bump
       - name: action/version-bump
         uses: ./.github/actions/version/bump
         id: version-bump
@@ -67,8 +70,9 @@ jobs:
       - name: pull-request
         run: |
           gh pr create -B main -H dev \
-            --title '${{ steps.check-version.outputs.version }} → ${{ steps.version-bump.outputs.new-version }}' \
-            --body '${{ inputs.bump-type }} release bump from ${{ steps.check-version.outputs.version }} to ${{ steps.version-bump.outputs.new-version }}, triggered by @${{ github.actor }}' \
+            --title '${{ steps.check-version.outputs.main-version }} → ${{ steps.version-bump.outputs.new-version }}' \
+            --body '${{ inputs.bump-type }} release bump from ${{ steps.check-version.outputs.main-version }} to ${{ steps.version-bump.outputs.new-version }}, triggered by @${{ github.actor }}' \
             --label ${{ inputs.bump-type }}
+            --label release-bump
         env:
             GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}

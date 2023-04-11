@@ -10,7 +10,6 @@ on:
       - '**'
 
 jobs:
-
   create-coverage-report:
     name: create-coverage-report
     uses: ./.github/workflows/artifacts_test.yml
@@ -27,7 +26,7 @@ jobs:
   check-version:
     name: check-version
     runs-on: ubuntu-latest
-    outputs: ## Only continue run if we are on nightly
+    outputs: 
       beta: ${{ steps.check-version.outputs.beta }}
       production: ${{ steps.check-version.outputs.production }}
     steps:
