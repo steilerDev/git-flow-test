@@ -16,19 +16,13 @@ runs:
   steps:
     - id: get-existing-pr
       shell: bash
-      run: |
-        PR=$(gh pr list -B main -H dev --label 'release-bump' --json number -q '.[0].number')
-        echo $PR
-        echo "pr-number='$PR'" >> $GITHUB_OUTPUT
+      run: echo "pr=$(gh pr list -B main -H dev --label 'release-bump' --json number -q '.[0].number')" >> $GITHUB_OUTPUT
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
-    - id: print-pr
-      shell: bash
-      run: echo ${{ steps.get-existing-pr.outputs.pr-number }}
     - id: close-existing-pr
-      if: ${{ steps.get-existing-pr.outputs.pr-number != '' }}
+      if: steps.get-existing-pr.outputs.pr != ''
       shell: bash
-      run: gh pr close ${{ steps.get-existing-pr.outputs.pr-number }}
+      run: gh pr close ${{ steps.get-existing-pr.outputs.pr }}
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
     - id: create-pr
@@ -41,14 +35,14 @@ runs:
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
     - id: get-new-pr
-      if: steps.get-existing-pr.outputs.pr-number != ''
+      if: steps.get-existing-pr.outputs.pr != ''
       shell: bash
-      run: echo "pr-number=$(gh pr list -B main -H dev --label release-bump --json number -q '.[0].number')" >> $GITHUB_OUTPUT
+      run: echo "pr=$(gh pr list -B main -H dev --label release-bump --json number -q '.[0].number')" >> $GITHUB_OUTPUT
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
     - id: comment-closed-pr 
-      if: steps.get-existing-pr.outputs.pr-number != ''
+      if: steps.get-existing-pr.outputs.pr != ''
       shell: bash
-      run: "gh pr comment ${{ steps.get-existing-pr.outputs.pr-number }} -b 'Superseded by #${{ steps.get-new-pr.outputs.pr-number }}.'"
+      run: "gh pr comment ${{ steps.get-existing-pr.outputs.pr }} -b 'Superseded by #${{ steps.get-new-pr.outputs.pr }}.'"
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
