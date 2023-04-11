@@ -38,9 +38,8 @@ runs:
       if: steps.get-existing-pr.outputs.pr != ''
       shell: bash
       run: |
-        while [ -z $PR ]; do
-          PR=$(gh pr list -B main -H dev --label release-bump )
-          echo $PR
+        while [ -z "$PR" ]; do
+          PR=$(gh pr list -B main -H dev --label release-bump --json number -q '.[0].number')
         done
         echo "pr=$PR" >> $GITHUB_OUTPUT
       env:
