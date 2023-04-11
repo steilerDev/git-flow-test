@@ -1,4 +1,4 @@
-name: 'Event - Push to {main}'
+name: '[event] push to {main}'
 run-name: '[event] push to {main}: ${{ github.event.head_commit.message }}'
 # Upon receiving a push to main, this workflow will deploy the main branch to the beta or production channel
 
