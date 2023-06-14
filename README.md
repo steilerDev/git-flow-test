@@ -2,6 +2,10 @@
 
 Using this repo to develop a git flow based setup
 
+## Conventional Commit
+
+Using [Angular preset](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular) with their [commit rules](https://github.com/angular/angular/blob/main/CONTRIBUTING.md#-commit-message-format)
+
 ## Process
 
 This projects' development process loosely follows git-flow by (Vincent Driessen)[http://nvie.com/]. Feature development happens on the `dev` branch, however features don't get their own feature branch, due to the lack of contribution complexity at the moment.

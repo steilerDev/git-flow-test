@@ -1,0 +1,63 @@
+{
+    "branches": [
+        "main",
+        {
+            "name": "beta", "prerelease": true 
+        }, {
+            "name": "dev", "channel": "nightly", "prerelease": "nightly"
+        }
+    ],
+    "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        [
+            "@semantic-release/changelog",
+            {
+                "changelogFile": "CHANGELOG.md",
+                "changelogTitle": "Changelog"
+            }
+        ],
+        [
+            "@google/semantic-release-replace-plugin",
+            {
+                "replacements": [
+                {
+                    "files": ["app/src/lib/package.ts"],
+                    "from": "export const VERSION = `.*`;",
+                    "to": "export const VERSION = `${nextRelease.version}`;",
+                    "results": [
+                        {
+                            "file": "app/src/lib/package.ts",
+                            "hasChanged": true,
+                            "numMatches": 1,
+                            "numReplacements": 1
+                        }
+                    ],
+                    "countMatches": true
+                }
+                ]
+            }
+        ],
+        [
+            "@semantic-release/git",
+            {
+                "assets": [
+                    "CHANGELOG.md",
+                    "app/src/lib/package.ts"
+                ]
+            }
+        ],
+        [
+            "@semantic-release/github",
+            {
+              "assets": [
+                { "path": "dist/asset.min.css", "label": "CSS distribution" },
+                { "path": "dist/asset.min.js", "label": "JS distribution" },
+                { "path": "dist/MyLibrary.js", "label": "MyLibrary JS (${nextRelease.gitTag}) distribution"}
+              ],
+              "addReleases": "bottom"
+            }
+        ]
+    ],
+    "preset": "angular"
+}
