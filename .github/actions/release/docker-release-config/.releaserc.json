@@ -4,7 +4,7 @@
         [
             "@semantic-release-plus/docker",
             {
-                "name": "icloud-photos-sync"
+                "name": "git-flow-test"
             }
         ]
     ]

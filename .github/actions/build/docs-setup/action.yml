@@ -36,4 +36,4 @@ runs:
         path: ${{ inputs.app-path }}
     - id: install-app-artifact
       shell: bash
-      run: npm install -g ${{ inputs.app-path }}/icloud-photos-sync*.tgz
+      run: npm install -g ${{ inputs.app-path }}/*.tgz

@@ -7,7 +7,7 @@
                 "replacements": [
                 {
                     "files": ["app/bin/lib/package.js"],
-                    "from": "export const VERSION = *",
+                    "from": "export const VERSION = .*$",
                     "to": "export const VERSION = `${nextRelease.version}`;",
                     "results": [
                         {
