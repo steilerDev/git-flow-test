@@ -4,7 +4,7 @@ Using this repo to develop a git flow based setup
 
 ## Conventional Commit
 
-Using [ESLint preset](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-eslint) for commit messages.
+Using [Angular](https://github.com/angular/angular/blob/main/CONTRIBUTING.md#commit) for commit messages.
 
 ## Process
 
