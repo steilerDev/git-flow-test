@@ -42,7 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     if: inputs.release && contains(fromJSON(inputs.artifacts), 'app')
     needs: app
-    permissions: {}
+    permissions:
+      contents: write
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
