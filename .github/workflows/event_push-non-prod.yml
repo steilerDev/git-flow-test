@@ -1,4 +1,4 @@
-name: '[event] push to {dev/beta}'
+name: '[event] push to {non-prod}'
 run-name: '[event] push to {${{ github.ref_name }}}: ${{ github.event.head_commit.message }}'
 # Upon receiving a push to dev or beta, this workflow will deploy to the nightly or beta channel
 
@@ -18,6 +18,6 @@ jobs:
       artifacts: '["app"]'
       release: true
     secrets:
-      docker-username: ${{ secrets.docker-username }}
-      docker-password: ${{ secrets.docker-password }}
-      npm-token: ${{ secrets.npm-token }}
+      docker-token: ${{ secrets.DOCKER_TOKEN }}
+      npm-token: ${{ secrets.NPM_TOKEN }}
+      gh-token: ${{ secrets.GH_TOKEN }}

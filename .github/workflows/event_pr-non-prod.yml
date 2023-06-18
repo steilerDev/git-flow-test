@@ -1,5 +1,5 @@
 # Upon receiving a PR to dev, this workflow will run basic build and test steps
-name: '[event] PR to {dev}'
+name: '[event] PR to {non-prod}'
 run-name: '[event] ${{ github.event.action }} "${{ github.event.pull_request.title }}" targeting {dev}'
 
 on:

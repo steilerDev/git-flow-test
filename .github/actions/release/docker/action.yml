@@ -4,8 +4,8 @@ inputs:
   docker-username:
     description: The Docker username used for releasing the image
     required: true
-  docker-password:
-    description: The Docker password used for releasing the image
+  docker-token:
+    description: The Docker token used for releasing the image
     required: true
   release-dir:
     description: Directory, where the semantic release binary and configuration is located
@@ -18,6 +18,6 @@ runs:
       shell: bash
       run: |
         export DOCKER_USERNAME=${{ inputs.docker-username }}
-        export DOCKER_PASSWORD=${{ inputs.docker-password }}
+        export DOCKER_PASSWORD=${{ inputs.docker-token }}
         (cd ${{ inputs.release-dir }}; npx semantic-release)
     

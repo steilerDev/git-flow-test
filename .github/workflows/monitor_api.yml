@@ -18,9 +18,9 @@ jobs:
     with:
       methods: '["api"]'
     secrets:
-      test-apple-id-user: ${{ secrets.test-apple-id-user }}
-      test-apple-id-pwd: ${{ secrets.test-apple-id-pwd }}
-      test-trust-token: ${{ secrets.test-trust-token }}
+      test-apple-id-user: ${{ secrets.TEST_APPLE_ID_USER }}
+      test-apple-id-pwd: ${{ secrets.TEST_APPLE_ID_PWD }}
+      test-trust-token: ${{ secrets.TEST_TRUST_TOKEN }}
   
   acquire-token:
     name: acquire-token

@@ -27,6 +27,19 @@ Before merging the PR into `beta` or `main` the following checks are enforced th
 
 ## Setup
 
+- Secrets:
+  - `GH_TOKEN`: Personal Access Token used by:
+    - `[event] push to {non-prod}` for release of tag
+    - `[event] push to {prod}` for release of tag
+  - `NPM_TOKEN`: Token for releasing to npm, used by:
+    - `[event] push to {non-prod}` for release to `nightly` channel
+    - `[event] push to {prod}` for release to `beta` or production channel
+  - `DOCKER_TOKEN`: Token for releasing to docker (assuming repo owner == docker username)
+    - `[event] push to {non-prod}` for release to `nightly` channel
+    - `[event] push to {prod}` for release to `beta` or production channel
+    
+
+
 - Environments:
   - `nightly`
     - Deployment branch: `dev`

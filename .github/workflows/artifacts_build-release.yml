@@ -14,16 +14,13 @@ on:
         type: boolean
         default: false
     secrets:
-        docker-username:
-          description: The Docker username used for releasing the image
-          required: false
-        docker-password:
-          description: The Docker password used for releasing the image
+        docker-token:
+          description: The Docker token used for releasing the image
           required: false
         npm-token:
           description: The npm token used for releasing the package
           required: false
-        gh-pat:
+        gh-token:
           description: The Github Personal Access Token, in order to deploy the wiki asset
           required: false
 
@@ -82,14 +79,14 @@ jobs:
       - name: action/release-docker
         uses: ./.github/actions/release/docker
         with:
-          docker-username: ${{ secrets.docker-username }}
-          docker-password: ${{ secrets.docker-password }}
+          docker-username: ${{ github.repository_owner }}
+          docker-token: ${{ secrets.docker-token }}
       - name: action/update-readme
         uses: peter-evans/dockerhub-description@v3
         if: contains(fromJSON(inputs.artifacts), 'docs')
         with:
-          username: ${{ secrets.docker-username }}
-          password: ${{ secrets.docker-password }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.docker-token }}
           repository: ${{ secrets.docker-username }}/${{ github.event.repository.name }}
           short-description: ${{ github.event.repository.description }}
           readme-filepath: README.md
