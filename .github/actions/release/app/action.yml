@@ -27,7 +27,7 @@ runs:
       run: |
         export NPM_TOKEN=${{ inputs.npm-token }}
         export GITHUB_TOKEN=${{ inputs.gh-token }}
-        (cd ${{ inputs.release-dir }}; npx semantic-release)
+        (cd ${{ inputs.release-dir }}; echo $GITHUB_TOKEN; npx semantic-release)
     - id: remove-artifact
       uses: geekyeggo/delete-artifact@v2
       with:
