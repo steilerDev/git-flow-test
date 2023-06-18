@@ -2,7 +2,6 @@
   "description": "dependencies for releasing the npm application through semantic release",
   "devDependencies": {
     "@google/semantic-release-replace-plugin": "^1.2.0",
-    "conventional-changelog-eslint": "^4.0.0",
     "semantic-release": "^21.0.5"
   }
 }

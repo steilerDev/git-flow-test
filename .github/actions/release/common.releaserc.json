@@ -11,5 +11,5 @@
         "@semantic-release/commit-analyzer",
         "@semantic-release/release-notes-generator"
     ],
-    "preset": "eslint"
+    "preset": "angular"
 }
