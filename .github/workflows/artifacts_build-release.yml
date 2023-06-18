@@ -42,7 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     if: inputs.release && contains(fromJSON(inputs.artifacts), 'app')
     needs: app
-    permissions: {}
+    permissions: 
+      contents: write
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
@@ -52,13 +53,13 @@ jobs:
         uses: ./.github/actions/release/app
         with:
           npm-token: ${{ secrets.npm-token }}
-          gh-token: ${{ secrets.gh-token }}
 
   docker:
     runs-on: ubuntu-latest
     if: contains(fromJSON(inputs.artifacts), 'app')
     needs: [app, app-release] # needs app-release, because this will provide a properly versioned app
-    permissions: {}
+    permissions: 
+      contents: write
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3

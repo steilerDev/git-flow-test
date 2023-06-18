@@ -4,9 +4,6 @@ inputs:
   npm-token:
     description: The npm token used for releasing the package
     required: true
-  gh-token:
-    description: A personal access token for the GH repository
-    required: true
   artifact-name:
     description: The name of the uploaded app artifact
     required: false
@@ -26,8 +23,7 @@ runs:
       shell: bash
       run: |
         export NPM_TOKEN=${{ inputs.npm-token }}
-        export GITHUB_TOKEN=${{ inputs.gh-token }}
-        (cd ${{ inputs.release-dir }}; echo $GITHUB_TOKEN; npx semantic-release)
+        (cd ${{ inputs.release-dir }}; npx semantic-release)
     - id: remove-artifact
       uses: geekyeggo/delete-artifact@v2
       with:
