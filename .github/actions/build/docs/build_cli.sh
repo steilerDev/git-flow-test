@@ -1,7 +1,7 @@
 #!/bin/bash
 
 OUT_FILE="$1/user-guides/cli.md"
-BIN="$2/node_modules/.bin/ts-node-esm app/src/main.ts"
+BIN="icloud-photos-sync"
 > $OUT_FILE
 
 echo '# CLI Reference' >> $OUT_FILE

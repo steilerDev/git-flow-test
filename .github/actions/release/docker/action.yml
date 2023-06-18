@@ -1,0 +1,23 @@
+name: release-docker
+description: Releases the docker image to the appropriate channel
+inputs:
+  docker-username:
+    description: The Docker username used for releasing the image
+    required: true
+  docker-password:
+    description: The Docker password used for releasing the image
+    required: true
+  release-dir:
+    description: Directory, where the semantic release binary and configuration is located
+    required: false
+    default: release
+runs:
+  using: composite
+  steps:
+    - id: release-docker
+      shell: bash
+      run: |
+        export DOCKER_USERNAME=${{ inputs.docker-username }}
+        export DOCKER_PASSWORD=${{ inputs.docker-password }}
+        (cd ${{ inputs.release-dir }}; npx semantic-release)
+    

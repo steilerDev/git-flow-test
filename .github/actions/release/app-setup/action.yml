@@ -1,0 +1,39 @@
+name: release-app-setup
+description: Sets up the app release environment
+inputs:
+  release-dir:
+    description: Directory, where the semantic release binary and configuration is located
+    required: false
+    default: release
+  artifact-name:
+    description: The name of the uploaded app artifact
+    required: false
+    default: app-artifact
+runs:
+  using: composite
+  steps:
+    - id: setup-fs
+      shell: bash
+      run: |
+        mkdir ${{ inputs.release-dir }}
+        cp ${{ github.action_path }}/../app-release-config/.releaserc.json \
+          ${{ github.action_path }}/../app-release-config/package.json \
+          ${{ github.action_path }}/../app-release-config/package-lock.json ${{ inputs.release-dir }}
+    - id: setup-node
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: ${{ github.action_path }}/node-version
+        cache: 'npm'
+        cache-dependency-path: ${{ inputs.release-dir }}
+    - id: setup-npm
+      shell: bash
+      run: (cd ${{ inputs.release-dir }}; npm ci)
+    - id: download-app-artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ inputs.app-artifact }}
+        path: ${{ inputs.release-dir }}/app
+    - id: setup-app-artifact
+      shell: bash
+      run: (cd ${{ inputs.release-dir }}/app; tar -xf *.tgz; rm -f *.tgz; ls -al)
+

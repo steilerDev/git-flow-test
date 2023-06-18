@@ -1,5 +1,5 @@
-name: test-app-setup
-description: Sets up the environment for the app unit test action
+name: test-api-setup
+description: Sets up the environment for the API test action
 inputs:
   app-path:
     description: The path to the app directory

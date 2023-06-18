@@ -1,0 +1,35 @@
+name: '[event] push to {beta/main}'
+run-name: '[event] push to {${{ github.event.ref }}}: ${{ github.event.head_commit.message }}'
+# Upon receiving a push to beta or main, this workflow will deploy the beta or production channels
+
+on: 
+  push:
+    branches: # Run on every push to main
+      - 'main'
+    tags-ignore:
+      - '**'
+
+    
+jobs:
+  create-coverage-report:
+    name: create-coverage-report
+    uses: ./.github/workflows/artifacts_test.yml
+    permissions: {}
+    with:
+      methods: '["unit"]' # Get coverage report
+
+  build-release-artifacts:
+    name: build-release-artifacts
+    needs: create-coverage-report
+    uses: ./.github/workflows/artifacts_build-release.yml
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    with:
+      artifacts: '["app", "docs"]'
+      release: true
+    secrets:
+      docker-username: ${{ secrets.docker-username }}
+      docker-password: ${{ secrets.docker-password }}
+      npm-token: ${{ secrets.npm-token }}

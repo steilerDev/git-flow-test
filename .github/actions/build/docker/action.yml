@@ -1,28 +1,43 @@
 name: build-docker
-description: Builds the docker container
+description: Builds the cross platform docker containers and uploads the artifact
 inputs:
   docker-path:
     description: The path to the docker directory
     required: false
     default: docker
-outputs:
-  artifact-path:
-    description: The generated docker artifact filepath
-    value: ${{ steps.package-artifact.outputs.artifact-path }}
+  artifact-name:
+    description: The name of the uploaded docker artifact
+    required: false
+    default: docker-artifact
 runs:
   using: composite
   steps:
     - id: build-rootfs
       shell: bash
       run: tar -C ${{ inputs.docker-path }}/rootfs -czf ${{ inputs.docker-path }}/rootfs.tar.gz ./
-    - id: build-docker
-      shell: bash
-      run: |
-        docker build ./docker --tag ${{ github.event.repository.name }}
-        docker save ${{ github.event.repository.name }} | gzip > ./docker-image.tar.gz
+    - id: build-docker-amd64
+      uses: docker/build-push-action@v4
+      with:
+        context: ${{ inputs.docker-path }}
+        platforms: ${{ inputs.docker-platform }}
+        tags: ${{ github.event.repository.name }}
+        outputs: type=docker,dest=docker-amd64.tar
+    - id: build-docker-arm64
+      uses: docker/build-push-action@v4
+      with:
+        context: ${{ inputs.docker-path }}
+        platforms: ${{ inputs.docker-platform }}
+        tags: ${{ github.event.repository.name }}
+        outputs: type=docker,dest=docker-arm64.tar
     - id: package-artifact
       shell: bash
       run: |
         mkdir docker-artifact
-        mv docker-image.tar.gz README.md CHANGELOG.md LICENSE docker-artifact/
+        gzip docker-*.tar
+        mv docker-*.tar.gz README.md LICENSE docker-artifact/
         echo "artifact-path=docker-artifact/" >> $GITHUB_OUTPUT
+    - name: upload-artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ steps.package-artifact.outputs.artifact-path }}

@@ -1,0 +1,155 @@
+name: 'Artifacts: Build & Release'
+# This workflow will generate the requested artifacts and optionally release them
+
+on:
+  workflow_call:
+    inputs:
+      artifacts:
+        description: 'An array of artifacts that need to be built. Will be read using fromJSON(). Allowed values: ["app", "docs"]'
+        required: true
+        type: string
+      release:
+        description: Flag to indicate if the respective artifacts should be deployed
+        required: false
+        type: boolean
+        default: false
+    secrets:
+        docker-username:
+          description: The Docker username used for releasing the image
+          required: false
+        docker-password:
+          description: The Docker password used for releasing the image
+          required: false
+        npm-token:
+          description: The npm token used for releasing the package
+          required: false
+        gh-pat:
+          description: The Github Personal Access Token, in order to deploy the wiki asset
+          required: false
+
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    if: contains(fromJSON(inputs.artifacts), 'app')
+    permissions: {}
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/build-app
+        uses: ./.github/actions/build/app-setup
+      - name: action/build-app
+        uses: ./.github/actions/build/app
+        id: build-app
+  
+  app-release:
+    runs-on: ubuntu-latest
+    if: inputs.release && contains(fromJSON(inputs.artifacts), 'app')
+    needs: app
+    permissions: {}
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/release-app
+        uses: ./.github/actions/release/app-setup
+      - name: action/release-app
+        uses: ./.github/actions/release/app
+        with:
+          npm-token: ${{ secrets.npm-token }}
+
+  docker:
+    runs-on: ubuntu-latest
+    if: contains(fromJSON(inputs.artifacts), 'app')
+    needs: [app, app-release] # needs app-release, because this will provide a properly versioned app
+    permissions: {}
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/build-docker
+        uses: ./.github/actions/build/docker-setup
+      - name: action/build-docker
+        uses: ./.github/actions/build/docker
+
+  docker-release:
+    runs-on: ubuntu-latest
+    if: inputs.release && contains(fromJSON(inputs.artifacts), 'app')
+    needs: docker
+    permissions: {}
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/release-docker
+        uses: ./.github/actions/release/docker-setup
+      - name: action/release-docker
+        uses: ./.github/actions/release/docker
+        with:
+          docker-username: ${{ secrets.docker-username }}
+          docker-password: ${{ secrets.docker-password }}
+      - name: action/update-readme
+        uses: peter-evans/dockerhub-description@v3
+        if: contains(fromJSON(inputs.artifacts), 'docs')
+        with:
+          username: ${{ secrets.docker-username }}
+          password: ${{ secrets.docker-password }}
+          repository: ${{ secrets.docker-username }}/${{ github.event.repository.name }}
+          short-description: ${{ github.event.repository.description }}
+          readme-filepath: README.md
+  
+  wiki:
+    runs-on: ubuntu-latest
+    if: contains(fromJSON(inputs.artifacts), 'docs')
+    permissions: {}
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/build-wiki
+        uses: ./.github/actions/build/wiki-setup
+      - name: action/build-wiki
+        uses: ./.github/actions/build/wiki
+
+  wiki-release:
+    runs-on: ubuntu-latest
+    if: inputs.release && contains(fromJSON(inputs.artifacts), 'docs')
+    needs: wiki
+    permissions:
+      contents: write
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      # Todo
+
+  docs:
+    runs-on: ubuntu-latest
+    if: contains(fromJSON(inputs.artifacts), 'docs')
+    needs: [app, app-release] # to generate the properly versioned CLI reference
+    permissions: {}
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/build-docs
+        uses: ./.github/actions/build/docs-setup
+      - name: action/build-docs
+        uses: ./.github/actions/build/docs
+
+  docs-release:
+    runs-on: ubuntu-latest
+    if: inputs.release && contains(fromJSON(inputs.artifacts), 'docs')
+    needs: docs
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      # Todo
+
+  github-release:
+    runs-on: ubuntu-latest
+    if: inputs.release && contains(fromJSON(inputs.artifacts), 'docs')
+    needs: [app, app-release, docker] # For the assets
+    permissions:
+      contents: write
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      # Todo

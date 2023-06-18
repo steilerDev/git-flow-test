@@ -1,29 +1,28 @@
-name: 'build-docs'
-description: 'Builds the docs using mkdocs'
+name: build-docs
+description: Builds the docs using mkdocs
 inputs:
   docs-path:
-    description: "The path to the docs directory"
+    description: The path to the docs directory
     required: false
     default: docs
   app-path:
-    description: "The path to the app directory"
+    description: The path to the app directory
     required: false
     default: app
-outputs:
-  artifact-path:
-    description: "The generated docs artifact filepath"
-    value: ${{ steps.export-artifact.outputs.artifact-path }}
 runs:
-  using: "composite"
+  using: composite
   steps:
     - id: get-config
       shell: bash
       run: | 
         echo "site-dir=$(grep -oP "site_dir: '\K.+'" ${{ inputs.docs-path }}/mkdocs.yml | head -c-2)" >> $GITHUB_OUTPUT
         echo "docs-dir=$(grep -oP "docs_dir: '\K.+'" ${{ inputs.docs-path }}/mkdocs.yml | head -c-2)" >> $GITHUB_OUTPUT
+    - id: build-readme
+      shell: bash
+      run: cp README.md LICENSE ${{ inputs.docs-path }}/${{ steps.get-config.outputs.docs-dir }}/
     - id: build-cli-reference
       shell: bash
-      run: ${{ github.action_path }}/build_cli.sh ${{ inputs.docs-path }}/${{ steps.get-config.outputs.docs-dir }} ${{ inputs.app-path }}
+      run: ${{ github.action_path }}/build_cli.sh ${{ inputs.docs-path }}/${{ steps.get-config.outputs.docs-dir }}
     - id: build-mkdocs
       shell: bash
       run: (cd ${{ inputs.docs-path }}; mkdocs build)
@@ -33,6 +32,7 @@ runs:
       with:
         name: coverage-artifact
         path: ${{ inputs.docs-path }}/${{ steps.get-config.outputs.site-dir }}/dev/coverage
-    - id: export-artifact
-      shell: bash
-      run: echo "artifact-path=${{ inputs.docs-path }}/${{ steps.get-config.outputs.site-dir }}" >> $GITHUB_OUTPUT
+    - id: upload-artifact
+      uses: actions/upload-pages-artifact@v1
+      with:
+        path: ${{ inputs.docs-path }}/${{ steps.get-config.outputs.site-dir }}

@@ -1,5 +1,5 @@
-name: test-app-setup
-description: Sets up the environment for the app unit test action
+name: test-api-token-setup
+description: Sets up the environment for acquiring an API token for GH runners
 inputs:
   app-path:
     description: The path to the app directory
@@ -17,3 +17,10 @@ runs:
     - id: setup-npm
       shell: bash
       run: (cd ${{ inputs.app-path }}; npm ci)
+    - id: build-app
+      shell: bash
+      run: (cd ${{ inputs.app-path }}; npm run build)
+    - id: install-app
+      shell: bash
+      run: (cd ${{ inputs.app-path }}; npm link)
+

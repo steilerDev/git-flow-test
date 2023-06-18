@@ -1,0 +1,35 @@
+name: release-docker
+description: Releases the npm package to the appropriate channel and updates the uploaded artifact
+inputs:
+  npm-token:
+    description: The npm token used for releasing the package
+    required: true
+  artifact-name:
+    description: The name of the uploaded app artifact
+    required: false
+    default: app-artifact
+  release-dir:
+    description: Directory, where the semantic release binary and configuration is located
+    required: false
+    default: release
+outputs:
+  artifact-path:
+    description: "The generated npm-pack filepath"
+    value: ${{ steps.package-artifact.outputs.artifact-path }}
+runs:
+  using: composite
+  steps:
+    - id: release-app
+      shell: bash
+      run: |
+        export NPM_TOKEN=${{ inputs.npm-token }}
+        (cd ${{ inputs.release-dir }}; npx semantic-release)
+    - id: remove-artifact
+      uses: geekyeggo/delete-artifact@v2
+      with:
+        name: ${{ inputs.artifact-name }}
+    - id: upload-artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.release-dir }}/*.tgz

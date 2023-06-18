@@ -1,16 +1,16 @@
-name: 'build-wiki'
-description: 'Builds the Github Wiki Pages'
+name: build-wiki
+description: Builds the Github Wiki Pages and uploads the artifact
 inputs:
   app-path:
-    description: "The path to the app directory"
+    description: The path to the app directory
     required: false
     default: app
-outputs:
-  artifact-path:
-    description: "The generated wiki artifact filepath"
-    value: ${{ steps.package-artifact.outputs.artifact-path }}
+  artifact-name:
+    description: The name of the uploaded wiki artifact
+    required: false
+    default: wiki-artifact
 runs:
-  using: "composite"
+  using: composite
   steps:
     - id: build-typedoc
       shell: bash
@@ -20,3 +20,8 @@ runs:
       run: |
         outDir=$(cat ${{ inputs.app-path }}/typedoc.json | jq -r .out)
         echo "artifact-path=${{ inputs.app-path }}/$outDir" >> $GITHUB_OUTPUT
+    - name: upload-artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ steps.package-artifact.outputs.artifact-path }}

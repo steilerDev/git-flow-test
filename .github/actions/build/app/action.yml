@@ -1,16 +1,16 @@
-name: 'build-app'
-description: 'Builds the JS application'
+name: build-app
+description: Builds the JS application and uploads the artifact
 inputs:
   app-path:
-    description: "The path to the app directory"
+    description: The path to the app directory
     required: false
     default: app
-outputs:
-  artifact-path:
-    description: "The generated npm-pack filepath"
-    value: ${{ steps.package-artifact.outputs.artifact-path }}
+  artifact-name:
+    description: The name of the uploaded app artifact
+    required: false
+    default: app-artifact
 runs:
-  using: "composite"
+  using: composite
   steps:
     - id: build-app
       shell: bash
@@ -20,3 +20,8 @@ runs:
       run: |
         fileName=$(cd ${{ inputs.app-path }}; npm pack)
         echo "artifact-path=${{ inputs.app-path }}/$fileName" >> $GITHUB_OUTPUT
+    - id: upload-artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ steps.package-artifact.outputs.artifact-path }}

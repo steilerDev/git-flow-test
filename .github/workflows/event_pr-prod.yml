@@ -1,0 +1,30 @@
+name: '[event] PR to {beta/main}'
+run-name: '[event] ${{ github.event.action }} "${{ github.event.pull_request.title }}" targeting {${{ github.event.pull_request.base.ref }}}'
+# Upon receiving a PR to main or beta, this workflow will run all build and test checks required for release
+
+on:
+  pull_request:
+    branches:    
+      - main
+      - beta
+
+permissions: {}
+
+jobs:
+  build-artifacts:
+    name: build-artifacts
+    uses: ./.github/workflows/artifacts_build-release.yml
+    with:
+      artifacts: '["app", "docs"]'
+      release: false
+
+  test-artifacts:
+    name: test-artifacts
+    needs: build-artifacts
+    uses: ./.github/workflows/artifacts_test.yml
+    with:
+      methods: '["unit", "e2e", "api"]'
+    secrets:
+      test-apple-id-user: ${{ secrets.test-apple-id-user }}
+      test-apple-id-pwd: ${{ secrets.test-apple-id-pwd }}
+      test-trust-token: ${{ secrets.test-trust-token }}
