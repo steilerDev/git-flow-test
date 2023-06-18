@@ -21,3 +21,6 @@ runs:
       with:
         name: ${{ inputs.app-artifact-name }}
         path: ${{ inputs.docker-path }}/rootfs/opt/
+    - id: debug
+      shell: bash
+      run: ls -al ${{ inputs.docker-path }}/rootfs/opt/

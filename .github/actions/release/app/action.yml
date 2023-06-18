@@ -24,10 +24,10 @@ runs:
       run: |
         export NPM_TOKEN=${{ inputs.npm-token }}
         (cd ${{ inputs.release-dir }}; npx semantic-release)
-    - id: remove-artifact
-      uses: geekyeggo/delete-artifact@v2
-      with:
-        name: ${{ inputs.artifact-name }}
+    # - id: remove-artifact
+    #   uses: geekyeggo/delete-artifact@v2
+    #   with:
+    #     name: ${{ inputs.artifact-name }}
     - id: upload-artifact
       uses: actions/upload-artifact@v3
       with:
