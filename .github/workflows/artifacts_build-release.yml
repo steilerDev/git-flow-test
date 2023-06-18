@@ -27,6 +27,11 @@ on:
           description: The Github Personal Access Token, in order to deploy the wiki asset
           required: false
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   app:
     runs-on: ubuntu-latest
