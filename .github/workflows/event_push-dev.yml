@@ -1,5 +1,5 @@
 name: '[event] push to {dev/beta}'
-run-name: '[event] push to {${{ github.event.ref }}}: ${{ github.event.head_commit.message }}'
+run-name: '[event] push to {${{ github.ref_name }}}: ${{ github.event.head_commit.message }}'
 # Upon receiving a push to dev or beta, this workflow will deploy to the nightly or beta channel
 
 on: 
