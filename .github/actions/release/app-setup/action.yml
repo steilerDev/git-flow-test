@@ -34,7 +34,7 @@ runs:
     - id: download-app-artifact
       uses: actions/download-artifact@v3
       with:
-        name: ${{ inputs.app-artifact }}
+        name: ${{ inputs.artifact-name }}
         path: ${{ inputs.release-dir }}/app
     - id: setup-app-artifact
       shell: bash
