@@ -10,13 +10,10 @@ on:
     tags-ignore:
       - '**'
 
-permissions: {}
-
 jobs:
   build-release-artifacts:
     name: build-release-artifacts
     uses: ./.github/workflows/artifacts_build-release.yml
-    permissions: {}
     with:
       artifacts: '["app"]'
       release: true
