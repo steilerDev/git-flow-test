@@ -1,5 +1,5 @@
 {
-  "name": "@steilerdev/git-flow-test",
+  "name": "steilerdev-git-flow-test",
   "version": "0.0.0-local-dev",
   "preferGlobal": true,
   "type": "module",
