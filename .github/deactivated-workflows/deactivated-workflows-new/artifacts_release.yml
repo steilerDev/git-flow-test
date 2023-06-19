@@ -1,0 +1,31 @@
+name: 'Artifacts: Release'
+# This workflow will release the requested artifacts
+
+on:
+  workflow_call:
+    inputs:
+      targets:
+        description: 'An array of deployment targets. Will be read using fromJSON(). Allowed values: ["app", "docs"]'
+        required: true
+        type: string
+    secrets:
+      docker-username:
+        required: false
+
+jobs:
+  npm:
+    runs-on: ubuntu-latest
+    if: contains(fromJSON(inputs.targets), 'app')
+    steps:
+      - run: echo "deploying to npm"
+  
+  docker:
+    runs-on: ubuntu-latest
+    if: contains(fromJSON(inputs.targets), 'docker')
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/release-docker
+        uses: ./.github/actions/release/docker-setup
+      - name: action/release-docker
+        uses: ./.github/actions/release/docker

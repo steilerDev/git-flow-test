@@ -1,0 +1,147 @@
+name: 'Artifacts: Build & Release'
+# This workflow will generate the requested artifacts and optionally release them
+
+on:
+  workflow_call:
+    inputs:
+      all-artifacts:
+        description: This flag indicates if only the app artifacts should be build/released or all available artifacts
+        required: true
+        type: boolean
+      release:
+        description: Flag to indicate if the respective artifacts should be deployed
+        required: true
+        type: boolean
+    secrets:
+        docker-token:
+          description: The Docker token used for releasing the image
+          required: false
+        npm-token:
+          description: The npm token used for releasing the package
+          required: false
+        gh-token:
+          description: The Github Personal Access Token, in order to deploy the wiki asset
+          required: false
+
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/build-app
+        uses: ./.github/actions/build/app-setup
+      - name: action/build-app
+        uses: ./.github/actions/build/app
+        id: build-app
+  
+  app-release:
+    runs-on: ubuntu-latest
+    if: inputs.release
+    needs: app
+    permissions: 
+      contents: write
+      id-token: write
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/release-app
+        uses: ./.github/actions/release/app-setup
+      - name: action/release-app
+        uses: ./.github/actions/release/app
+        with:
+          npm-token: ${{ secrets.npm-token }}
+
+  docker:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [app, app-release] # needs app-release, because this will provide a properly versioned app
+    permissions: {}
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/build-docker
+        uses: ./.github/actions/build/docker-setup
+      - name: action/build-docker
+        uses: ./.github/actions/build/docker
+
+  docker-release:
+    runs-on: ubuntu-latest
+    if: inputs.release
+    needs: docker
+    permissions: 
+      contents: write
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/release-docker
+        uses: ./.github/actions/release/docker-setup
+      - name: action/release-docker
+        uses: ./.github/actions/release/docker
+        with:
+          docker-token: ${{ secrets.docker-token }}
+  
+  wiki:
+    runs-on: ubuntu-latest
+    if: inputs.all-artifacts
+    permissions: {}
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/build-wiki
+        uses: ./.github/actions/build/wiki-setup
+      - name: action/build-wiki
+        uses: ./.github/actions/build/wiki
+
+  wiki-release:
+    runs-on: ubuntu-latest
+    if: inputs.release && inputs.all-artifacts
+    needs: wiki
+    permissions:
+      contents: write
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      # Todo
+
+  docs:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.all-artifacts && always() }}
+    needs: [app, app-release] # to generate the properly versioned CLI reference
+    permissions: {}
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/build-docs
+        uses: ./.github/actions/build/docs-setup
+      - name: action/build-docs
+        uses: ./.github/actions/build/docs
+
+  docs-release:
+    runs-on: ubuntu-latest
+    if: inputs.release && inputs.all-artifacts
+    needs: docs
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      # Todo
+
+  github-release:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.release && always() }}
+    needs: [app-release, docker-release, docs-release, wiki-release] # For the assets
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: setup/checkout
+        uses: actions/checkout@v3
+      - name: setup/release-github
+        uses: ./.github/actions/release/github-setup
+      - name: action/release-github
+        uses: ./.github/actions/release/github

@@ -1,0 +1,11 @@
+{
+    "extends": "./common.releaserc.json",
+    "plugins": [
+        [
+            "@semantic-release-plus/docker",
+            {
+                "name": "Updated within CI"
+            }
+        ]
+    ]
+}

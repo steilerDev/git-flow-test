@@ -2,5 +2,5 @@
 
 import { VERSION } from "./lib/package.js";
 
-console.log(`Hello world`);
+console.log(`Hello world 2`);
 console.log(`Version: ${VERSION}`)

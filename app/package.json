@@ -1,7 +1,6 @@
 {
-  "name": "icloud-photos-sync",
-  "version": "1.2.3-beta.5",
-  "description": "1.2.0",
+  "name": "steilerdev-git-flow-test",
+  "version": "0.0.0-local-dev",
   "preferGlobal": true,
   "type": "module",
   "main": "bin/main.js",
@@ -19,7 +18,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/steilerDev/icloud-photos-sync.git"
+    "url": "git+https://github.com/steilerDev/git-flow-test"
+  },
+  "publishConfig": {
+    "provenance": true
   },
   "keywords": [
     "icloud",

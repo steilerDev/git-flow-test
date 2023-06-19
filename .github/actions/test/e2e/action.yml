@@ -15,13 +15,15 @@ inputs:
     description: The test user's trust token
     required: true
 runs:
-  using: "composite"
+  using: composite
   steps:
+    - id: get-image-tag
+      uses: ./.github/actions/helper/docker-image-tag
     - id: test-docker
       shell: bash
       run: |
         export TEST_APPLE_ID_USER=${{ inputs.test-apple-id-user }}
         export TEST_APPLE_ID_PWD=${{ inputs.test-apple-id-pwd }}
         export TEST_TRUST_TOKEN=${{ inputs.test-trust-token }}
-        export IMAGE_NAME=${{ github.event.repository.name }}
+        export IMAGE_NAME=${{ steps.get-image-tag.outputs.image-namespace }}/${{ steps.get-image-tag.outputs.image-repository }}:${{ steps.get-image-tag.outputs.image-tag }}
         run-parts -v --exit-on-error ${{ inputs.docker-path }}/test

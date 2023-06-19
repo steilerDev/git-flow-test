@@ -1,0 +1,59 @@
+name: release-github-setup
+description: Sets up the github release environment
+inputs:
+  release-dir:
+    description: Directory, where the semantic release binary and configuration is located
+    required: false
+    default: release
+runs:
+  using: composite
+  steps:
+    - id: setup-fs
+      shell: bash
+      run: |
+        mkdir ${{ inputs.release-dir }}
+        # Copy release configurations
+        cp ${{ github.action_path }}/../github-release-config/package.json \
+          ${{ github.action_path }}/../github-release-config/package-lock.json \
+          ${{ github.action_path }}/../common.releaserc.json \
+          ${{ github.action_path }}/../node-version \
+          ${{ inputs.release-dir }}/
+    - id: configure-dev-release
+      shell: bash
+      if: github.ref_name == 'dev'
+      run: |
+        # Not running github release plugin on dev release
+        cat ${{ github.action_path }}/../github-release-config/.releaserc.json |\
+          jq 'del(.plugins[0])' \
+          > ${{ inputs.release-dir }}/.releaserc.json
+    - id: configure-beta-release
+      shell: bash
+      if: github.ref_name == 'beta'
+      run: |
+        # Slightly different messaging, when publishing beta releases
+        cat ${{ github.action_path }}/../github-release-config/.releaserc.json |\
+          jq '.plugins[0][1].successComment = "This ${issue.pull_request ? 'pull request' : 'issue'} is resolved with version ${nextRelease.version}, please confirm before public release." |\
+          jq '.plugins[0][1].releasedLabels = "previewed <%= nextRelease.version %>" |\
+          > ${{ inputs.release-dir }}/.releaserc.json
+    - id: configure-main-release
+      shell: bash
+      if: github.ref_name == 'main'
+      run: |
+        cp ${{ github.action_path }}/../github-release-config/.releaserc.json \
+          {{ inputs.release-dir }}/
+    - id: setup-node
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: ${{ inputs.release-dir }}/node-version
+        cache: npm
+        cache-dependency-path: ${{ inputs.release-dir }}
+    - id: setup-npm
+      shell: bash
+      run: (cd ${{ inputs.release-dir }}; npm ci)
+    - id: download-artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: ${{ inputs.release-dir }}/artifacts
+    - id: check-artifact
+      shell: bash
+      run: tree -a ${{ inputs.release-dir }}/artifacts/

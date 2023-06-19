@@ -1,0 +1,22 @@
+# Upon receiving a PR to dev, this workflow will run basic build and test steps
+name: '[event] PR to {non-prod}'
+run-name: '[event] ${{ github.event.action }} "${{ github.event.pull_request.title }}" targeting {dev}'
+
+on:
+  pull_request:
+    branches:    
+      - dev
+
+jobs:
+  build-artifacts:
+    name: build-artifacts
+    uses: ./.github/workflows/artifacts_build-release.yml
+    with:
+      artifacts: '["app"]'
+      release: false
+
+  test-artifacts:
+    name: test-artifacts
+    uses: ./.github/workflows/artifacts_test.yml
+    with:
+      methods: '["unit"]'

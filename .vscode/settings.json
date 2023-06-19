@@ -1,5 +1,14 @@
 {
     "cSpell.words": [
-        "buildx"
+        "buildx",
+        "dockerhub",
+        "mkdocs",
+        "releaserc",
+        "rootfs",
+        "steilerdev",
+        "typedoc"
+    ],
+    "conventionalCommits.scopes": [
+        "ci"
     ]
 }

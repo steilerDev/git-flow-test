@@ -1,0 +1,33 @@
+name: release-docker
+description: Releases the docker image to the appropriate channel
+inputs:
+  docker-token:
+    description: The Docker token used for releasing the image
+    required: true
+  release-dir:
+    description: Directory, where the semantic release binary and configuration is located
+    required: false
+    default: release
+runs:
+  using: composite
+  steps:
+    - id: get-image-tag
+      uses: ./.github/actions/helper/docker-image-tag
+    - id: release-docker
+      shell: bash
+      run: |
+        export DOCKER_USERNAME=${{ steps.get-image-tag.outputs.image-namespace }}
+        export DOCKER_PASSWORD=${{ inputs.docker-token }}
+        (cd ${{ inputs.release-dir }}; npx semantic-release)
+    - id: clean-tag
+      shell: bash
+      run: git push --delete origin $(git describe --tags --abbrev=0)
+    - id: update-readme
+      uses: peter-evans/dockerhub-description@v3
+      if: github.ref_name == 'main'
+      with:
+        username: ${{ steps.get-image-tag.outputs.image-namespace }}
+        password: ${{ inputs.docker-token }}
+        repository: ${{ steps.get-image-tag.outputs.image-namespace }}/${{ steps.get-image-tag.outputs.image-repository }}
+        short-description: ${{ github.event.repository.description }}
+        readme-filepath: README.md

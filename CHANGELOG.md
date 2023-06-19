@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.3-beta.5
+## 1.2.3-beta.6
 
 - some release notes
 
