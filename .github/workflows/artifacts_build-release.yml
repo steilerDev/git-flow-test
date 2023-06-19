@@ -4,15 +4,14 @@ name: 'Artifacts: Build & Release'
 on:
   workflow_call:
     inputs:
-      artifacts:
-        description: 'An array of artifacts that need to be built. Will be read using fromJSON(). Allowed values: ["app", "docs"]'
+      all-artifacts:
+        description: This flag indicates if only the app artifacts should be build/released or all available artifacts
         required: true
-        type: string
+        type: boolean
       release:
         description: Flag to indicate if the respective artifacts should be deployed
-        required: false
+        required: true
         type: boolean
-        default: false
     secrets:
         docker-token:
           description: The Docker token used for releasing the image
@@ -27,7 +26,6 @@ on:
 jobs:
   app:
     runs-on: ubuntu-latest
-    if: contains(fromJSON(inputs.artifacts), 'app')
     permissions: {}
     steps:
       - name: setup/checkout
@@ -40,7 +38,7 @@ jobs:
   
   app-release:
     runs-on: ubuntu-latest
-    if: inputs.release && contains(fromJSON(inputs.artifacts), 'app')
+    if: inputs.release
     needs: app
     permissions: 
       contents: write
@@ -56,7 +54,6 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
-    if: contains(fromJSON(inputs.artifacts), 'app')
     needs: [app, app-release] # needs app-release, because this will provide a properly versioned app
     permissions: {}
     steps:
@@ -69,7 +66,7 @@ jobs:
 
   docker-release:
     runs-on: ubuntu-latest
-    if: inputs.release && contains(fromJSON(inputs.artifacts), 'app')
+    if: inputs.release
     needs: docker
     permissions: 
       contents: write
@@ -85,7 +82,7 @@ jobs:
           docker-token: ${{ secrets.docker-token }}
       - name: action/update-readme
         uses: peter-evans/dockerhub-description@v3
-        if: contains(fromJSON(inputs.artifacts), 'docs')
+        if: inputs.all-artifacts
         with:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.docker-token }}
@@ -95,7 +92,7 @@ jobs:
   
   wiki:
     runs-on: ubuntu-latest
-    if: contains(fromJSON(inputs.artifacts), 'docs')
+    if: inputs.all-artifacts
     permissions: {}
     steps:
       - name: setup/checkout
@@ -107,7 +104,7 @@ jobs:
 
   wiki-release:
     runs-on: ubuntu-latest
-    if: inputs.release && contains(fromJSON(inputs.artifacts), 'docs')
+    if: inputs.release && inputs.all-artifacts
     needs: wiki
     permissions:
       contents: write
@@ -118,7 +115,7 @@ jobs:
 
   docs:
     runs-on: ubuntu-latest
-    if: contains(fromJSON(inputs.artifacts), 'docs')
+    if: inputs.all-artifacts
     needs: [app, app-release] # to generate the properly versioned CLI reference
     permissions: {}
     steps:
@@ -131,7 +128,7 @@ jobs:
 
   docs-release:
     runs-on: ubuntu-latest
-    if: inputs.release && contains(fromJSON(inputs.artifacts), 'docs')
+    if: inputs.release && inputs.all-artifacts
     needs: docs
     permissions:
       contents: read
@@ -144,11 +141,13 @@ jobs:
 
   github-release:
     runs-on: ubuntu-latest
-    if: inputs.release && contains(fromJSON(inputs.artifacts), 'docs')
-    needs: [app, app-release, docker] # For the assets
+    if: inputs.release
+    needs: [app-release, docker-release, docs-release, wiki-release] # For the assets
     permissions:
       contents: write
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
+      # Push tag
+      # if all-artifacts also create GH release
       # Todo

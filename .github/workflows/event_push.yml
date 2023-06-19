@@ -1,0 +1,33 @@
+name: '[event] push'
+run-name: '[event] push to {${{ github.ref_name }}}: ${{ github.event.head_commit.message }}'
+# Upon receiving a push, this workflow will deploy to the appropriate channels
+
+on: 
+  push:
+    branches: # Run on every push to dev
+      - 'dev'
+      - 'beta'
+      - 'main'
+    tags-ignore:
+      - '**'
+
+jobs:
+  create-coverage-report: # Coverage report will only be build for main release by 
+    name: create-coverage-report
+    uses: ./.github/workflows/artifacts_test.yml
+    if: github.ref_name == 'main'
+    permissions: {}
+    with:
+      methods: '["unit"]'
+
+  build-release-artifacts:
+    name: build-release-artifacts
+    uses: ./.github/workflows/artifacts_build-release.yml
+    needs: create-coverage-report
+    with:
+      all-artifacts: ${{ github.ref_name == 'main' }} # Build and release all artifacts only on main branch
+      release: true
+    secrets:
+      docker-token: ${{ secrets.DOCKER_TOKEN }}
+      npm-token: ${{ secrets.NPM_TOKEN }}
+      gh-token: ${{ secrets.GH_TOKEN }}

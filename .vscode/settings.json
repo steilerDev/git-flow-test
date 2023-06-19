@@ -5,6 +5,7 @@
         "mkdocs",
         "releaserc",
         "rootfs",
+        "steilerdev",
         "typedoc"
     ],
     "conventionalCommits.scopes": [

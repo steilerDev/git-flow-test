@@ -14,9 +14,19 @@ inputs:
 runs:
   using: composite
   steps:
+    - id: prepare-image
+      shell: bash
+      run: |
+        docker tag ${{ github.event.repository.name }} \
+          $(echo ${{ inputs.docker-username }} | tr '[:upper:]' '[:lower:]')/\
+          ${{ github.event.repository.name }}:\
+          latest-ci-build
     - id: release-docker
       shell: bash
       run: |
         export DOCKER_USERNAME=$(echo ${{ inputs.docker-username }} | tr '[:upper:]' '[:lower:]') # making sure docker username is lower case
         export DOCKER_PASSWORD=${{ inputs.docker-token }}
         (cd ${{ inputs.release-dir }}; npx semantic-release)
+    - id: clean-tag
+      shell: bash
+      run: git push --delete origin $(git describe --tags --abbrev=0)
