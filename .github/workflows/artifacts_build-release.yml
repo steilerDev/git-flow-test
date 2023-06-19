@@ -58,8 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(fromJSON(inputs.artifacts), 'app')
     needs: [app, app-release] # needs app-release, because this will provide a properly versioned app
-    permissions: 
-      contents: write
+    permissions: {}
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
@@ -72,7 +71,8 @@ jobs:
     runs-on: ubuntu-latest
     if: inputs.release && contains(fromJSON(inputs.artifacts), 'app')
     needs: docker
-    permissions: {}
+    permissions: 
+      contents: write
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
