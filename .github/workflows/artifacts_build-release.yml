@@ -80,7 +80,6 @@ jobs:
       - name: action/release-docker
         uses: ./.github/actions/release/docker
         with:
-          docker-username: ${{ github.repository_owner }}
           docker-token: ${{ secrets.docker-token }}
       - name: action/update-readme
         uses: peter-evans/dockerhub-description@v3

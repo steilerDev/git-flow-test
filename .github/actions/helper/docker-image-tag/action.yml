@@ -16,6 +16,6 @@ runs:
     - id: get-config
       shell: bash
       run: |
-        echo "image-namespace=$(echo ${{ inputs.docker-username }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+        echo "image-namespace=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
         echo "image-repository=${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
         echo "image-tag=latest-ci-build" >> $GITHUB_OUTPUT
