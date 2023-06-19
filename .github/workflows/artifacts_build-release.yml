@@ -81,15 +81,6 @@ jobs:
         uses: ./.github/actions/release/docker
         with:
           docker-token: ${{ secrets.docker-token }}
-      - name: action/update-readme
-        uses: peter-evans/dockerhub-description@v3
-        if: inputs.all-artifacts
-        with:
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.docker-token }}
-          repository: ${{ secrets.docker-username }}/${{ github.event.repository.name }}
-          short-description: ${{ github.event.repository.description }}
-          readme-filepath: README.md
   
   wiki:
     runs-on: ubuntu-latest
@@ -146,9 +137,12 @@ jobs:
     needs: [app-release, docker-release, docs-release, wiki-release] # For the assets
     permissions:
       contents: write
+      issues: write
+      pull-requests: write
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
-      # Push tag
-      # if all-artifacts also create GH release
-      # Todo
+      - name: setup/release-github
+        uses: ./.github/actions/release/github-setup
+      - name: action/release-github
+        uses: ./.github/actions/release/github
