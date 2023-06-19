@@ -24,11 +24,12 @@ runs:
       run: |
         export NPM_TOKEN=${{ inputs.npm-token }}
         (cd ${{ inputs.release-dir }}; npx semantic-release)
+        mv ${{ inputs.release-dir }}/*.tgz ${{ github.event.repository.name }}.tgz
     - id: upload-artifact
       uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.artifact-name }}
-        path: ${{ inputs.release-dir }}/*.tgz
+        path: ${{ github.event.repository.name }}.tgz
     - id: clean-tag
       shell: bash
       run: git push --delete origin $(git describe --tags --abbrev=0)

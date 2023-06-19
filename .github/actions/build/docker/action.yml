@@ -12,6 +12,8 @@ inputs:
 runs:
   using: composite
   steps:
+    - id: get-image-tag
+      uses: ./.github/actions/helper/docker-image-tag
     - id: build-rootfs
       shell: bash
       run: tar -C ${{ inputs.docker-path }}/rootfs -czf ${{ inputs.docker-path }}/rootfs.tar.gz ./
@@ -20,14 +22,14 @@ runs:
       with:
         context: ${{ inputs.docker-path }}
         platforms: ${{ inputs.docker-platform }}
-        tags: ${{ github.event.repository.name }}
+        tags: ${{ steps.get-image-tag.outputs.image-namespace }}/${{ steps.get-image-tag.outputs.image-repository }}:${{ steps.get-image-tag.outputs.image-tag }}
         outputs: type=docker,dest=docker-amd64.tar
     - id: build-docker-arm64
       uses: docker/build-push-action@v4
       with:
         context: ${{ inputs.docker-path }}
         platforms: ${{ inputs.docker-platform }}
-        tags: ${{ github.event.repository.name }}
+        tags: ${{ steps.get-image-tag.outputs.image-namespace }}/${{ steps.get-image-tag.outputs.image-repository }}:${{ steps.get-image-tag.outputs.image-tag }}
         outputs: type=docker,dest=docker-arm64.tar
     - id: package-artifact
       shell: bash

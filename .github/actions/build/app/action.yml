@@ -19,9 +19,9 @@ runs:
       shell: bash
       run: |
         fileName=$(cd ${{ inputs.app-path }}; npm pack)
-        echo "artifact-path=${{ inputs.app-path }}/$fileName" >> $GITHUB_OUTPUT
+        mv $fileName ${{ github.event.repository.name }}.tgz
     - id: upload-artifact
       uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.artifact-name }}
-        path: ${{ steps.package-artifact.outputs.artifact-path }}
+        path: ${{ github.event.repository.name }}.tgz

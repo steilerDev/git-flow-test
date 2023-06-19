@@ -4,11 +4,7 @@
         [
             "@semantic-release-plus/docker",
             {
-                "name": {
-                    "namespace": "steilerdev",
-                    "repository": "git-flow-test",
-                    "tag": "latest-ci-build"
-                }
+                "name": "Updated within CI"
             }
         ]
     ]

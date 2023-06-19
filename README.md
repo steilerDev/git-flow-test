@@ -22,8 +22,12 @@ Before merging the PR into `beta` or `main` the following checks are enforced th
 - API tests
 - Docker E2E tests
 
+## Merging todos
 
-
+Before merging this back into `icloud-photos-sync`, the following hardcoded references to `git-flow-test` need to be adjusted:
+- `app/package.json`:
+  - `repository.url`
+  - `name`
 
 ## Setup
 
