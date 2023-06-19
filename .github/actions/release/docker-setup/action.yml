@@ -39,6 +39,4 @@ runs:
         path: docker-artifact
     - id: setup-docker-artifact
       shell: bash
-      run: |
-        docker load --input docker-artifact/docker-amd64.tar.gz
-        docker tag ${{ github.event.repository.name }} 
+      run: docker load --input docker-artifact/docker-amd64.tar.gz
