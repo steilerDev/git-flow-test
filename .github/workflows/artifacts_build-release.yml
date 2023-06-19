@@ -107,7 +107,7 @@ jobs:
 
   docs:
     runs-on: ubuntu-latest
-    if: inputs.all-artifacts
+    if: ${{ inputs.all-artifacts && always() }}
     needs: [app, app-release] # to generate the properly versioned CLI reference
     permissions: {}
     steps:
