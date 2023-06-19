@@ -38,4 +38,4 @@ runs:
       shell: bash
       run: |
         tree -a ${{ inputs.app-path }}
-        npm install -g ${{ inputs.app-path }}/npm-pack.tgz
+        npm install -g ./${{ inputs.app-path }}/npm-pack.tgz
