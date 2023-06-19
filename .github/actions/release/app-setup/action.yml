@@ -12,6 +12,12 @@ inputs:
 runs:
   using: composite
   steps:
+    - id: remove-remote-git
+      shell: bash
+      run: |
+        git remote -v  
+        git remote rm origin
+        git remote -v 
     - id: setup-fs
       shell: bash
       run: |
