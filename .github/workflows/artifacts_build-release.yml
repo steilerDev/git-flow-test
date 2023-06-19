@@ -123,7 +123,6 @@ jobs:
     if: inputs.release && inputs.all-artifacts
     needs: docs
     permissions:
-      contents: read
       pages: write
       id-token: write
     steps:

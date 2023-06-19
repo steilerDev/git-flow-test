@@ -5,8 +5,19 @@
             "@semantic-release/github",
             {
               "assets": [
-                { "path": "dist/asset.min.css", "label": "CSS distribution" },
-                { "path": "dist/asset.min.js", "label": "JS distribution" }
+                { 
+                    "path": "artifacts/app-artifact/npm-pack.tgz", 
+                    "name": "git-flow-test.<%= nextRelease.version %>.tgz",
+                    "label": "NPM Package Tarball" 
+                },{ 
+                    "path": "artifacts/docker-artifact/docker-amd64.tar.gz", 
+                    "name": "git-flow-test.amd64.<%= nextRelease.version %>.tar.gz",
+                    "label": "Docker Image Tarball (amd64)" 
+                },{ 
+                    "path": "artifacts/docker-artifact/docker-amd64.tar.gz", 
+                    "name": "git-flow-test.arm64.<%= nextRelease.version %>.tar.gz",
+                    "label": "Docker Image Tarball (arm64)" 
+                }
               ],
               "successComment": "This ${issue.pull_request ? 'pull request' : 'issue'} is resolved with version ${nextRelease.version}",
               "releasedLabels": "released <%= nextRelease.version %>",

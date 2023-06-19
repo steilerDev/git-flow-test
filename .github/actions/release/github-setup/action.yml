@@ -11,7 +11,7 @@ runs:
     - id: setup-fs
       shell: bash
       run: |
-        mkdir -p ${{ inputs.release-dir }}/artifacts
+        mkdir ${{ inputs.release-dir }}
         # Copy release configurations
         cp ${{ github.action_path }}/../github-release-config/package.json \
           ${{ github.action_path }}/../github-release-config/package-lock.json \
@@ -53,7 +53,7 @@ runs:
     - id: download-artifacts
       uses: actions/download-artifact@v3
       with:
-        path: ${{ inputs.release-dir }}/artifacts/
+        path: ${{ inputs.release-dir }}/artifacts
     - id: check-artifact
       shell: bash
       run: tree -a ${{ inputs.release-dir }}/artifacts/

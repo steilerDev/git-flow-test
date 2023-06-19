@@ -28,6 +28,8 @@ Before merging this back into `icloud-photos-sync`, the following hardcoded refe
 - `app/package.json`:
   - `repository.url`
   - `name`
+- `.github/actions/release/github-release-config/.releaserc.json`
+  - Name of packages
 
 ## Setup
 

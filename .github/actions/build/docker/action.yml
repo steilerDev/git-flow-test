@@ -21,14 +21,14 @@ runs:
       uses: docker/build-push-action@v4
       with:
         context: ${{ inputs.docker-path }}
-        platforms: ${{ inputs.docker-platform }}
+        platforms: linux/amd64
         tags: ${{ steps.get-image-tag.outputs.image-namespace }}/${{ steps.get-image-tag.outputs.image-repository }}:${{ steps.get-image-tag.outputs.image-tag }}
         outputs: type=docker,dest=docker-amd64.tar
     - id: build-docker-arm64
       uses: docker/build-push-action@v4
       with:
         context: ${{ inputs.docker-path }}
-        platforms: ${{ inputs.docker-platform }}
+        platforms: linux/arm64
         tags: ${{ steps.get-image-tag.outputs.image-namespace }}/${{ steps.get-image-tag.outputs.image-repository }}:${{ steps.get-image-tag.outputs.image-tag }}
         outputs: type=docker,dest=docker-arm64.tar
     - id: package-artifact
@@ -36,7 +36,7 @@ runs:
       run: |
         mkdir docker-artifact
         gzip docker-*.tar
-        mv docker-*.tar.gz README.md LICENSE docker-artifact/
+        mv docker-*.tar.gz docker-artifact/
         echo "artifact-path=docker-artifact/" >> $GITHUB_OUTPUT
     - name: upload-artifact
       uses: actions/upload-artifact@v3
