@@ -22,3 +22,12 @@ runs:
     - id: clean-tag
       shell: bash
       run: git push --delete origin $(git describe --tags --abbrev=0)
+    - id: update-readme
+      uses: peter-evans/dockerhub-description@v3
+      if: github.ref_name == "main"
+      with:
+        username: ${{ steps.get-image-tag.outputs.image-namespace }}
+        password: ${{ inputs.docker-token }}
+        repository: ${{ steps.get-image-tag.outputs.image-namespace }}/${{ steps.get-image-tag.outputs.image-repository }}
+        short-description: ${{ github.event.repository.description }}
+        readme-filepath: README.md

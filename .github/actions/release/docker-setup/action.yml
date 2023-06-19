@@ -1,4 +1,3 @@
-# download docker artifacts & load them
 name: release-docker-setup
 description: Sets up the docker release environment
 inputs:

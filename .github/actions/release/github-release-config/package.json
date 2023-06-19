@@ -1,0 +1,7 @@
+{
+  "description": "dependencies for creating a Github release",
+  "devDependencies": {
+    "@semantic-release/github": "^9.0.3",
+    "semantic-release": "^21.0.5"
+  }
+}

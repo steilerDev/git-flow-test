@@ -1,0 +1,20 @@
+{
+    "extends": "./common.releaserc.json",
+    "plugins": [
+        [
+            "@semantic-release/github",
+            {
+              "assets": [
+                { "path": "dist/asset.min.css", "label": "CSS distribution" },
+                { "path": "dist/asset.min.js", "label": "JS distribution" }
+              ],
+              "successComment": "This ${issue.pull_request ? 'pull request' : 'issue'} is resolved with version ${nextRelease.version}",
+              "releasedLabels": "released <%= nextRelease.version %>",
+              "failComment": false,
+              "failTitle": false,
+              "labels": false,
+              "addReleases": "bottom"
+            }
+          ]
+    ]
+}

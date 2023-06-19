@@ -1,0 +1,13 @@
+name: release-github
+description: Pushes the git tag and updates Github appropriately
+inputs:
+  release-dir:
+    description: Directory, where the semantic release binary and configuration is located
+    required: false
+    default: release
+runs:
+  using: composite
+  steps:
+    - id: release-github
+      shell: bash
+      run: (cd ${{ inputs.release-dir }}; npx semantic-release)
