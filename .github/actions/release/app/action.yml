@@ -29,3 +29,9 @@ runs:
       with:
         name: ${{ inputs.artifact-name }}
         path: ${{ inputs.release-dir }}/*.tgz
+    - id: clean-tag
+      shell: bash
+      run: |
+        git tag -l
+        git push --delete origin $(git describe --tags --abbrev=0)
+        git tag -l
