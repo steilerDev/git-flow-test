@@ -36,4 +36,6 @@ runs:
         path: ${{ inputs.app-path }}
     - id: install-app-artifact
       shell: bash
-      run: npm install -g ${{ inputs.app-path }}/*.tgz
+      run: |
+        tree -a ${{ inputs.app-path }}
+        npm install -g ${{ inputs.app-path }}/npm-pack.tgz
