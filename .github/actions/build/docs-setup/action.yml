@@ -20,7 +20,7 @@ runs:
       uses: actions/setup-python@v4
       with:
         python-version: 3.9
-        cache: pip'
+        cache: pip
         cache-dependency-path: ${{ inputs.docs-path }}
     - id: setup-pip
       shell: bash
