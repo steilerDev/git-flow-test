@@ -20,6 +20,9 @@
     "type": "git",
     "url": "git+https://github.com/steilerDev/icloud-photos-sync.git"
   },
+  "publishConfig": {
+    "provenance": true
+  },
   "keywords": [
     "icloud",
     "icloud-sync",
