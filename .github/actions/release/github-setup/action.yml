@@ -20,7 +20,7 @@ runs:
           ${{ inputs.release-dir }}/
     - id: configure-dev-release
       shell: bash
-      if: github.ref_name == "dev"
+      if: github.ref_name == 'dev'
       run: |
         # Not running github release plugin on dev release
         cat ${{ github.action_path }}/../github-release-config/.releaserc.json |\
@@ -28,7 +28,7 @@ runs:
           > ${{ inputs.release-dir }}/.releaserc.json
     - id: configure-beta-release
       shell: bash
-      if: github.ref_name == "beta"
+      if: github.ref_name == 'beta'
       run: |
         # Slightly different messaging, when publishing beta releases
         cat ${{ github.action_path }}/../github-release-config/.releaserc.json |\
@@ -37,7 +37,7 @@ runs:
           > ${{ inputs.release-dir }}/.releaserc.json
     - id: configure-main-release
       shell: bash
-      if: github.ref_name == "main"
+      if: github.ref_name == 'main'
       run: |
         cp ${{ github.action_path }}/../github-release-config/.releaserc.json \
           {{ inputs.release-dir }}/
