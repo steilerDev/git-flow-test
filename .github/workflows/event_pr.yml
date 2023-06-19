@@ -9,7 +9,7 @@ on:
       - beta
       - dev
 
-permissions: {}
+
 
 jobs:
   build-artifacts:
@@ -23,6 +23,7 @@ jobs:
     name: test-artifacts
     needs: build-artifacts
     uses: ./.github/workflows/artifacts_test.yml
+    permissions: {}
     with:
       methods: ${{ github.ref_name == 'dev' && '["unit"]' || '["unit", "e2e", "api"]' }}
     secrets:
