@@ -24,6 +24,7 @@ jobs:
     name: build-release-artifacts
     uses: ./.github/workflows/artifacts_build-release.yml
     needs: create-coverage-report
+    if: ${{ always() }}
     with:
       all-artifacts: ${{ github.ref_name == 'main' }} # Build and release all artifacts only on main branch
       release: true

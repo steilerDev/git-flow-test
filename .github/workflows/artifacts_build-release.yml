@@ -54,6 +54,7 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
+    if: ${{ always() }}
     needs: [app, app-release] # needs app-release, because this will provide a properly versioned app
     permissions: {}
     steps:
@@ -141,7 +142,7 @@ jobs:
 
   github-release:
     runs-on: ubuntu-latest
-    if: inputs.release
+    if: ${{ inputs.release && always() }}
     needs: [app-release, docker-release, docs-release, wiki-release] # For the assets
     permissions:
       contents: write
