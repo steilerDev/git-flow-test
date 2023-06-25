@@ -1,26 +1,25 @@
-name: 'test-e2e-setup'
-description: 'Sets up the environment for the E2E docker test action'
+name: test-e2e-setup
+description: Sets up the environment for the E2E docker test action
 inputs:
   docker-path:
-    description: "The path to the docker directory"
+    description: The path to the docker directory
     required: false
     default: docker
+  artifact-name:
+    description: The name of the uploaded docker artifact
+    required: false
+    default: docker-artifact
 runs:
-  using: "composite"
+  using: composite
   steps:
-    - id: setup-quemu
-      uses: docker/setup-qemu-action@v2
-    - id: setup-buildx
-      uses: docker/setup-buildx-action@v2
     - id: download-docker-artifact 
       uses: actions/download-artifact@v3
       with:
-        name: docker-artifact
-        path: docker-image
+        name: ${{ inputs.artifact-name }}
+        path: docker-artifact
     - id: setup-docker-artifact
       shell: bash
-      run: docker load --input ./docker-image/docker-image.tar.gz
+      run: docker load --input docker-artifact/docker-amd64.tar.gz
     - name: setup-tests
       shell: bash
       run: chmod +x ${{ inputs.docker-path }}/test/*
-    
