@@ -15,6 +15,9 @@ runs:
     - id: test-unit
       shell: bash
       run: (cd ${{ inputs.app-path }}; npm run test)
+    - id: make-artifact-unique
+      shell: bash
+      run: echo $(date) > ${{ inputs.app-path }}/coverage/builddate.txt
     - id: upload-artifact
       uses: actions/upload-artifact@v3
       with:
