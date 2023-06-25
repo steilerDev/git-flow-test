@@ -158,7 +158,7 @@ jobs:
 
   github-release:
     runs-on: ubuntu-latest
-    if: ${{ inputs.release && always() }}
+    if: inputs.release
     needs: [app-release, docker-build]
     permissions: # for semantic release
       contents: write
