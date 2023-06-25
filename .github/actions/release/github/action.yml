@@ -15,6 +15,5 @@ runs:
     - id: release-github
       shell: bash
       run: |
-        cat ${{ inputs.release-dir }}/.releaserc.json
         export GH_TOKEN=${{ inputs.gh-token }}
         (cd ${{ inputs.release-dir }}; npx semantic-release)

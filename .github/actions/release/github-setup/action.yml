@@ -24,6 +24,7 @@ runs:
           jq '.plugins[0][1].assets[1].name = "${{ github.event.repository.name }}.docker.amd64.<%= nextRelease.version %>.tar.gz"' |\
           jq '.plugins[0][1].assets[2].name = "${{ github.event.repository.name }}.docker.arm64.<%= nextRelease.version %>.tar.gz"' \
           > ${{ inputs.release-dir }}/.releaserc.json
+        cat ${{ inputs.release-dir }}/.releaserc.json
     - id: configure-dev-release
       shell: bash
       if: github.ref_name == 'dev'
@@ -40,6 +41,8 @@ runs:
           jq ".plugins[0][1].successComment = \"This \${issue.pull_request ? 'pull request' : 'issue'} should be resolved with version [\${nextRelease.version}](\${releases.url}), please confirm.\"" |\
           jq '.plugins[0][1].releasedLabels = "previewed <%= nextRelease.version %>"' \
           > ${{ inputs.release-dir }}/.releaserc.json
+
+        cat ${{ inputs.release-dir }}/.releaserc.json
     - id: configure-main-release
       shell: bash
       if: github.ref_name == 'main'
