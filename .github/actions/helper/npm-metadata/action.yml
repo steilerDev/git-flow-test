@@ -17,5 +17,5 @@ runs:
     - id: get-config
       shell: bash
       run: |
-        echo "version=$(jq -r .version ${{ inputs.package }}) >> $GITHUB_OUTPUT
-        echo "version=$(jq -r .name ${{ inputs.package }}) >> $GITHUB_OUTPUT
+        echo "version=$(jq -r .version ${{ inputs.package }})" >> $GITHUB_OUTPUT
+        echo "name=$(jq -r .name ${{ inputs.package }})" >> $GITHUB_OUTPUT
