@@ -8,6 +8,11 @@ inputs:
     description: Directory, where the release artifacts are located
     required: false
     default: release
+outputs:
+  release-url:
+    description: The URL to the created release
+    value: ${{ steps.release-wiki.outputs.wiki_url }}
+
 runs:
   using: composite
   steps:

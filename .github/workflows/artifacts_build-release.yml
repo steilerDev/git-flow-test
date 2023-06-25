@@ -45,13 +45,14 @@ jobs:
       id-token: write
     environment:
       name: ${{ github.ref_name }}
-      url: https://npmjs.com
+      url: ${{ steps.release-app.outputs.release-url }}
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
       - name: setup/release-app
         uses: ./.github/actions/release/app-setup
       - name: action/release-app
+        id: release-app
         uses: ./.github/actions/release/app
         with:
           npm-token: ${{ secrets.npm-token }}
@@ -77,13 +78,14 @@ jobs:
       contents: write
     environment:
       name: ${{ github.ref_name }}
-      url: https://hub.docker.com
+      url: ${{ steps.release-docker.outputs.release-url }}
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
       - name: setup/release-docker
         uses: ./.github/actions/release/docker-setup
       - name: action/release-docker
+        id: release-docker
         uses: ./.github/actions/release/docker
         with:
           docker-token: ${{ secrets.docker-token }}
@@ -108,13 +110,14 @@ jobs:
       contents: write
     environment:
       name: ${{ github.ref_name }}
-      url: https://github.com
+      url: ${{ steps.release-wiki.outputs.release-url }}
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
       - name: setup/release-wiki
         uses: ./.github/actions/release/wiki-setup
       - name: action/release-wiki
+        id: release-wiki
         uses: ./.github/actions/release/wiki
         with:
           gh-token: ${{ secrets.gh-token }}
@@ -141,17 +144,17 @@ jobs:
       id-token: write
     environment:
       name: ${{ github.ref_name }}
-      url: https://github.com
+      url: ${{ steps.release-docs.outputs.release-url }}
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
       - name: setup/release-docs
         uses: ./.github/actions/release/docs-setup
       - name: action/release-docs
+        id: release-docs
         uses: ./.github/actions/release/docs
         with:
           gh-token: ${{ secrets.gh-token }}
-      # Todo
 
   github-release:
     runs-on: ubuntu-latest
@@ -163,13 +166,14 @@ jobs:
       pull-requests: write
     environment:
       name: ${{ github.ref_name }}
-      url: https://github.com
+      url: ${{ steps.release-github.outputs.release-url }}
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
       - name: setup/release-github
         uses: ./.github/actions/release/github-setup
       - name: action/release-github
+        id: release-github
         uses: ./.github/actions/release/github
         with:
           gh-token: ${{ secrets.gh-token }}

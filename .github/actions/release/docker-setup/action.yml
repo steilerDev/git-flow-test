@@ -12,8 +12,8 @@ inputs:
 runs:
   using: composite
   steps:
-    - id: get-image-tag
-      uses: ./.github/actions/helper/docker-image-tag
+    - id: get-docker-metadata
+      uses: ./.github/actions/helper/docker-metadata
     - id: setup-dependencies
       shell: bash
       run: sudo apt-get install -y moreutils
@@ -31,9 +31,9 @@ runs:
         # Dynamically adjust image tag within .releaserc.json
         cat ${{ github.action_path }}/../docker-release-config/releaserc.json |\
           jq 'del(.plugins[0][1].name)' |\
-          jq '.plugins[0][1].name.namespace = "${{ steps.get-image-tag.outputs.image-namespace }}"' |\
-          jq '.plugins[0][1].name.repository = "${{ steps.get-image-tag.outputs.image-repository }}"' |\
-          jq '.plugins[0][1].name.tag = "${{ steps.get-image-tag.outputs.image-tag }}"' |\
+          jq '.plugins[0][1].name.namespace = "${{ steps.get-docker-metadata.outputs.image-namespace }}"' |\
+          jq '.plugins[0][1].name.repository = "${{ steps.get-docker-metadata.outputs.image-repository }}"' |\
+          jq '.plugins[0][1].name.tag = "${{ steps.get-docker-metadata.outputs.image-tag }}"' |\
           sponge ${{ inputs.release-dir }}/.releaserc.json
     - id: setup-node
       uses: actions/setup-node@v3

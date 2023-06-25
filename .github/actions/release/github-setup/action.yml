@@ -22,7 +22,7 @@ runs:
           ${{ github.action_path }}/../node-version \
           ${{ inputs.release-dir }}/
 
-        cat ${{ github.action_path }}/../github-release-config/.releaserc.json |\
+        cat ${{ github.action_path }}/../github-release-config/releaserc.json |\
           jq '.plugins[0][1].assets[0].name = "${{ github.event.repository.name }}.npm.<%= nextRelease.version %>.tgz"' |\
           jq '.plugins[0][1].assets[1].name = "${{ github.event.repository.name }}.docker.amd64.<%= nextRelease.version %>.tar.gz"' |\
           jq '.plugins[0][1].assets[2].name = "${{ github.event.repository.name }}.docker.arm64.<%= nextRelease.version %>.tar.gz"' |\

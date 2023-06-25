@@ -13,9 +13,9 @@ inputs:
     required: false
     default: release
 outputs:
-  artifact-path:
-    description: "The generated npm-pack filepath"
-    value: ${{ steps.package-artifact.outputs.artifact-path }}
+  release-url:
+    description: The URL to the created release
+    value: https://www.npmjs.com/package/${{ steps.get-npm-metadata.outputs.name }}/v/${{ steps.get-npm-metadata.outputs.version }}
 runs:
   using: composite
   steps:
@@ -30,6 +30,13 @@ runs:
       with:
         name: ${{ inputs.artifact-name }}
         path: npm-pack.tgz
+    - id: get-npm-metadata
+      uses: ./.github/actions/helper/npm-metadata
+      with:
+        package: ${{ inputs.release-dir }}/package.json
+    - id: get-git-metadata
+      uses: ./.github/actions/helper/git-metadata
     - id: clean-tag
-      shell: bash
-      run: git push --delete origin $(git describe --tags --abbrev=0)
+      uses: ./.github/actions/helper/clear-git-tag
+      with:
+        git-tag: ${{ steps.get-git-metadata.outputs.version }}
