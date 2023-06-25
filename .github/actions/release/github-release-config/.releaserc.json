@@ -19,8 +19,8 @@
                     "label": "Docker Image Tarball (arm64)" 
                 }
               ],
-              "successComment": "This ${issue.pull_request ? 'pull request' : 'issue'} is resolved with version ${nextRelease.version}",
-              "releasedLabels": "released <%= nextRelease.version %>",
+              "successComment": "<updated within CI>",
+              "releasedLabels": "<updated within CI>",
               "failComment": false,
               "failTitle": false,
               "labels": false,
