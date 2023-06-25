@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     if: inputs.release
     needs: app-build
-    permissions: 
+    permissions: # for semantic release with provenance
       contents: write
       id-token: write
     environment:
@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     if: inputs.release
     needs: docker-build
-    permissions: 
+    permissions: # for semantic release
       contents: write
     environment:
       name: ${{ github.ref_name }}
@@ -106,8 +106,8 @@ jobs:
     runs-on: ubuntu-latest
     if: inputs.release && inputs.all-artifacts
     needs: wiki-build
-    permissions:
-      contents: write
+    permissions: {}
+      # contents: write
     environment:
       name: ${{ github.ref_name }}
       url: ${{ steps.release-wiki.outputs.release-url }}
@@ -139,9 +139,9 @@ jobs:
     runs-on: ubuntu-latest
     if: inputs.release && inputs.all-artifacts
     needs: docs-build
-    permissions:
-      pages: write
-      id-token: write
+    permissions: {}
+      # pages: write
+      # id-token: write
     environment:
       name: ${{ github.ref_name }}
       url: ${{ steps.release-docs.outputs.release-url }}
@@ -160,10 +160,10 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ inputs.release && always() }}
     needs: [app-release, docker-build]
-    permissions:
+    permissions: # for semantic release
       contents: write
-      issues: write
-      pull-requests: write
+      # issues: write
+      # pull-requests: write
     environment:
       name: ${{ github.ref_name }}
       url: ${{ steps.release-github.outputs.release-url }}

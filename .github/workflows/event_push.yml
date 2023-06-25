@@ -12,19 +12,9 @@ on:
       - '**'
 
 jobs:
-  create-coverage-report: # Coverage report will only be build for main release by 
-    name: create-coverage-report
-    uses: ./.github/workflows/artifacts_test.yml
-    if: github.ref_name == 'main'
-    permissions: {}
-    with:
-      methods: '["unit"]'
-
   build-release:
     name: build-release
     uses: ./.github/workflows/artifacts_build-release.yml
-    needs: create-coverage-report
-    if: ${{ always() }}
     with:
       all-artifacts: ${{ github.ref_name == 'main' }} # Build and release all artifacts only on main branch
       release: true
