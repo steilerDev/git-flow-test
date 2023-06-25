@@ -16,12 +16,14 @@ runs:
       shell: bash
       run: |
         mkdir ${{ inputs.release-dir }}
-        cp ${{ github.action_path }}/../app-release-config/.releaserc.json \
-          ${{ github.action_path }}/../app-release-config/package.json \
+
+        cp ${{ github.action_path }}/../app-release-config/package.json \
           ${{ github.action_path }}/../app-release-config/package-lock.json \
           ${{ github.action_path }}/../common.releaserc.json \
           ${{ github.action_path }}/../node-version \
           ${{ inputs.release-dir }}/
+
+        cp ${{ github.action_path }}/../app-release-config/releaserc.json ${{ inputs.release-dir }}/.releaserc.json
     - id: setup-node
       uses: actions/setup-node@v3
       with:

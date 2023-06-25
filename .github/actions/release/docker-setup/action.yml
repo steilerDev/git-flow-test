@@ -26,12 +26,12 @@ runs:
           ${{ inputs.release-dir }}/
 
         # Dynamically adjust image tag within .releaserc.json
-        cat ${{ github.action_path }}/../docker-release-config/.releaserc.json |\
+        cat ${{ github.action_path }}/../docker-release-config/releaserc.json |\
           jq 'del(.plugins[0][1].name)' |\
           jq '.plugins[0][1].name.namespace = "${{ steps.get-image-tag.outputs.image-namespace }}"' |\
           jq '.plugins[0][1].name.repository = "${{ steps.get-image-tag.outputs.image-repository }}"' |\
-          jq '.plugins[0][1].name.tag = "${{ steps.get-image-tag.outputs.image-tag }}"' \
-          > ${{ inputs.release-dir }}/.releaserc.json
+          jq '.plugins[0][1].name.tag = "${{ steps.get-image-tag.outputs.image-tag }}"' |\
+          sponge ${{ inputs.release-dir }}/.releaserc.json
     - id: setup-node
       uses: actions/setup-node@v3
       with:
