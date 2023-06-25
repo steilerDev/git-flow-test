@@ -22,13 +22,13 @@ runs:
         cat ${{ github.action_path }}/../github-release-config/.releaserc.json |\
           jq '.plugins[0][1].assets[0].name = "${{ github.event.repository.name }}.npm.<%= nextRelease.version %>.tgz"' |\
           jq '.plugins[0][1].assets[1].name = "${{ github.event.repository.name }}.docker.amd64.<%= nextRelease.version %>.tar.gz"' |\
-          jq '.plugins[0][1].assets[2].name = "${{ github.event.repository.name }}.docker.arm64.<%= nextRelease.version %>.tar.gz"' |\
+          jq '.plugins[0][1].assets[2].name = "${{ github.event.repository.name }}.docker.arm64.<%= nextRelease.version %>.tar.gz"' \
           > ${{ inputs.release-dir }}/.releaserc.json
     - id: configure-dev-release
       shell: bash
       if: github.ref_name == 'dev'
       run: |
-        # Not running Github release plugin on dev release
+        # Disabling Github release plugin on dev release
         cat ${{ inputs.release-dir }}/.releaserc.json |\
           jq 'del(.plugins[0])' \
           > ${{ inputs.release-dir }}/.releaserc.json
