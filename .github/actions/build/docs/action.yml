@@ -27,11 +27,14 @@ runs:
       shell: bash
       run: (cd ${{ inputs.docs-path }}; mkdocs build)
     - id: bundle-coverage
-      uses: actions/download-artifact@v3
-      continue-on-error: true
+      uses: dawidd6/action-download-artifact@v2
       with:
         name: coverage-artifact
         path: ${{ inputs.docs-path }}/${{ steps.get-config.outputs.site-dir }}/dev/coverage
+        workflow: event_pr.yml
+        branch: beta
+        event: pr
+        if_no_artifact_found: warn
     - id: upload-artifact
       uses: actions/upload-pages-artifact@v1
       with:

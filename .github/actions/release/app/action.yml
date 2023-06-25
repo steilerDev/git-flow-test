@@ -33,7 +33,7 @@ runs:
     - id: get-npm-metadata
       uses: ./.github/actions/helper/npm-metadata
       with:
-        package: ${{ inputs.release-dir }}/package.json
+        package: ${{ inputs.release-dir }}/app/package.json
     - id: get-git-metadata
       uses: ./.github/actions/helper/git-metadata
     - id: clean-tag
