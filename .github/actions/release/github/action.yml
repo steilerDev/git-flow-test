@@ -1,19 +1,19 @@
 name: release-github
 description: Pushes the git tag and updates Github appropriately
 inputs:
+  gh-token:
+    description: The GH token used for performing the release
+    required: true
   release-dir:
     description: Directory, where the semantic release binary and configuration is located
     required: false
     default: release
+  
 runs:
   using: composite
   steps:
-    - id: test-token
-      shell: bash
-      run: |
-        echo "GH_TOKEN: < $GH_TOKEN >"
-        echo "GITHUB_TOKEN: < $GITHUB_TOKEN >"
-        echo "Secrets GITHUB_TOKEN: < ${{ secrets.GITHUB_TOKEN }} >"
     - id: release-github
       shell: bash
-      run: (cd ${{ inputs.release-dir }}; npx semantic-release)
+      run: |
+        export GH_TOKEN=${{ inputs.gh-token }}
+        (cd ${{ inputs.release-dir }}; npx semantic-release)

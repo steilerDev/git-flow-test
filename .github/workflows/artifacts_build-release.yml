@@ -145,3 +145,5 @@ jobs:
         uses: ./.github/actions/release/github-setup
       - name: action/release-github
         uses: ./.github/actions/release/github
+        with:
+          gh-token: ${{ secrets.gh-token }}
