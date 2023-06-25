@@ -9,6 +9,7 @@
         "typedoc"
     ],
     "conventionalCommits.scopes": [
-        "ci"
+        "ci",
+        "app"
     ]
 }
