@@ -1,0 +1,18 @@
+name: release-wiki
+description: Releases the Github wiki page
+inputs:
+  gh-token:
+    description: The GH token used for performing the release
+    required: true
+  release-dir:
+    description: Directory, where the release artifacts are located
+    required: false
+    default: release
+runs:
+  using: composite
+  steps:
+    - id: release-wiki
+      uses: Andrew-Chen-Wang/github-wiki-action@v4
+      with:
+        token: ${{ inputs.gh-token }}
+        path: ${{ inputs.release-dir }}

@@ -1,1 +1,13 @@
-# Publish GH pages and wiki
+name: release-docs
+description: Releases the docs on Github Pages
+inputs:
+  gh-token:
+    description: The GH token used for performing the release
+    required: true
+runs:
+  using: composite
+  steps:
+    - id: release-docs
+      uses: actions/deploy-pages@v2
+      with:
+        token: ${{ inputs.gh-token }}

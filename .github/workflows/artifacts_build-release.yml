@@ -20,7 +20,7 @@ on:
           description: The npm token used for releasing the package
           required: false
         gh-token:
-          description: The Github Personal Access Token, in order to deploy the wiki asset
+          description: The Github Token, in order to deploy the wiki asset
           required: false
 
 jobs:
@@ -43,6 +43,9 @@ jobs:
     permissions: 
       contents: write
       id-token: write
+    environment:
+      name: ${{ github.ref_name }}
+      url: https://npmjs.com
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
@@ -72,6 +75,9 @@ jobs:
     needs: docker-build
     permissions: 
       contents: write
+    environment:
+      name: ${{ github.ref_name }}
+      url: https://hub.docker.com
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
@@ -100,10 +106,18 @@ jobs:
     needs: wiki-build
     permissions:
       contents: write
+    environment:
+      name: ${{ github.ref_name }}
+      url: https://github.com
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
-      # Todo
+      - name: setup/release-wiki
+        uses: ./.github/actions/release/wiki-setup
+      - name: action/release-wiki
+        uses: ./.github/actions/release/wiki
+        with:
+          gh-token: ${{ secrets.gh-token }}
 
   docs-build:
     runs-on: ubuntu-latest
@@ -125,9 +139,18 @@ jobs:
     permissions:
       pages: write
       id-token: write
+    environment:
+      name: ${{ github.ref_name }}
+      url: https://github.com
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
+      - name: setup/release-docs
+        uses: ./.github/actions/release/docs-setup
+      - name: action/release-docs
+        uses: ./.github/actions/release/docs
+        with:
+          gh-token: ${{ secrets.gh-token }}
       # Todo
 
   github-release:
@@ -138,6 +161,9 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
+    environment:
+      name: ${{ github.ref_name }}
+      url: https://github.com
     steps:
       - name: setup/checkout
         uses: actions/checkout@v3
