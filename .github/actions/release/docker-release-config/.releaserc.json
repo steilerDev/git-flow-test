@@ -4,7 +4,7 @@
         [
             "@semantic-release-plus/docker",
             {
-                "name": "Updated within CI"
+                "name": "<updated within CI>"
             }
         ]
     ]

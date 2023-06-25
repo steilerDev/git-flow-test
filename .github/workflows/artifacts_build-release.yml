@@ -1,5 +1,5 @@
 name: 'Artifacts: Build & Release'
-# This workflow will generate the requested artifacts and optionally release them
+# This workflow will build the requested artifacts and optionally release them
 
 on:
   workflow_call:

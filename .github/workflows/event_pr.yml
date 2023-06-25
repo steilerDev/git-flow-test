@@ -12,16 +12,16 @@ on:
 
 
 jobs:
-  build-artifacts:
-    name: build-artifacts
+  build:
+    name: build
     uses: ./.github/workflows/artifacts_build-release.yml
     with:
       all-artifacts: ${{ github.ref_name != 'dev' }} # Skip building associated artifacts on dev channel
       release: false
 
-  test-artifacts:
-    name: test-artifacts
-    needs: build-artifacts
+  test:
+    name: test
+    needs: build
     uses: ./.github/workflows/artifacts_test.yml
     permissions: {}
     with:

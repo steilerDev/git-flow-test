@@ -32,6 +32,9 @@ runs:
       run: |
         # Slightly different messaging, when publishing beta releases
         cat ${{ github.action_path }}/../github-release-config/.releaserc.json |\
+          jq '.plugins[0][1].assets[0].name = "${{ github.event.repository.name }}.npm.<%= nextRelease.version %>.tgz"' |\
+          jq '.plugins[0][1].assets[1].name = "${{ github.event.repository.name }}.docker.amd64.<%= nextRelease.version %>.tar.gz"' |\
+          jq '.plugins[0][1].assets[2].name = "${{ github.event.repository.name }}.docker.arm64.<%= nextRelease.version %>.tar.gz"' |\
           jq ".plugins[0][1].successComment = \"This \${issue.pull_request ? 'pull request' : 'issue'} should be resolved with version \${nextRelease.version}, please confirm before public release.\"" |\
           jq '.plugins[0][1].releasedLabels = "previewed <%= nextRelease.version %>"' \
           > ${{ inputs.release-dir }}/.releaserc.json

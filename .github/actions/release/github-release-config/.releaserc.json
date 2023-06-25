@@ -7,15 +7,15 @@
               "assets": [
                 { 
                     "path": "artifacts/app-artifact/npm-pack.tgz", 
-                    "name": "git-flow-test.<%= nextRelease.version %>.tgz",
+                    "name": "<updated within CI>",
                     "label": "NPM Package Tarball" 
                 },{ 
                     "path": "artifacts/docker-artifact/docker-amd64.tar.gz", 
-                    "name": "git-flow-test.amd64.<%= nextRelease.version %>.tar.gz",
+                    "name": "<updated within CI>",
                     "label": "Docker Image Tarball (amd64)" 
                 },{ 
-                    "path": "artifacts/docker-artifact/docker-amd64.tar.gz", 
-                    "name": "git-flow-test.arm64.<%= nextRelease.version %>.tar.gz",
+                    "path": "artifacts/docker-artifact/docker-arm64.tar.gz", 
+                    "name": "<updated within CI>",
                     "label": "Docker Image Tarball (arm64)" 
                 }
               ],

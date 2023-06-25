@@ -20,8 +20,8 @@ jobs:
     with:
       methods: '["unit"]'
 
-  build-release-artifacts:
-    name: build-release-artifacts
+  build-release:
+    name: build-release
     uses: ./.github/workflows/artifacts_build-release.yml
     needs: create-coverage-report
     if: ${{ always() }}
