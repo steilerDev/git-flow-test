@@ -32,8 +32,8 @@ runs:
       run: |
         # Slightly different messaging, when publishing beta releases
         cat ${{ github.action_path }}/../github-release-config/.releaserc.json |\
-          jq '.plugins[0][1].successComment = "This ${issue.pull_request ? 'pull request' : 'issue'} is resolved with version ${nextRelease.version}, please confirm before public release." |\
-          jq '.plugins[0][1].releasedLabels = "previewed <%= nextRelease.version %>" |\
+          jq ".plugins[0][1].successComment = \"This \${issue.pull_request ? 'pull request' : 'issue'} should be resolved with version \${nextRelease.version}, please confirm before public release.\""
+          jq '.plugins[0][1].releasedLabels = "previewed <%= nextRelease.version %>"' |\
           > ${{ inputs.release-dir }}/.releaserc.json
     - id: configure-main-release
       shell: bash
