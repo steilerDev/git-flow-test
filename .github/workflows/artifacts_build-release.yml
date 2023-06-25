@@ -159,7 +159,7 @@ jobs:
   github-release:
     runs-on: ubuntu-latest
     if: ${{ inputs.release && always() }}
-    needs: [app-release, docker-release, docs-release, wiki-release] # For the assets
+    needs: [app-release, docker-build]
     permissions:
       contents: write
       issues: write
