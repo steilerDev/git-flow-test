@@ -8,6 +8,9 @@ inputs:
 runs:
   using: composite
   steps:
+    - id: setup-dependencies
+      shell: bash
+      run: apt-get install -y moreutils
     - id: setup-fs
       shell: bash
       run: |
