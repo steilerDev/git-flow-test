@@ -16,7 +16,7 @@ jobs:
     name: build-artifacts
     uses: ./.github/workflows/artifacts_build-release.yml
     with:
-      all-artifacts: ${{ github.ref_name != 'dev' }}
+      all-artifacts: ${{ github.ref_name != 'dev' }} # Skip building associated artifacts on dev channel
       release: false
 
   test-artifacts:
