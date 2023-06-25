@@ -16,7 +16,7 @@ runs:
       uses: ./.github/actions/helper/docker-image-tag
     - id: setup-dependencies
       shell: bash
-      run: apt-get install -y moreutils
+      run: sudo apt-get install -y moreutils
     - id: setup-fs
       shell: bash
       run: |
