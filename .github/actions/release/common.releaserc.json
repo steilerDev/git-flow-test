@@ -8,16 +8,7 @@
         }
     ],
     "plugins": [
-        "@semantic-release/commit-analyzer",
-        [
-            "@semantic-release/release-notes-generator",
-            {
-                "preset": "angular",
-                "writerOpts": {
-                    "commitsSort": ["subject"]
-                }
-            }
-        ]
+        "@semantic-release/commit-analyzer"
     ],
     "preset": "angular"
 }

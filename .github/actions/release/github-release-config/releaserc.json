@@ -1,31 +1,39 @@
 {
     "extends": "./common.releaserc.json",
     "plugins": [
-        [
-            "@semantic-release/github",
-            {
-              "assets": [
-                { 
-                    "path": "artifacts/app-artifact/npm-pack.tgz", 
-                    "name": "<updated within CI>",
-                    "label": "NPM Package Tarball" 
-                },{ 
-                    "path": "artifacts/docker-artifact/docker-amd64.tar.gz", 
-                    "name": "<updated within CI>",
-                    "label": "Docker Image Tarball (amd64)" 
-                },{ 
-                    "path": "artifacts/docker-artifact/docker-arm64.tar.gz", 
-                    "name": "<updated within CI>",
-                    "label": "Docker Image Tarball (arm64)" 
-                }
-              ],
-              "successComment": "<updated within CI>",
-              "releasedLabels": "<updated within CI>",
-              "failComment": false,
-              "failTitle": false,
-              "labels": false,
-              "addReleases": "bottom"
+      [
+        "@semantic-release/release-notes-generator",
+        {
+            "preset": "angular",
+            "writerOpts": {
+                "commitsSort": ["subject"]
             }
-          ]
+        }
+      ],[
+        "@semantic-release/github",
+        {
+          "assets": [
+            { 
+                "path": "artifacts/app-artifact/npm-pack.tgz", 
+                "name": "<updated within CI>",
+                "label": "NPM Package Tarball" 
+            },{ 
+                "path": "artifacts/docker-artifact/docker-amd64.tar.gz", 
+                "name": "<updated within CI>",
+                "label": "Docker Image Tarball (amd64)" 
+            },{ 
+                "path": "artifacts/docker-artifact/docker-arm64.tar.gz", 
+                "name": "<updated within CI>",
+                "label": "Docker Image Tarball (arm64)" 
+            }
+          ],
+          "successComment": "<updated within CI>",
+          "releasedLabels": "<updated within CI>",
+          "failComment": false,
+          "failTitle": false,
+          "labels": false,
+          "addReleases": "bottom"
+        }
+      ]
     ]
 }
