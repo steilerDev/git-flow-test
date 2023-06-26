@@ -22,6 +22,8 @@ Before merging the PR into `beta` or `main` the following checks are enforced th
 - API tests
 - Docker E2E tests
 
+`beta` and `main` branch can only receive PRs - direct commits are disabled through branch protection rules
+
 ## Merging todos
 
 Before merging this back into `icloud-photos-sync`, the following hardcoded references to `git-flow-test` need to be adjusted:
@@ -38,25 +40,16 @@ Before merging this back into `icloud-photos-sync`, the following hardcoded refe
     - `[event] push` for releases to npm
   - `DOCKER_TOKEN` (needs to be 'read/write/delete'): Token for releasing to docker (assuming repo owner == docker username)
     - `[event] push` for releases
-    
-
 
 - Environments:
-  - `nightly`
+  - `dev`
     - Deployment branch: `dev`
-    - `DOCKER_TOKEN` (with deployment access to a user with the same username as this repo's owner)
   - `beta`
-    - Deployment branch: `main`
-    - `DOCKER_TOKEN` (with deployment access to a user with the same username as this repo's owner)
-    - `NPM_TOKEN` (with deployment access)
+    - Deployment branch: `beta`
   - `production`
     - Deployment branch: `main`
-    - Required reviewer: `steilerDev`
-    - Do not let admins overwrite protection rules
-    - `DOCKER_TOKEN` (with deployment access to a user with the same username as this repo's owner)
-    - `NPM_TOKEN` (with deployment access)
 - Branch protection rules:
-  - `main` branch:
+  - `main` & `beta` branch:
     - Require a pull request before merging
     - Require status checks to pass before merging
       - `build-artifacts / changelog`
@@ -70,4 +63,3 @@ Before merging this back into `icloud-photos-sync`, the following hardcoded refe
   - `TEST_APPLE_ID_USER`
   - `TEST_APPLE_ID_PWD`
   - `TEST_TRUST_TOKEN`
-  - `GH_ACCESS_TOKEN` (for version bump workflow)
