@@ -59,7 +59,7 @@ jobs:
 
   docker-build:
     runs-on: ubuntu-latest
-    if: ${{ always() }}
+    if: (needs.app-release.result == 'skipped' || needs.app-release.result == 'success')
     needs: [app-build, app-release] # needs app-release, because this will provide a properly versioned app
     permissions: {}
     steps:
@@ -124,7 +124,7 @@ jobs:
 
   docs-build:
     runs-on: ubuntu-latest
-    if: ${{ inputs.all-artifacts && always() }}
+    if: inputs.all-artifacts && (needs.app-release.result == 'skipped' || needs.app-release.result == 'success')
     needs: [app-build, app-release] # to generate the properly versioned CLI reference
     permissions: {}
     steps:
@@ -139,9 +139,9 @@ jobs:
     runs-on: ubuntu-latest
     if: inputs.release && inputs.all-artifacts
     needs: docs-build
-    permissions: {}
-      # pages: write
-      # id-token: write
+    permissions: # to deploy GH pages
+      pages: write
+      id-token: write
     environment:
       name: ${{ github.ref_name }}
       url: ${{ steps.release-docs.outputs.release-url }}
@@ -159,11 +159,11 @@ jobs:
   github-release:
     runs-on: ubuntu-latest
     if: inputs.release
-    needs: [app-release, docker-build]
+    needs: [app-release, docker-release]
     permissions: # for semantic release
       contents: write
-      # issues: write
-      # pull-requests: write
+      issues: write
+      pull-requests: write
     environment:
       name: ${{ github.ref_name }}
       url: ${{ steps.release-github.outputs.release-url }}
