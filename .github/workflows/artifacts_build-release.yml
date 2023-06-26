@@ -106,8 +106,8 @@ jobs:
     runs-on: ubuntu-latest
     if: inputs.release && inputs.all-artifacts
     needs: wiki-build
-    permissions: {}
-      # contents: write
+    permissions:
+      contents: write
     environment:
       name: ${{ github.ref_name }}
       url: ${{ steps.release-wiki.outputs.release-url }}

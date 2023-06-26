@@ -34,13 +34,10 @@ Before merging this back into `icloud-photos-sync`, the following hardcoded refe
 ## Setup
 
 - Secrets:
-  - `GH_TOKEN`: Personal Access Token used by:
   - `NPM_TOKEN`: Token for releasing to npm, used by:
-    - `[event] push to {non-prod}` for release to `nightly` channel
-    - `[event] push to {prod}` for release to `beta` or production channel
-  - `DOCKER_TOKEN`: Token for releasing to docker (assuming repo owner == docker username)
-    - `[event] push to {non-prod}` for release to `nightly` channel
-    - `[event] push to {prod}` for release to `beta` or production channel
+    - `[event] push` for releases to npm
+  - `DOCKER_TOKEN` (needs to be 'read/write/delete'): Token for releasing to docker (assuming repo owner == docker username)
+    - `[event] push` for releases
     
 
 
