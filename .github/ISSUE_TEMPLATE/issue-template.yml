@@ -47,7 +47,7 @@ body:
     validations:
       required: true
   - type: input
-    id: environment
+    id: version
     attributes:
       label: icloud-photos-sync version
       placeholder: ex. 1.0.1-beta.1
