@@ -5,9 +5,10 @@ run-name: '[event] push to {${{ github.ref_name }}}: ${{ github.event.head_commi
 on: 
   push:
     branches: # Run on every push to dev
-      - 'dev'
-      - 'beta'
-      - 'main'
+      - 'bla'
+      # - 'dev'
+      # - 'beta'
+      # - 'main'
     tags-ignore:
       - '**'
 

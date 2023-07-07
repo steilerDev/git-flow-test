@@ -1,8 +1,6 @@
 name: Bug Report
-about: Create a report to help us improve
-title: ''
+description: Create a report to help us improve
 labels: ["class(bug)", "status(open)"]
-assignees: ''
 body:
   - type: textarea
     id: describe-issue
@@ -30,8 +28,8 @@ body:
     id: logs
     attributes:
       label: Relevant log output
-      description: 'Please copy and paste any relevant log output (with `LOG_LEVEL=debug`), located in `.icloud-photos-sync.log`, stored in the user specified `DATA_DIR`'.
-      render: shell
+      description: 'Please copy and paste any relevant log output (with `LOG_LEVEL=debug`), located in `.icloud-photos-sync.log`, stored in the user specified `DATA_DIR`'
+      render: shell-script
     validations:
       required: true
   - type: input
@@ -56,8 +54,8 @@ body:
     validations:
       required: true
   - type: checkboxes
-      id: terms
-      attributes:
+    id: terms
+    attributes:
       label: Checklist
       description: Before submitting this issue, make sure you completed the following steps
       options:
